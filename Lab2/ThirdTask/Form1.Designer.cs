@@ -81,7 +81,6 @@
             this.trackBar1.Size = new System.Drawing.Size(192, 45);
             this.trackBar1.TabIndex = 3;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
-            this.trackBar1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackBar1_MouseUp);
             // 
             // trackBar2
             // 
@@ -94,7 +93,6 @@
             this.trackBar2.Size = new System.Drawing.Size(192, 45);
             this.trackBar2.TabIndex = 4;
             this.trackBar2.Scroll += new System.EventHandler(this.trackBar2_Scroll);
-            this.trackBar2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackBar2_MouseUp);
             // 
             // trackBar3
             // 
@@ -107,7 +105,6 @@
             this.trackBar3.Size = new System.Drawing.Size(192, 45);
             this.trackBar3.TabIndex = 5;
             this.trackBar3.Scroll += new System.EventHandler(this.trackBar3_Scroll);
-            this.trackBar3.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackBar3_MouseUp);
             // 
             // button2
             // 

@@ -130,55 +130,47 @@ namespace ThirdTask
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void trackBar1_MouseUp(object sender, MouseEventArgs e)
-        {
-            pictureBox1.Image = bitmap.Select(color => {
-                double hue, saturation, value;
-                RGBToHSV(Color.FromArgb(color.R, color.G, color.B), out hue,
-                    out saturation, out value);
-
-                hue = Math.Max(Math.Min(hue + trackBar1.Value / 2.0, 359), 0);
-                return HSVToRGB(hue, saturation, value);
-            });
-        }
-
-        private void trackBar2_MouseUp(object sender, MouseEventArgs e)
-        {
-            pictureBox1.Image = bitmap.Select(color => {
-                double hue, saturation, value;
-                RGBToHSV(Color.FromArgb(color.R, color.G, color.B), out hue,
-                    out saturation, out value);
-
-                saturation = Math.Max(Math.Min(saturation + trackBar2.Value / 100.0, 1), 0);
-                return HSVToRGB(hue, saturation, value);
-            });
-        }
-
-        private void trackBar3_MouseUp(object sender, MouseEventArgs e)
-        {
-            pictureBox1.Image = bitmap.Select(color => {
-                double hue, saturation, value;
-                RGBToHSV(Color.FromArgb(color.R, color.G, color.B), out hue,
-                    out saturation, out value);
-
-                value = Math.Max(Math.Min(value + trackBar3.Value / 100.0, 1), 0);
-                return HSVToRGB(hue, saturation, value);
-            });
-        }
-
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
             hueView.Text = trackBar1.Value + "";
+            double hDelta = trackBar1.Value * 2.0;
+            pictureBox1.Image = bitmap.Select(color => {
+                double hue, saturation, value;
+                RGBToHSV(Color.FromArgb(color.R, color.G, color.B), out hue,
+                    out saturation, out value);
+
+                hue = Math.Max(Math.Min(hue + hDelta, 359.99), 0);
+                return HSVToRGB(hue, saturation, value);
+            });
         }
 
         private void trackBar2_Scroll(object sender, EventArgs e)
         {
             saturationView.Text = trackBar2.Value + "";
+            double sDelta = trackBar2.Value / 100.0;
+            pictureBox1.Image = bitmap.Select(color => {
+                double hue, saturation, value;
+                RGBToHSV(Color.FromArgb(color.R, color.G, color.B), out hue,
+                    out saturation, out value);
+
+                saturation = Math.Max(Math.Min(saturation + sDelta, 1), 0);
+                return HSVToRGB(hue, saturation, value);
+            });
         }
 
         private void trackBar3_Scroll(object sender, EventArgs e)
         {
             valueView.Text = trackBar3.Value + "";
+            double vDelta = trackBar3.Value / 100.0;
+
+            pictureBox1.Image = bitmap.Select(color => {
+                double hue, saturation, value;
+                RGBToHSV(Color.FromArgb(color.R, color.G, color.B), out hue,
+                    out saturation, out value);
+
+                value = Math.Max(Math.Min(value + vDelta, 1), 0);
+                return HSVToRGB(hue, saturation, value);
+            });
         }
     }
 }
