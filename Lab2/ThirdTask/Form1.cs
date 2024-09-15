@@ -114,11 +114,11 @@ namespace ThirdTask
                     button2.Enabled = true;
 
                     trackBar1.Value = 0;
-                    trackBar1_Scroll(sender, e);
+                    hueView.Text = "0";
                     trackBar2.Value = 0;
-                    trackBar2_Scroll(sender, e);
+                    saturationView.Text = "0";
                     trackBar3.Value = 0;
-                    trackBar3_Scroll(sender, e);
+                    valueView.Text = "0";
                 }
             }
         }
