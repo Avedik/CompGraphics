@@ -30,11 +30,16 @@
         {
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.trackBar2 = new System.Windows.Forms.TrackBar();
             this.trackBar3 = new System.Windows.Forms.TrackBar();
-            this.button3 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.hueView = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.saturationView = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.valueView = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
@@ -57,7 +62,7 @@
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(656, 28);
+            this.button1.Location = new System.Drawing.Point(650, 28);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(87, 40);
             this.button1.TabIndex = 1;
@@ -65,53 +70,116 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button2
-            // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(649, 87);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(102, 43);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Преобразовать из RGB в HSV";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
             // trackBar1
             // 
             this.trackBar1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.trackBar1.Location = new System.Drawing.Point(596, 177);
-            this.trackBar1.Maximum = 1439;
+            this.trackBar1.Enabled = false;
+            this.trackBar1.Location = new System.Drawing.Point(596, 104);
+            this.trackBar1.Maximum = 180;
+            this.trackBar1.Minimum = -180;
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(192, 45);
             this.trackBar1.TabIndex = 3;
+            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            this.trackBar1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackBar1_MouseUp);
             // 
             // trackBar2
             // 
             this.trackBar2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.trackBar2.Location = new System.Drawing.Point(596, 215);
-            this.trackBar2.Maximum = 1000;
+            this.trackBar2.Enabled = false;
+            this.trackBar2.Location = new System.Drawing.Point(596, 167);
+            this.trackBar2.Maximum = 100;
+            this.trackBar2.Minimum = -100;
             this.trackBar2.Name = "trackBar2";
             this.trackBar2.Size = new System.Drawing.Size(192, 45);
             this.trackBar2.TabIndex = 4;
+            this.trackBar2.Scroll += new System.EventHandler(this.trackBar2_Scroll);
+            this.trackBar2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackBar2_MouseUp);
             // 
             // trackBar3
             // 
             this.trackBar3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.trackBar3.Location = new System.Drawing.Point(596, 259);
-            this.trackBar3.Maximum = 1000;
+            this.trackBar3.Enabled = false;
+            this.trackBar3.Location = new System.Drawing.Point(596, 229);
+            this.trackBar3.Maximum = 100;
+            this.trackBar3.Minimum = -100;
             this.trackBar3.Name = "trackBar3";
             this.trackBar3.Size = new System.Drawing.Size(192, 45);
             this.trackBar3.TabIndex = 5;
+            this.trackBar3.Scroll += new System.EventHandler(this.trackBar3_Scroll);
+            this.trackBar3.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackBar3_MouseUp);
             // 
-            // button3
+            // button2
             // 
-            this.button3.Location = new System.Drawing.Point(656, 311);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 6;
-            this.button3.Text = "Применить";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.Enabled = false;
+            this.button2.Location = new System.Drawing.Point(650, 291);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(87, 38);
+            this.button2.TabIndex = 6;
+            this.button2.Text = "Сохранить в файл";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(597, 85);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(29, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Тон:";
+            // 
+            // hueView
+            // 
+            this.hueView.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.hueView.AutoSize = true;
+            this.hueView.Location = new System.Drawing.Point(632, 85);
+            this.hueView.Name = "hueView";
+            this.hueView.Size = new System.Drawing.Size(13, 13);
+            this.hueView.TabIndex = 8;
+            this.hueView.Text = "0";
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(597, 146);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(88, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Насыщенность:";
+            // 
+            // saturationView
+            // 
+            this.saturationView.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.saturationView.AutoSize = true;
+            this.saturationView.Location = new System.Drawing.Point(691, 146);
+            this.saturationView.Name = "saturationView";
+            this.saturationView.Size = new System.Drawing.Size(13, 13);
+            this.saturationView.TabIndex = 10;
+            this.saturationView.Text = "0";
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(597, 210);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(58, 13);
+            this.label3.TabIndex = 11;
+            this.label3.Text = "Значение:";
+            // 
+            // valueView
+            // 
+            this.valueView.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.valueView.AutoSize = true;
+            this.valueView.Location = new System.Drawing.Point(661, 210);
+            this.valueView.Name = "valueView";
+            this.valueView.Size = new System.Drawing.Size(13, 13);
+            this.valueView.TabIndex = 12;
+            this.valueView.Text = "0";
             // 
             // Form1
             // 
@@ -119,11 +187,16 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.button3);
+            this.Controls.Add(this.valueView);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.saturationView);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.hueView);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.trackBar3);
             this.Controls.Add(this.trackBar2);
             this.Controls.Add(this.trackBar1);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.pictureBox1);
             this.Name = "Form1";
@@ -141,11 +214,16 @@
 
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.TrackBar trackBar2;
         private System.Windows.Forms.TrackBar trackBar3;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label hueView;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label saturationView;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label valueView;
     }
 }
 

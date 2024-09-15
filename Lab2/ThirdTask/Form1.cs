@@ -15,14 +15,13 @@ namespace ThirdTask
     public partial class Form1 : Form
     {
         private Bitmap bitmap;
-        private double hue, saturation, value;
 
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void RGBToHSV(Color color)
+        private void RGBToHSV(Color color, out double hue, out double saturation, out double value)
         {
             double R = color.R / 255.0;
             double G = color.G / 255.0;
@@ -96,25 +95,6 @@ namespace ThirdTask
             return Color.FromArgb(red, green, blue);
         }
 
-        private void Transform()
-        {
-            using (var fastBitmap = new FastBitmap.FastBitmap(bitmap))
-            {
-                for (var x = 0; x < fastBitmap.Width; x++)
-                    for (var y = 0; y < fastBitmap.Height; y++)
-                    {
-                        var color = fastBitmap[x, y];
-                        RGBToHSV(Color.FromArgb(color.R, color.G, color.B));
-
-                        hue = Math.Min(hue + trackBar1.Value / 4.0, 359);
-                        saturation = Math.Min(saturation + trackBar2.Value / 1000.0, 1);
-                        value = Math.Min(value + trackBar3.Value / 1000.0, 1);
-                        fastBitmap[x, y] = HSVToRGB(hue, saturation, value);
-                    }
-            }
-            pictureBox1.Image = bitmap;
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog dialog = new OpenFileDialog())
@@ -127,18 +107,78 @@ namespace ThirdTask
                 {
                     bitmap = new Bitmap(dialog.FileName);
                     pictureBox1.Image = bitmap;
+
+                    trackBar1.Enabled = true;
+                    trackBar2.Enabled = true;
+                    trackBar3.Enabled = true;
+                    button2.Enabled = true;
+
+                    trackBar1.Value = 0;
+                    trackBar1_Scroll(sender, e);
+                    trackBar2.Value = 0;
+                    trackBar2_Scroll(sender, e);
+                    trackBar3.Value = 0;
+                    trackBar3_Scroll(sender, e);
                 }
             }
         }
+
         private void button2_Click(object sender, EventArgs e)
         {
-            Transform();
+            pictureBox1.Image.Save("image.png");
+            MessageBox.Show("Изображение успешно сохранено.", "Сохранение",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void trackBar1_MouseUp(object sender, MouseEventArgs e)
         {
-            Transform();
+            pictureBox1.Image = bitmap.Select(color => {
+                double hue, saturation, value;
+                RGBToHSV(Color.FromArgb(color.R, color.G, color.B), out hue,
+                    out saturation, out value);
+
+                hue = Math.Max(Math.Min(hue + trackBar1.Value / 2.0, 359), 0);
+                return HSVToRGB(hue, saturation, value);
+            });
         }
 
+        private void trackBar2_MouseUp(object sender, MouseEventArgs e)
+        {
+            pictureBox1.Image = bitmap.Select(color => {
+                double hue, saturation, value;
+                RGBToHSV(Color.FromArgb(color.R, color.G, color.B), out hue,
+                    out saturation, out value);
+
+                saturation = Math.Max(Math.Min(saturation + trackBar2.Value / 100.0, 1), 0);
+                return HSVToRGB(hue, saturation, value);
+            });
+        }
+
+        private void trackBar3_MouseUp(object sender, MouseEventArgs e)
+        {
+            pictureBox1.Image = bitmap.Select(color => {
+                double hue, saturation, value;
+                RGBToHSV(Color.FromArgb(color.R, color.G, color.B), out hue,
+                    out saturation, out value);
+
+                value = Math.Max(Math.Min(value + trackBar3.Value / 100.0, 1), 0);
+                return HSVToRGB(hue, saturation, value);
+            });
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            hueView.Text = trackBar1.Value + "";
+        }
+
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {
+            saturationView.Text = trackBar2.Value + "";
+        }
+
+        private void trackBar3_Scroll(object sender, EventArgs e)
+        {
+            valueView.Text = trackBar3.Value + "";
+        }
     }
 }
