@@ -27,6 +27,7 @@ namespace FirstTask
             AddOwnedForm(form2);
         }
 
+        // Кнопка загрузки картинки
         private void button1_Click(object sender, EventArgs e)
         {
             OpenFileDialog open_dialog = new OpenFileDialog();
@@ -52,6 +53,7 @@ namespace FirstTask
             pictureBox4.Image = null;
         }
 
+        // Кнопка построения картинок
         private void button2_Click(object sender, EventArgs e)
         {
             int x, y;
@@ -59,18 +61,21 @@ namespace FirstTask
             hist2 = new int[256];
             hist3 = new int[256];
 
+            // PAL / NTSC
             b2 = b2.Select(color => {
                         int Y = (int)(0.299 * color.R + 0.587 * color.G + 0.114 * color.B);
                         ++hist1[Y];
                         return Color.FromArgb(Y, Y, Y);
             });
 
+            // HDTV
             b3 = b3.Select(color => {
                         int Y = (int)(0.2126 * color.R + 0.7152 * color.G + 0.0722 * color.B);
                         ++hist2[Y];
                         return Color.FromArgb(Y, Y, Y);
             });
 
+            // Разница
             using (var fastBitmap2 = new FastBitmap(b2))
             using (var fastBitmap3 = new FastBitmap(b3))
             using (var fastBitmap4 = new FastBitmap(b4))
@@ -86,11 +91,13 @@ namespace FirstTask
                     }
             }
 
+            // Вывод картинок
             pictureBox2.Image = b2;
             pictureBox3.Image = b3;
             pictureBox4.Image = b4;
         }
 
+        // Кнопка вывода гистограмм
         private void button3_Click(object sender, EventArgs e)
         {
             form2.hist1 = hist1;

@@ -32,6 +32,7 @@ namespace FirstTask
 
         private void Form2_Load(object sender, EventArgs e)
         {
+            // Построение гистограмм
             int[] nums = new int[256];
             for (int i = 0; i < 256; ++i)
                 nums[i] = i;
