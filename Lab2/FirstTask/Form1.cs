@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FastBmap;
 
 namespace FirstTask
 {
@@ -58,41 +59,31 @@ namespace FirstTask
             hist2 = new int[256];
             hist3 = new int[256];
 
-            for (x=0; x<b2.Width; ++x)
-            {
-                for (y=0; y<b2.Height; ++y)
-                {
-                    Color pixelColor = b2.GetPixel(x, y);
-                    int Y = (int)(0.299 * pixelColor.R + 0.587 * pixelColor.G + 0.114 * pixelColor.B);
-                    ++hist1[Y];
-                    Color newColor = Color.FromArgb(Y, Y, Y);
-                    b2.SetPixel(x, y, newColor);
-                }
-            }
+            b2 = b2.Select(color => {
+                        int Y = (int)(0.299 * color.R + 0.587 * color.G + 0.114 * color.B);
+                        ++hist1[Y];
+                        return Color.FromArgb(Y, Y, Y);
+            });
 
-            for (x=0; x<b3.Width; ++x)
-            {
-                for (y=0; y<b3.Height; ++y)
-                {
-                    Color pixelColor = b3.GetPixel(x, y);
-                    int Y = (int)(0.2126 * pixelColor.R + 0.7152 * pixelColor.G + 0.0722 * pixelColor.B);
-                    ++hist2[Y];
-                    Color newColor = Color.FromArgb(Y, Y, Y);
-                    b3.SetPixel(x, y, newColor);
-                }
-            }
+            b3 = b3.Select(color => {
+                        int Y = (int)(0.2126 * color.R + 0.7152 * color.G + 0.0722 * color.B);
+                        ++hist2[Y];
+                        return Color.FromArgb(Y, Y, Y);
+            });
 
-            for (x=0; x<b4.Width; ++x)
+            using (var fastBitmap2 = new FastBitmap(b2))
+            using (var fastBitmap3 = new FastBitmap(b3))
+            using (var fastBitmap4 = new FastBitmap(b4))
             {
-                for (y=0; y<b4.Height; ++y)
-                {
-                    Color pixelColorOne = b2.GetPixel(x, y);
-                    Color pixelColorTwo = b3.GetPixel(x, y);
-                    int d = Math.Abs(pixelColorTwo.R - pixelColorOne.R);
-                    ++hist3[d];
-                    Color newColor = Color.FromArgb(d, d, d);
-                    b4.SetPixel(x, y, newColor);
-                }
+                for (x = 0; x < fastBitmap4.Width; x++)
+                    for (y = 0; y < fastBitmap4.Height; y++)
+                    {
+                        Color ColorOne = fastBitmap2[x, y];
+                        Color ColorTwo = fastBitmap3[x, y];
+                        int d = Math.Abs(ColorTwo.R - ColorOne.R);
+                        ++hist3[d];
+                        fastBitmap4[x, y] = Color.FromArgb(d, d, d);
+                    }
             }
 
             pictureBox2.Image = b2;
