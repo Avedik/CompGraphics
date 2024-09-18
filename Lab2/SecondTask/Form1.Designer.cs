@@ -56,6 +56,7 @@
             this.pbOriginal.Location = new System.Drawing.Point(21, 205);
             this.pbOriginal.Name = "pbOriginal";
             this.pbOriginal.Size = new System.Drawing.Size(256, 256);
+            this.pbOriginal.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbOriginal.TabIndex = 1;
             this.pbOriginal.TabStop = false;
             // 
@@ -64,6 +65,7 @@
             this.pbRedChannel.Location = new System.Drawing.Point(352, 32);
             this.pbRedChannel.Name = "pbRedChannel";
             this.pbRedChannel.Size = new System.Drawing.Size(256, 256);
+            this.pbRedChannel.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbRedChannel.TabIndex = 2;
             this.pbRedChannel.TabStop = false;
             // 
@@ -72,6 +74,7 @@
             this.pbGreenChannel.Location = new System.Drawing.Point(614, 32);
             this.pbGreenChannel.Name = "pbGreenChannel";
             this.pbGreenChannel.Size = new System.Drawing.Size(256, 256);
+            this.pbGreenChannel.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbGreenChannel.TabIndex = 3;
             this.pbGreenChannel.TabStop = false;
             // 
@@ -80,6 +83,7 @@
             this.pbBlueChannel.Location = new System.Drawing.Point(876, 32);
             this.pbBlueChannel.Name = "pbBlueChannel";
             this.pbBlueChannel.Size = new System.Drawing.Size(256, 256);
+            this.pbBlueChannel.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbBlueChannel.TabIndex = 4;
             this.pbBlueChannel.TabStop = false;
             // 
