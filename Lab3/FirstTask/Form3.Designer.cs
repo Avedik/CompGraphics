@@ -37,8 +37,9 @@
             // 
             // pictureBox1
             // 
+            this.pictureBox1.BackColor = System.Drawing.SystemColors.Control;
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Location = new System.Drawing.Point(12, 70);
+            this.pictureBox1.Location = new System.Drawing.Point(16, 70);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(708, 430);
             this.pictureBox1.TabIndex = 0;
@@ -47,7 +48,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(12, 11);
+            this.button1.Location = new System.Drawing.Point(486, 11);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(154, 51);
             this.button1.TabIndex = 1;
@@ -62,17 +63,18 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(313, 30);
+            this.label1.Location = new System.Drawing.Point(18, 30);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(233, 13);
+            this.label1.Size = new System.Drawing.Size(363, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Выберите связную область на изображении";
+            this.label1.Text = "Откройте изображение и выберите связную область, щёлкнув по ней";
             // 
             // Form3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(742, 510);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);

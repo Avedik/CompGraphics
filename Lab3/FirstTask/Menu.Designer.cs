@@ -35,31 +35,38 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(362, 55);
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.button1.Location = new System.Drawing.Point(263, 65);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 41);
+            this.button1.Size = new System.Drawing.Size(290, 50);
             this.button1.TabIndex = 0;
-            this.button1.Text = "Задание 1а";
+            this.button1.Text = "Рекурсивный алгоритм заливки на основе серий пикселов (линий)  заданным цветом";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(362, 132);
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.button2.Location = new System.Drawing.Point(263, 153);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(100, 39);
+            this.button2.Size = new System.Drawing.Size(290, 54);
             this.button2.TabIndex = 1;
-            this.button2.Text = "Задание 1б";
+            this.button2.Text = "Рекурсивный алгоритм заливки на основе серий пикселов (линий)  рисунком из графич" +
+    "еского файла";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(362, 208);
+            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.button3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.button3.Location = new System.Drawing.Point(263, 241);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(100, 38);
+            this.button3.Size = new System.Drawing.Size(290, 46);
             this.button3.TabIndex = 2;
-            this.button3.Text = "Задание 1в";
+            this.button3.Text = "Выделение границы связной области";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 

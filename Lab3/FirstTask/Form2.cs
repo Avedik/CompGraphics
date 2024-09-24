@@ -16,7 +16,6 @@ namespace FirstTask
         private bool drawing = false;
         private Image orig;
         int left, right, up, down;
-        Color c;
         OpenFileDialog open_dialog;
         Bitmap back;
         List<Tuple<Point, Point>> l = new List<Tuple<Point, Point>>();
@@ -26,11 +25,9 @@ namespace FirstTask
             InitializeComponent(); ;
             radioButton1.Checked = true;
 
-
-            //создаем фон
             Bitmap b = new Bitmap(pictureBox.Width, pictureBox.Height);
             pictureBox.Image = b;
-            Clear(); // очищаем pictureBox
+            Clear();
         }
 
         public Bitmap ResizeBitmap(Bitmap bmp, int width, int height)
@@ -93,7 +90,7 @@ namespace FirstTask
             if (l.Exists(t => t.Item1.Y == p.Y && t.Item1.X <= p.X && p.X <= t.Item2.X))
                 return;
             //если пиксель еще не был закрашен
-            if (0 < p.X && p.X < b.Width && 0 < p.Y && p.Y < b.Height)// && equalColors(b.GetPixel(p.X, p.Y), c))
+            if (0 < p.X && p.X < b.Width && 0 < p.Y && p.Y < b.Height)
             {
                 // var g = Graphics.FromImage(b);
                 Point left_b = p, right_b = p;
@@ -109,11 +106,6 @@ namespace FirstTask
                     up = right_b.Y;
 
                 l.Add(Tuple.Create(left_b, right_b));
-                // Rectangle r = new Rectangle(left_b.X + 1, p.Y, right_b.X - left_b.X - 1, 1); 
-                // Bitmap line = back.Clone(r, back.PixelFormat); //копируем линию из заданного изображения
-
-                // g.DrawImage(line, r);
-                // pictureBox.Image = b;
 
                 for (int i = left_b.X + 1; i < right_b.X; ++i)
                     filling(new Point(i, p.Y + 1), c);
@@ -138,8 +130,7 @@ namespace FirstTask
                 up = e.Location.Y;
                 down = e.Location.Y;
 
-                filling(start, pictureBox.BackColor); // заливаем
-                                                      //back = ResizeBitmap(back, right - left, up - down);
+                filling(start, pictureBox.BackColor);
                 byFilling(start);
                 l.Clear();
             }
@@ -202,14 +193,13 @@ namespace FirstTask
                     g.DrawImage(fragment, r);
                 }
             }
-            res = res;
             return res;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             open_dialog = new OpenFileDialog(); //создание диалогового окна для выбора файла
-            open_dialog.Filter = "Image Files(*.BMP;*.JPG;**.PNG)|*.BMP;*.JPG;**.PNG|All files (*.*)|*.*"; //формат загружаемого файла
+            open_dialog.Filter = "Image Files(*.BMP;*.JPG;**.PNG)|*.BMP;*.JPG;**.PNG|All files (*.*)|*.*";
             DialogResult dr = open_dialog.ShowDialog();
             if (dr == DialogResult.OK)
             {

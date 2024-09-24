@@ -82,19 +82,14 @@ namespace FirstTask
             
             while (colorsEqual(innerColor, currColor) && x < image.Width)
             {
-                //image.SetPixel(x, y, myBorderColor);
                 x += 1;
                 currColor = image.GetPixel(x, y);
             }
             borderColor = image.GetPixel(x, y);
             firstX = x - 1;
             firstY = y;
-            //image.SetPixel(x - 1, y, myBorderColor);
         }
 
-        //3 2 1
-        //4 X 0
-        //5 6 7
         private Tuple<int, int> moveByDirection(int x, int y, int direction)
         {
             switch (direction)
@@ -161,8 +156,6 @@ namespace FirstTask
             }
         }
 
-        //LinkedList<Tuple<int, int>> points = new LinkedList<Tuple<int, int>>();
-
         private LinkedList<Tuple<int, int>> getFullBorder(int x, int y)
         {
             LinkedList<Tuple<int, int>> points = new LinkedList<Tuple<int, int>>();
@@ -173,7 +166,7 @@ namespace FirstTask
                 if (points.Count() == 0 || points.Last() != newt)
                     points.AddLast(newt);
                 getNextPixel(ref x, ref y, ref whereBorder);
-                //image.SetPixel(x, y, myBorderColor);
+
             } while (((x != firstX) || (y != firstY)) && (points.Count() < (image.Width + image.Height) * 10));
             return points;
         }
@@ -204,12 +197,6 @@ namespace FirstTask
             }
         }
 
-        //Возвращает список, содержаций следующие элементы:
-        //  Значение Y и список из пар границ (x1, x2), 
-        //      где каждая пара границ получена из следующей последовательности пикселей: 
-        //      (x1, y), (x1+1, y), ... , (x2, y).
-        //      Из-за того, что одному Y может соответствовать не одна пара границ (x1, x2), а несколько,
-        //      был использован двусвязный список.
         private LinkedList<Tuple<int, LinkedList<Tuple<int, int>>>> getYandBorders(ref List<Tuple<int, int>> points)
         {
             LinkedList<Tuple<int, LinkedList<Tuple<int, int>>>> yBorders = new LinkedList<Tuple<int, LinkedList<Tuple<int, int>>>>();

@@ -42,8 +42,7 @@ namespace FirstTask
             if (flag)
             {
                 list.Add(new Point(e.X, e.Y));
-                int val = trackBar1.Value;
-                g.DrawLines(new Pen(Color.Black, val), list.ToArray());
+                g.DrawLines(new Pen(Color.Black), list.ToArray());
             }
             else
             {
@@ -53,7 +52,6 @@ namespace FirstTask
             pictureBox1.Image = bmp;
         }
 
-        //Color formColor;
         Pen needColor;
         private void pictureBox1_MouseDown2(object sender, MouseEventArgs e)
         {
@@ -107,20 +105,6 @@ namespace FirstTask
             pictureBox1.MouseDown += new MouseEventHandler(pictureBox1_MouseDown2);
             button3.Enabled = true;
             button2.Enabled = false;
-            label2.Visible = true;
-            label3.Visible = false;
-        }
-
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            saveFileDialog1.RestoreDirectory = true;
-            saveFileDialog1.Filter = "Image Files(*.JPG)|*.JPG|All files (*.*)|*.*";
-            pictureBox1.Image = pictureBox1.Image;
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                pictureBox1.Image.Save(saveFileDialog1.FileName);
-            }
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -129,18 +113,15 @@ namespace FirstTask
             pictureBox1.MouseDown += new MouseEventHandler(pictureBox1_MouseDown1);
             button3.Enabled = false;
             button2.Enabled = true;
-            label3.Visible = true;
-            label2.Visible = false;
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             if (colorDialog1.ShowDialog() == DialogResult.Cancel)
                 return;
-            Color c = colorDialog1.Color;
-            label5.BackColor = c;
-            needColor.Color = c;
-            //button2_Click(sender, e);
+            Color color = colorDialog1.Color;
+            label5.BackColor = color;
+            needColor.Color = color;
         }
     }
 }
