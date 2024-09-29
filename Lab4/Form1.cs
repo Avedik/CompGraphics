@@ -12,11 +12,13 @@ namespace Lab4
 {
     public partial class Form1 : Form
     {
-        enum Transormations { Shift };
+        enum Transormations { Shift, Rotation, RotationCenter};
         Bitmap bmp;
         Graphics g;
+        bool isReady = false; // флаг готовности полигона
         double[,] transformationMatrix; // матрица преобразования
-        List<Point> list = new List<Point>(); //список точек для полигона
+        List<Point> list = new List<Point>(); // список точек для полигона
+        Point myPoint; // Точка, относительно которой происходит поворот
 
         public Form1()
         {
@@ -34,22 +36,30 @@ namespace Lab4
         // Добавляет очередной элемент к полигону при нажатии мышкой
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            list.Add(new Point(e.X, e.Y));
-            if (list.Count() == 3)
-                chainButton.Enabled = true;
-
-            if (list.Count() == 1)
+            if (!isReady)
             {
-                button2.Enabled = true;
-                ((Bitmap)pictureBox1.Image).SetPixel(e.X, e.Y, Color.Red);
+                list.Add(new Point(e.X, e.Y));
+                if (list.Count() == 3)
+                    chainButton.Enabled = true;
+
+                if (list.Count() == 1)
+                {
+                    button2.Enabled = true;
+                    ((Bitmap)pictureBox1.Image).SetPixel(e.X, e.Y, Color.Red);
+                }
+                else
+                {
+                    var pen = new Pen(Color.Red, 1);
+                    g.DrawLine(pen, list[list.Count() - 2], list.Last());
+                    pen.Dispose();
+                }
+                pictureBox1.Image = pictureBox1.Image;
             }
             else
             {
-                var pen = new Pen(Color.Red, 1);
-                g.DrawLine(pen, list[list.Count() - 2], list.Last());
-                pen.Dispose();
+                myPoint = new Point(e.X, e.Y);
+                ((Bitmap)pictureBox1.Image).SetPixel(e.X, e.Y, Color.Red);
             }
-            pictureBox1.Image = pictureBox1.Image;
         }
 
         private void RefreshElements()
@@ -58,6 +68,12 @@ namespace Lab4
             label2.Enabled = textBox1.Enabled =
                 textBox2.Enabled = dxLabel.Enabled =
                 dyLabel.Enabled = comboBox1.SelectedIndex == (int)Transormations.Shift;
+            // Происходит активация элементов, если в комбобоксе выбрано "Поворот вокруг заданной точки"
+            label1.Enabled = textBox3.Enabled = degreesLabel.Enabled = 
+                comboBox1.SelectedIndex == (int)Transormations.Rotation;
+            // Происходит активация элементов, если в комбобоксе выбрано "Поворот вокруг центра"
+            label1.Enabled = textBox3.Enabled = degreesLabel.Enabled =
+                comboBox1.SelectedIndex == (int)Transormations.RotationCenter;
         }
 
         // Очистка сцены (удаление всех полигонов)
@@ -74,11 +90,15 @@ namespace Lab4
 
         private void button1_Click(object sender, EventArgs e)
         {
+            isReady = false;
             Clear();
         }
 
         private void ChooseTransformation()
         {
+            double X;
+            double Y;
+            double angle;
             // Выбор аффинного преобразования
             switch (comboBox1.SelectedIndex)
             {
@@ -86,6 +106,16 @@ namespace Lab4
                     double dX = System.Convert.ToDouble(textBox1.Text);
                     double dY = -System.Convert.ToDouble(textBox2.Text);
                     transformationMatrix = new double[,] { { 1.0, 0, 0 }, { 0, 1.0, 0 }, { dX, dY, 1.0 } };
+                    break;
+                case (int)Transormations.Rotation:
+                    X = System.Convert.ToDouble(myPoint.X);
+                    Y = -System.Convert.ToDouble(myPoint.Y);
+                    angle = Math.PI * System.Convert.ToDouble(textBox3.Text) / 180.0;
+                    transformationMatrix = new double[,] { 
+                        { Math.Cos(angle), Math.Sin(angle), 0 }, 
+                        { -Math.Sin(angle), Math.Cos(angle), 0 }, 
+                        { -X*Math.Cos(angle) - Y*Math.Sin(angle) + X, 
+                            -X*Math.Sin(angle)+Y*Math.Cos(angle)-Y, 1.0 } };
                     break;
 
                 default:
@@ -157,6 +187,7 @@ namespace Lab4
             g.DrawLine(new Pen(Color.Red, 1), list.Last(), list.First());
             list.Add(list.First());
             pictureBox1.Image = pictureBox1.Image;
+            isReady = true;
             chainButton.Enabled = false;
         }
     }
