@@ -68,12 +68,9 @@ namespace Lab4
             label2.Enabled = textBox1.Enabled =
                 textBox2.Enabled = dxLabel.Enabled =
                 dyLabel.Enabled = comboBox1.SelectedIndex == (int)Transormations.Shift;
-            // Происходит активация элементов, если в комбобоксе выбрано "Поворот вокруг заданной точки"
+            // Происходит активация элементов, если в комбобоксе выбрано "Поворот вокруг заданной точки" или "Поворот вокруг центра"
             label1.Enabled = textBox3.Enabled = degreesLabel.Enabled = 
-                comboBox1.SelectedIndex == (int)Transormations.Rotation;
-            // Происходит активация элементов, если в комбобоксе выбрано "Поворот вокруг центра"
-            label1.Enabled = textBox3.Enabled = degreesLabel.Enabled =
-                comboBox1.SelectedIndex == (int)Transormations.RotationCenter;
+                comboBox1.SelectedIndex == (int)Transormations.Rotation || comboBox1.SelectedIndex == (int)Transormations.RotationCenter;
         }
 
         // Очистка сцены (удаление всех полигонов)
@@ -99,6 +96,7 @@ namespace Lab4
             double X;
             double Y;
             double angle;
+            Point center;
             // Выбор аффинного преобразования
             switch (comboBox1.SelectedIndex)
             {
@@ -115,6 +113,17 @@ namespace Lab4
                         { Math.Cos(angle), Math.Sin(angle), 0 }, 
                         { -Math.Sin(angle), Math.Cos(angle), 0 }, 
                         { -X*Math.Cos(angle) - Y*Math.Sin(angle) + X, 
+                            -X*Math.Sin(angle)+Y*Math.Cos(angle)-Y, 1.0 } };
+                    break;
+                case (int)Transormations.RotationCenter:
+                    center = Centroid();
+                    X = center.X;
+                    Y = center.Y;
+                    angle = Math.PI * System.Convert.ToDouble(textBox3.Text) / 180.0;
+                    transformationMatrix = new double[,] {
+                        { Math.Cos(angle), Math.Sin(angle), 0 },
+                        { -Math.Sin(angle), Math.Cos(angle), 0 },
+                        { -X*Math.Cos(angle) - Y*Math.Sin(angle) + X,
                             -X*Math.Sin(angle)+Y*Math.Cos(angle)-Y, 1.0 } };
                     break;
 
@@ -143,6 +152,27 @@ namespace Lab4
                     }
 
             return res;
+        }
+
+        // Возвращает геометрический центр полигона
+        private Point Centroid ()
+        {
+            double S = 0;
+            double X = 0;
+            double Y = 0;
+            int num;
+
+            for (int i = 0; i < list.Count - 1; ++i)
+            {
+                num = -list[i].X * list[i + 1].Y + list[i + 1].X * list[i].Y;
+                S += num;
+                X += (list[i].X + list[i + 1].X) * num;
+                Y += -(list[i].Y + list[i + 1].Y) * num;
+            }
+            S *= 0.5;
+            X /= 6*S;
+            Y /= 6*S;
+            return new Point((int)X, (int)Y);
         }
 
         // Применяет преобразование с использованием матриц
