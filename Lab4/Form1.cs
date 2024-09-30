@@ -19,6 +19,10 @@ namespace Lab4
         double[,] transformationMatrix; // матрица преобразования
         List<Point> list = new List<Point>(); // список точек для полигона
         Point myPoint; // Точка, относительно которой происходит поворот
+        // Для хранения пересекающейся линии
+        Point lineStart;
+        Point lineEnd;
+        bool isSecondLineReady = false;
 
         public Form1()
         {
@@ -57,9 +61,31 @@ namespace Lab4
             }
             else
             {
-                myPoint = new Point(e.X, e.Y);
-                ((Bitmap)pictureBox1.Image).SetPixel(e.X, e.Y, Color.Red);
+                if (!isSecondLineReady)
+                {
+                    if (lineStart.IsEmpty)
+                    {
+                        lineStart = new Point(e.X, e.Y);
+                    }
+                    else
+                    {
+                        lineEnd = new Point(e.X, e.Y);
+                        g.DrawLine(new Pen(Color.Blue, 1), lineStart, lineEnd);
+                        isSecondLineReady = true;
+
+                        // Проверка на пересечение
+                        Point? intersection = GetIntersection(lineStart, lineEnd);
+                        if (intersection.HasValue)
+                        {
+                            g.FillEllipse(Brushes.Green, intersection.Value.X - 5, intersection.Value.Y - 5, 10, 10);
+                        }
+
+                        lineStart = Point.Empty; // сброс
+                        lineEnd = Point.Empty; // сброс
+                    }
+                }
             }
+            pictureBox1.Image = pictureBox1.Image;
         }
 
         private void RefreshElements()
@@ -82,6 +108,9 @@ namespace Lab4
         {
             g.Clear(pictureBox1.BackColor);
             list.Clear();
+            lineStart = Point.Empty;
+            lineEnd = Point.Empty;
+            isSecondLineReady = false;
 
             comboBox1.SelectedIndex = 0;
             RefreshElements();
@@ -246,6 +275,29 @@ namespace Lab4
             pictureBox1.Image = pictureBox1.Image;
             isReady = true;
             chainButton.Enabled = false;
+        }
+
+        // Вычисление пересечения между ребрами
+        private Point? GetIntersection(Point p1, Point p2)
+        {
+            if (list.Count < 2) return null;
+
+            Point p3 = list[list.Count - 2];
+            Point p4 = list[list.Count - 1];
+
+            // Вычисление параметров пересечения
+            float denom = (p4.Y - p3.Y) * (p2.X - p1.X) - (p4.X - p3.X) * (p2.Y - p1.Y);
+            if (denom == 0) return null; // Параллельные линии
+
+            float ua = ((p4.X - p3.X) * (p1.Y - p3.Y) - (p4.Y - p3.Y) * (p1.X - p3.X)) / denom;
+            float ub = ((p2.X - p1.X) * (p1.Y - p3.Y) - (p2.Y - p1.Y) * (p1.X - p3.X)) / denom;
+
+            if (ua < 0 || ua > 1 || ub < 0 || ub > 1) return null; // Нет пересечения
+
+            // Вычисление координат точки пересечения
+            float intersectionX = p1.X + ua * (p2.X - p1.X);
+            float intersectionY = p1.Y + ua * (p2.Y - p1.Y);
+            return new Point((int)intersectionX, (int)intersectionY);
         }
     }
 }
