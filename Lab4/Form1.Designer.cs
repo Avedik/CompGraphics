@@ -42,6 +42,11 @@
             this.label1 = new System.Windows.Forms.Label();
             this.degreesLabel = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.XLabel = new System.Windows.Forms.Label();
+            this.YLabel = new System.Windows.Forms.Label();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.textBox5 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -73,10 +78,12 @@
             this.comboBox1.Items.AddRange(new object[] {
             "Смещение",
             "Поворот вокруг заданной точки",
-            "Поворот вокруг центра"});
-            this.comboBox1.Location = new System.Drawing.Point(724, 112);
+            "Поворот вокруг центра",
+            "Масштабирование относительно точки",
+            "Масштабирование относительно центра"});
+            this.comboBox1.Location = new System.Drawing.Point(694, 98);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(192, 21);
+            this.comboBox1.Size = new System.Drawing.Size(237, 21);
             this.comboBox1.TabIndex = 6;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
@@ -84,7 +91,7 @@
             // 
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(739, 178);
+            this.textBox1.Location = new System.Drawing.Point(739, 164);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(51, 20);
             this.textBox1.TabIndex = 8;
@@ -94,7 +101,7 @@
             // 
             this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox2.Enabled = false;
-            this.textBox2.Location = new System.Drawing.Point(851, 178);
+            this.textBox2.Location = new System.Drawing.Point(851, 164);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(51, 20);
             this.textBox2.TabIndex = 9;
@@ -105,7 +112,7 @@
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
             this.label2.Enabled = false;
-            this.label2.Location = new System.Drawing.Point(679, 155);
+            this.label2.Location = new System.Drawing.Point(679, 141);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(111, 13);
             this.label2.TabIndex = 10;
@@ -127,7 +134,7 @@
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(679, 83);
+            this.label4.Location = new System.Drawing.Point(679, 69);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(150, 13);
             this.label4.TabIndex = 14;
@@ -138,7 +145,7 @@
             this.dxLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.dxLabel.AutoSize = true;
             this.dxLabel.Enabled = false;
-            this.dxLabel.Location = new System.Drawing.Point(712, 181);
+            this.dxLabel.Location = new System.Drawing.Point(712, 167);
             this.dxLabel.Name = "dxLabel";
             this.dxLabel.Size = new System.Drawing.Size(21, 13);
             this.dxLabel.TabIndex = 15;
@@ -149,7 +156,7 @@
             this.dyLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.dyLabel.AutoSize = true;
             this.dyLabel.Enabled = false;
-            this.dyLabel.Location = new System.Drawing.Point(824, 181);
+            this.dyLabel.Location = new System.Drawing.Point(824, 167);
             this.dyLabel.Name = "dyLabel";
             this.dyLabel.Size = new System.Drawing.Size(21, 13);
             this.dyLabel.TabIndex = 16;
@@ -172,7 +179,7 @@
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
             this.label1.Enabled = false;
-            this.label1.Location = new System.Drawing.Point(679, 213);
+            this.label1.Location = new System.Drawing.Point(679, 197);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(130, 13);
             this.label1.TabIndex = 18;
@@ -183,7 +190,7 @@
             this.degreesLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.degreesLabel.AutoSize = true;
             this.degreesLabel.Enabled = false;
-            this.degreesLabel.Location = new System.Drawing.Point(748, 240);
+            this.degreesLabel.Location = new System.Drawing.Point(737, 224);
             this.degreesLabel.Name = "degreesLabel";
             this.degreesLabel.Size = new System.Drawing.Size(53, 13);
             this.degreesLabel.TabIndex = 19;
@@ -193,11 +200,64 @@
             // 
             this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox3.Enabled = false;
-            this.textBox3.Location = new System.Drawing.Point(814, 237);
+            this.textBox3.Location = new System.Drawing.Point(796, 221);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(51, 20);
             this.textBox3.TabIndex = 20;
             this.textBox3.Text = "0";
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Enabled = false;
+            this.label3.Location = new System.Drawing.Point(679, 255);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(221, 13);
+            this.label3.TabIndex = 21;
+            this.label3.Text = "Укажите степень масштабирования (в %):";
+            // 
+            // XLabel
+            // 
+            this.XLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.XLabel.AutoSize = true;
+            this.XLabel.Enabled = false;
+            this.XLabel.Location = new System.Drawing.Point(691, 285);
+            this.XLabel.Name = "XLabel";
+            this.XLabel.Size = new System.Drawing.Size(55, 13);
+            this.XLabel.TabIndex = 22;
+            this.XLabel.Text = "По оси X:";
+            // 
+            // YLabel
+            // 
+            this.YLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.YLabel.AutoSize = true;
+            this.YLabel.Enabled = false;
+            this.YLabel.Location = new System.Drawing.Point(824, 285);
+            this.YLabel.Name = "YLabel";
+            this.YLabel.Size = new System.Drawing.Size(55, 13);
+            this.YLabel.TabIndex = 23;
+            this.YLabel.Text = "По оси Y:";
+            // 
+            // textBox4
+            // 
+            this.textBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox4.Enabled = false;
+            this.textBox4.Location = new System.Drawing.Point(750, 282);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(51, 20);
+            this.textBox4.TabIndex = 24;
+            this.textBox4.Text = "100";
+            // 
+            // textBox5
+            // 
+            this.textBox5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox5.Enabled = false;
+            this.textBox5.Location = new System.Drawing.Point(880, 282);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(51, 20);
+            this.textBox5.TabIndex = 25;
+            this.textBox5.Text = "100";
             // 
             // Form1
             // 
@@ -205,6 +265,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.ClientSize = new System.Drawing.Size(957, 511);
+            this.Controls.Add(this.textBox5);
+            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.YLabel);
+            this.Controls.Add(this.XLabel);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.degreesLabel);
             this.Controls.Add(this.label1);
@@ -244,6 +309,11 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label degreesLabel;
         private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label XLabel;
+        private System.Windows.Forms.Label YLabel;
+        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox textBox5;
     }
 }
 

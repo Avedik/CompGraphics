@@ -12,7 +12,7 @@ namespace Lab4
 {
     public partial class Form1 : Form
     {
-        enum Transormations { Shift, Rotation, RotationCenter};
+        enum Transormations { Shift, Rotation, RotationCenter, Zoom, ZoomCenter};
         Bitmap bmp;
         Graphics g;
         bool isReady = false; // флаг готовности полигона
@@ -71,6 +71,10 @@ namespace Lab4
             // Происходит активация элементов, если в комбобоксе выбрано "Поворот вокруг заданной точки" или "Поворот вокруг центра"
             label1.Enabled = textBox3.Enabled = degreesLabel.Enabled = 
                 comboBox1.SelectedIndex == (int)Transormations.Rotation || comboBox1.SelectedIndex == (int)Transormations.RotationCenter;
+            // Происходит активация элементов, если в комбобоксе выбрано "Масштабирование относительно точки" или "Масштабирование относительно центра"
+            label3.Enabled = textBox4.Enabled =
+                textBox5.Enabled = XLabel.Enabled = YLabel.Enabled =
+                comboBox1.SelectedIndex == (int)Transormations.Zoom || comboBox1.SelectedIndex == (int)Transormations.ZoomCenter;
         }
 
         // Очистка сцены (удаление всех полигонов)
@@ -96,7 +100,9 @@ namespace Lab4
             double X;
             double Y;
             double angle;
-            Point center;
+            double XScale;
+            double YScale;
+
             // Выбор аффинного преобразования
             switch (comboBox1.SelectedIndex)
             {
@@ -116,15 +122,36 @@ namespace Lab4
                             -X*Math.Sin(angle)+Y*Math.Cos(angle)-Y, 1.0 } };
                     break;
                 case (int)Transormations.RotationCenter:
-                    center = Centroid();
-                    X = center.X;
-                    Y = center.Y;
+                    myPoint = Centroid();
+                    X = myPoint.X;
+                    Y = myPoint.Y;
                     angle = Math.PI * System.Convert.ToDouble(textBox3.Text) / 180.0;
                     transformationMatrix = new double[,] {
                         { Math.Cos(angle), Math.Sin(angle), 0 },
                         { -Math.Sin(angle), Math.Cos(angle), 0 },
                         { -X*Math.Cos(angle) - Y*Math.Sin(angle) + X,
                             -X*Math.Sin(angle)+Y*Math.Cos(angle)-Y, 1.0 } };
+                    break;
+                case (int)Transormations.Zoom:
+                    X = System.Convert.ToDouble(myPoint.X);
+                    Y = -System.Convert.ToDouble(myPoint.Y);
+                    XScale = System.Convert.ToDouble(textBox4.Text) / 100.0;
+                    YScale = System.Convert.ToDouble(textBox5.Text) / 100.0;
+                    transformationMatrix = new double[,] {
+                        { XScale, 0, 0 },
+                        { 0, YScale, 0 },
+                        { (1 - XScale)* X, -(1 - YScale)* Y, 1.0 } };
+                    break;
+                case (int)Transormations.ZoomCenter:
+                    myPoint = Centroid();
+                    X = myPoint.X;
+                    Y = myPoint.Y;
+                    XScale = System.Convert.ToDouble(textBox4.Text) / 100.0;
+                    YScale = System.Convert.ToDouble(textBox5.Text) / 100.0;
+                    transformationMatrix = new double[,] {
+                        { XScale, 0, 0 },
+                        { 0, YScale, 0 },
+                        { (1 - XScale)* X, -(1 - YScale)* Y, 1.0 } };
                     break;
 
                 default:
