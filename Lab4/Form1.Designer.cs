@@ -50,6 +50,7 @@
             this.drawSecondLineButton = new System.Windows.Forms.Button();
             this.drawPoint = new System.Windows.Forms.Button();
             this.checkButton = new System.Windows.Forms.Button();
+            this.classifyButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -264,7 +265,7 @@
             // 
             // drawSecondLineButton
             // 
-            this.drawSecondLineButton.Location = new System.Drawing.Point(682, 338);
+            this.drawSecondLineButton.Location = new System.Drawing.Point(682, 323);
             this.drawSecondLineButton.Name = "drawSecondLineButton";
             this.drawSecondLineButton.Size = new System.Drawing.Size(66, 56);
             this.drawSecondLineButton.TabIndex = 26;
@@ -274,7 +275,7 @@
             // 
             // drawPoint
             // 
-            this.drawPoint.Location = new System.Drawing.Point(789, 323);
+            this.drawPoint.Location = new System.Drawing.Point(844, 323);
             this.drawPoint.Name = "drawPoint";
             this.drawPoint.Size = new System.Drawing.Size(56, 27);
             this.drawPoint.TabIndex = 28;
@@ -284,13 +285,23 @@
             // 
             // checkButton
             // 
-            this.checkButton.Location = new System.Drawing.Point(764, 356);
+            this.checkButton.Location = new System.Drawing.Point(784, 356);
             this.checkButton.Name = "checkButton";
-            this.checkButton.Size = new System.Drawing.Size(105, 55);
+            this.checkButton.Size = new System.Drawing.Size(161, 55);
             this.checkButton.TabIndex = 29;
-            this.checkButton.Text = "проверка принадлежности точки";
+            this.checkButton.Text = "проверка принадлежности точки полигону";
             this.checkButton.UseVisualStyleBackColor = true;
             this.checkButton.Click += new System.EventHandler(this.checkButton_Click);
+            // 
+            // classifyButton
+            // 
+            this.classifyButton.Location = new System.Drawing.Point(784, 417);
+            this.classifyButton.Name = "classifyButton";
+            this.classifyButton.Size = new System.Drawing.Size(161, 28);
+            this.classifyButton.TabIndex = 30;
+            this.classifyButton.Text = "Классификация точки";
+            this.classifyButton.UseVisualStyleBackColor = true;
+            this.classifyButton.Click += new System.EventHandler(this.classifyButton_Click);
             // 
             // Form1
             // 
@@ -298,6 +309,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.ClientSize = new System.Drawing.Size(957, 511);
+            this.Controls.Add(this.classifyButton);
             this.Controls.Add(this.checkButton);
             this.Controls.Add(this.drawPoint);
             this.Controls.Add(this.drawSecondLineButton);
@@ -353,6 +365,7 @@
         private System.Windows.Forms.Button drawSecondLineButton;
         private System.Windows.Forms.Button drawPoint;
         private System.Windows.Forms.Button checkButton;
+        private System.Windows.Forms.Button classifyButton;
     }
 }
 

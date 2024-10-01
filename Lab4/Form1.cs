@@ -82,8 +82,8 @@ namespace Lab4
                             g.FillEllipse(Brushes.Green, intersection.Value.X - 5, intersection.Value.Y - 5, 10, 10);
                         }
 
-                        lineStart = Point.Empty; // сброс
-                        lineEnd = Point.Empty; // сброс
+                        lineStart = Point.Empty; 
+                        lineEnd = Point.Empty; 
                     }
                 }
             }
@@ -123,7 +123,8 @@ namespace Lab4
             list.Clear();
             lineStart = Point.Empty;
             lineEnd = Point.Empty;
-            isSecondLineReady = false;
+            isSecondLineReady = true;
+            drPoint = true;
 
             comboBox1.SelectedIndex = 0;
             RefreshElements();
@@ -368,7 +369,44 @@ namespace Lab4
 
         private void drawPoint_Click(object sender, EventArgs e)
         {
+            isReady = true; 
             drPoint = false;
+        }
+
+        private void classifyButton_Click(object sender, EventArgs e)
+        {
+            if (isReady && isSecondLineReady)
+            {
+                // Классификация положения точки  относительно отрезка
+                Point A = list[list.Count - 1]; 
+                Point B = list[list.Count - 2];  
+                Point P = myPoint; // Точка для классификации
+
+                string position = ClassifyPosition(A, B, P);
+                MessageBox.Show($"Положение точки относительно отрезка: {position}");
+            }
+            else
+            {
+                MessageBox.Show("Пожалуйста, убедитесь, что полигон завершен и линия готова.");
+            }
+        }
+
+        private string ClassifyPosition(Point A, Point B, Point P)
+        {
+            double D = (B.X - A.X) * (P.Y - A.Y) - (B.Y - A.Y) * (P.X - A.X);
+
+            if (D > 0)
+            {
+                return "Слева от отрезка";
+            }
+            else if (D < 0)
+            {
+                return "Справа от отрезка";
+            }
+            else
+            {
+                return "На отрезке";
+            }
         }
     }
 }
