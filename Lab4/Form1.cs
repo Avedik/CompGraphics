@@ -23,6 +23,7 @@ namespace Lab4
         Point lineStart;
         Point lineEnd;
         bool isSecondLineReady = true;
+        bool drPoint = true;
 
         public Form1()
         {
@@ -60,7 +61,7 @@ namespace Lab4
                 }
                 pictureBox1.Image = pictureBox1.Image;
             }
-            else
+            else if (!isSecondLineReady)
             {
                 if (!isSecondLineReady)
                 {
@@ -86,8 +87,16 @@ namespace Lab4
                     }
                 }
             }
+            else
+            {
+                if (!drPoint)
+                {
+                    myPoint = new Point(e.X, e.Y);
+                    g.FillEllipse(Brushes.Yellow, myPoint.X - 5, myPoint.Y - 5, 10, 10); // покрасим точку в желтый
+                    pictureBox1.Image = pictureBox1.Image;
+                }
+            }
             pictureBox1.Image = pictureBox1.Image;
-            
         }
 
 
@@ -133,6 +142,7 @@ namespace Lab4
             isReady = true;
             isSecondLineReady = false;
         }
+
 
         private void ChooseTransformation()
         {
@@ -310,6 +320,55 @@ namespace Lab4
             return new Point((int)intersectionX, (int)intersectionY);
         }
 
-        
+
+        private bool IsPointInPolygon(Point[] polygon, Point point)
+        {
+            int n = polygon.Length;
+            bool inside = false;
+
+            // Индекс предыдущей точки
+            int j = n - 1;
+
+            for (int i = 0; i < n; i++)
+            {
+                // Проверка пересечения ребра
+                if ((polygon[i].Y > point.Y) != (polygon[j].Y > point.Y) &&
+                    (point.X < (polygon[j].X - polygon[i].X) * (point.Y - polygon[i].Y) / (polygon[j].Y - polygon[i].Y) + polygon[i].X))
+                {
+                    inside = !inside; // Если пересечение, меняем состояние
+                }
+                j = i; // Запоминаем текущую точку как предыдущую
+            }
+
+            return inside;
+        }
+
+
+        private void checkButton_Click(object sender, EventArgs e)
+        {
+            if (isReady && myPoint != Point.Empty)
+            {
+                // Проверка принадлежности к невыпуклому полигону
+                if (IsPointInPolygon(list.ToArray(), myPoint))
+                {
+                    MessageBox.Show("Точка принадлежит полигону");
+                }
+                else
+                {
+                    MessageBox.Show("Точка не принадлежит полигону");
+                }
+                drPoint = true;
+
+            }
+            else
+            {
+                MessageBox.Show("Пожалуйста, сначала нарисуйте полигон и выберите точку.", "Ошибка");
+            }
+        }
+
+        private void drawPoint_Click(object sender, EventArgs e)
+        {
+            drPoint = false;
+        }
     }
 }

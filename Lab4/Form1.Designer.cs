@@ -48,6 +48,7 @@
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.drawSecondLineButton = new System.Windows.Forms.Button();
+            this.drawPoint = new System.Windows.Forms.Button();
             this.checkButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -263,7 +264,7 @@
             // 
             // drawSecondLineButton
             // 
-            this.drawSecondLineButton.Location = new System.Drawing.Point(709, 326);
+            this.drawSecondLineButton.Location = new System.Drawing.Point(682, 338);
             this.drawSecondLineButton.Name = "drawSecondLineButton";
             this.drawSecondLineButton.Size = new System.Drawing.Size(66, 56);
             this.drawSecondLineButton.TabIndex = 26;
@@ -271,14 +272,25 @@
             this.drawSecondLineButton.UseVisualStyleBackColor = true;
             this.drawSecondLineButton.Click += new System.EventHandler(this.drawSecondLineButton_Click);
             // 
+            // drawPoint
+            // 
+            this.drawPoint.Location = new System.Drawing.Point(789, 323);
+            this.drawPoint.Name = "drawPoint";
+            this.drawPoint.Size = new System.Drawing.Size(56, 27);
+            this.drawPoint.TabIndex = 28;
+            this.drawPoint.Text = "точка";
+            this.drawPoint.UseVisualStyleBackColor = true;
+            this.drawPoint.Click += new System.EventHandler(this.drawPoint_Click);
+            // 
             // checkButton
             // 
-            this.checkButton.Location = new System.Drawing.Point(796, 326);
+            this.checkButton.Location = new System.Drawing.Point(764, 356);
             this.checkButton.Name = "checkButton";
-            this.checkButton.Size = new System.Drawing.Size(60, 56);
-            this.checkButton.TabIndex = 27;
-            this.checkButton.Text = "check Button";
+            this.checkButton.Size = new System.Drawing.Size(105, 55);
+            this.checkButton.TabIndex = 29;
+            this.checkButton.Text = "проверка принадлежности точки";
             this.checkButton.UseVisualStyleBackColor = true;
+            this.checkButton.Click += new System.EventHandler(this.checkButton_Click);
             // 
             // Form1
             // 
@@ -287,6 +299,7 @@
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.ClientSize = new System.Drawing.Size(957, 511);
             this.Controls.Add(this.checkButton);
+            this.Controls.Add(this.drawPoint);
             this.Controls.Add(this.drawSecondLineButton);
             this.Controls.Add(this.textBox5);
             this.Controls.Add(this.textBox4);
@@ -338,6 +351,7 @@
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Button drawSecondLineButton;
+        private System.Windows.Forms.Button drawPoint;
         private System.Windows.Forms.Button checkButton;
     }
 }
