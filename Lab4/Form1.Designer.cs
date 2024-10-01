@@ -265,9 +265,10 @@
             // 
             // drawSecondLineButton
             // 
-            this.drawSecondLineButton.Location = new System.Drawing.Point(682, 323);
+            this.drawSecondLineButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.drawSecondLineButton.Location = new System.Drawing.Point(694, 317);
             this.drawSecondLineButton.Name = "drawSecondLineButton";
-            this.drawSecondLineButton.Size = new System.Drawing.Size(66, 56);
+            this.drawSecondLineButton.Size = new System.Drawing.Size(169, 29);
             this.drawSecondLineButton.TabIndex = 26;
             this.drawSecondLineButton.Text = "Добавить второе ребро";
             this.drawSecondLineButton.UseVisualStyleBackColor = true;
@@ -275,31 +276,34 @@
             // 
             // drawPoint
             // 
-            this.drawPoint.Location = new System.Drawing.Point(844, 323);
+            this.drawPoint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.drawPoint.Location = new System.Drawing.Point(694, 376);
             this.drawPoint.Name = "drawPoint";
-            this.drawPoint.Size = new System.Drawing.Size(56, 27);
+            this.drawPoint.Size = new System.Drawing.Size(56, 50);
             this.drawPoint.TabIndex = 28;
-            this.drawPoint.Text = "точка";
+            this.drawPoint.Text = "Точка";
             this.drawPoint.UseVisualStyleBackColor = true;
             this.drawPoint.Click += new System.EventHandler(this.drawPoint_Click);
             // 
             // checkButton
             // 
-            this.checkButton.Location = new System.Drawing.Point(784, 356);
+            this.checkButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkButton.Location = new System.Drawing.Point(756, 364);
             this.checkButton.Name = "checkButton";
-            this.checkButton.Size = new System.Drawing.Size(161, 55);
+            this.checkButton.Size = new System.Drawing.Size(161, 38);
             this.checkButton.TabIndex = 29;
-            this.checkButton.Text = "проверка принадлежности точки полигону";
+            this.checkButton.Text = "Проверка принадлежности точки полигону";
             this.checkButton.UseVisualStyleBackColor = true;
             this.checkButton.Click += new System.EventHandler(this.checkButton_Click);
             // 
             // classifyButton
             // 
-            this.classifyButton.Location = new System.Drawing.Point(784, 417);
+            this.classifyButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.classifyButton.Location = new System.Drawing.Point(756, 408);
             this.classifyButton.Name = "classifyButton";
-            this.classifyButton.Size = new System.Drawing.Size(161, 28);
+            this.classifyButton.Size = new System.Drawing.Size(161, 37);
             this.classifyButton.TabIndex = 30;
-            this.classifyButton.Text = "Классификация точки";
+            this.classifyButton.Text = "Классификация точки относительно ребра";
             this.classifyButton.UseVisualStyleBackColor = true;
             this.classifyButton.Click += new System.EventHandler(this.classifyButton_Click);
             // 

@@ -94,6 +94,7 @@ namespace Lab4
                     myPoint = new Point(e.X, e.Y);
                     g.FillEllipse(Brushes.Yellow, myPoint.X - 5, myPoint.Y - 5, 10, 10); // покрасим точку в желтый
                     pictureBox1.Image = pictureBox1.Image;
+                    drPoint = true;
                 }
             }
             pictureBox1.Image = pictureBox1.Image;
@@ -141,6 +142,7 @@ namespace Lab4
         private void drawSecondLineButton_Click(object sender, EventArgs e)
         {
             isReady = true;
+            drPoint = true;
             isSecondLineReady = false;
         }
 
