@@ -22,7 +22,7 @@ namespace Lab4
         // Для хранения пересекающейся линии
         Point lineStart;
         Point lineEnd;
-        bool isSecondLineReady = false;
+        bool isSecondLineReady = true;
 
         public Form1()
         {
@@ -36,6 +36,7 @@ namespace Lab4
             g = Graphics.FromImage(pictureBox1.Image);
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
         }
+
 
         // Добавляет очередной элемент к полигону при нажатии мышкой
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
@@ -86,7 +87,10 @@ namespace Lab4
                 }
             }
             pictureBox1.Image = pictureBox1.Image;
+            
         }
+
+
 
         private void RefreshElements()
         {
@@ -122,6 +126,12 @@ namespace Lab4
         {
             isReady = false;
             Clear();
+        }
+
+        private void drawSecondLineButton_Click(object sender, EventArgs e)
+        {
+            isReady = true;
+            isSecondLineReady = false;
         }
 
         private void ChooseTransformation()
@@ -299,5 +309,7 @@ namespace Lab4
             float intersectionY = p1.Y + ua * (p2.Y - p1.Y);
             return new Point((int)intersectionX, (int)intersectionY);
         }
+
+        
     }
 }

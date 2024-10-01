@@ -47,6 +47,8 @@
             this.YLabel = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.textBox5 = new System.Windows.Forms.TextBox();
+            this.drawSecondLineButton = new System.Windows.Forms.Button();
+            this.checkButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -259,12 +261,33 @@
             this.textBox5.TabIndex = 25;
             this.textBox5.Text = "100";
             // 
+            // drawSecondLineButton
+            // 
+            this.drawSecondLineButton.Location = new System.Drawing.Point(709, 326);
+            this.drawSecondLineButton.Name = "drawSecondLineButton";
+            this.drawSecondLineButton.Size = new System.Drawing.Size(66, 56);
+            this.drawSecondLineButton.TabIndex = 26;
+            this.drawSecondLineButton.Text = "Добавить второе ребро";
+            this.drawSecondLineButton.UseVisualStyleBackColor = true;
+            this.drawSecondLineButton.Click += new System.EventHandler(this.drawSecondLineButton_Click);
+            // 
+            // checkButton
+            // 
+            this.checkButton.Location = new System.Drawing.Point(796, 326);
+            this.checkButton.Name = "checkButton";
+            this.checkButton.Size = new System.Drawing.Size(60, 56);
+            this.checkButton.TabIndex = 27;
+            this.checkButton.Text = "check Button";
+            this.checkButton.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.ClientSize = new System.Drawing.Size(957, 511);
+            this.Controls.Add(this.checkButton);
+            this.Controls.Add(this.drawSecondLineButton);
             this.Controls.Add(this.textBox5);
             this.Controls.Add(this.textBox4);
             this.Controls.Add(this.YLabel);
@@ -314,6 +337,8 @@
         private System.Windows.Forms.Label YLabel;
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.Button drawSecondLineButton;
+        private System.Windows.Forms.Button checkButton;
     }
 }
 
