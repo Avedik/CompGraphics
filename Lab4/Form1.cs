@@ -76,10 +76,9 @@ namespace Lab4
                         isSecondLineReady = true;
 
                         // Проверка на пересечение
-                        Point? intersection = GetIntersection(lineStart, lineEnd);
-                        if (intersection.HasValue)
+                        foreach (var intersection in GetIntersections(lineStart, lineEnd))
                         {
-                            g.FillEllipse(Brushes.Green, intersection.Value.X - 5, intersection.Value.Y - 5, 10, 10);
+                            g.FillEllipse(Brushes.Green, intersection.X-5 , intersection.Y-5, 10, 10);
                         }
 
                         lineStart = Point.Empty; 
@@ -299,30 +298,33 @@ namespace Lab4
             isReady = true;
             chainButton.Enabled = false;
         }
-
-        // Вычисление пересечения между ребрами
-        private Point? GetIntersection(Point p1, Point p2)
+        
+        // Вычисление всех пересечений между линией и ребрами полигона
+        private List<Point> GetIntersections(Point p1, Point p2)
         {
-            if (list.Count < 2) return null;
+            List<Point> intersections = new List<Point>();
 
-            Point p3 = list[list.Count - 2];
-            Point p4 = list[list.Count - 1];
+            for (int i = 0; i < list.Count; i++)
+            {
+                Point p3 = list[i];
+                Point p4 = list[(i + 1) % list.Count]; // Используем модуль для замыкания полигона
 
-            // Вычисление параметров пересечения
-            float denom = (p4.Y - p3.Y) * (p2.X - p1.X) - (p4.X - p3.X) * (p2.Y - p1.Y);
-            if (denom == 0) return null; // Параллельные линии
+                float denom = (p4.Y - p3.Y) * (p2.X - p1.X) - (p4.X - p3.X) * (p2.Y - p1.Y);
+                if (denom == 0) continue; // Параллельные линии
 
-            float ua = ((p4.X - p3.X) * (p1.Y - p3.Y) - (p4.Y - p3.Y) * (p1.X - p3.X)) / denom;
-            float ub = ((p2.X - p1.X) * (p1.Y - p3.Y) - (p2.Y - p1.Y) * (p1.X - p3.X)) / denom;
+                float ua = ((p4.X - p3.X) * (p1.Y - p3.Y) - (p4.Y - p3.Y) * (p1.X - p3.X)) / denom;
+                float ub = ((p2.X - p1.X) * (p1.Y - p3.Y) - (p2.Y - p1.Y) * (p1.X - p3.X)) / denom;
 
-            if (ua < 0 || ua > 1 || ub < 0 || ub > 1) return null; // Нет пересечения
+                if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1)
+                {
+                    float intersectionX = p1.X + ua * (p2.X - p1.X);
+                    float intersectionY = p1.Y + ua * (p2.Y - p1.Y);
+                    intersections.Add(new Point((int)intersectionX, (int)intersectionY));
+                }
+            }
 
-            // Вычисление координат точки пересечения
-            float intersectionX = p1.X + ua * (p2.X - p1.X);
-            float intersectionY = p1.Y + ua * (p2.Y - p1.Y);
-            return new Point((int)intersectionX, (int)intersectionY);
+            return intersections;
         }
-
 
         private bool IsPointInPolygon(Point[] polygon, Point point)
         {
