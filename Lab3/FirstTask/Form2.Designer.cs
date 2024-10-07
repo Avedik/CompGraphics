@@ -89,7 +89,7 @@
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "Нарисовать";
             this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.radioButton1_MouseClick);
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // radioButton2
             // 
@@ -101,7 +101,6 @@
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "Залить";
             this.radioButton2.UseVisualStyleBackColor = true;
-            this.radioButton2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.radioButton2_MouseClick);
             // 
             // Form2
             // 

@@ -14,35 +14,20 @@ namespace FirstTask
     {
         private Point start;
         private bool drawing = false;
-        private Image orig;
         int left, right, up, down;
-        OpenFileDialog open_dialog;
+        Bitmap image;
         Bitmap back;
-        List<Tuple<Point, Point>> l = new List<Tuple<Point, Point>>();
+        List<Tuple<Point, Point>> listOfLines = new List<Tuple<Point, Point>>();
 
         public Form2()
         {
-            InitializeComponent(); ;
+            InitializeComponent();
+            pictureBox.Image = new Bitmap(pictureBox.Width, pictureBox.Height);
             radioButton1.Checked = true;
-
-            Bitmap b = new Bitmap(pictureBox.Width, pictureBox.Height);
-            pictureBox.Image = b;
             Clear();
         }
 
-        public Bitmap ResizeBitmap(Bitmap bmp, int width, int height)
-        {
-            Bitmap result = new Bitmap(width, height);
-            using (Graphics g = Graphics.FromImage(result))
-            {
-                g.DrawImage(bmp, 0, 0, width, height);
-            }
-
-            return result;
-        }
-
-        //поиск границ
-        private void find_borders(Point our_p, ref Point left_b, ref Point right_b, Bitmap b, Color c)
+        private void findBorders(Point our_p, ref Point left_b, ref Point right_b, Bitmap b, Color c)
         {
             while (left_b.X > 0 && equalColors(b.GetPixel(left_b.X, left_b.Y), c))
             {
@@ -53,48 +38,49 @@ namespace FirstTask
                 right_b.X += 1;
         }
 
-        //проверяем цвета на равенство
         private bool equalColors(Color c1, Color c2)
         {
             return c1.R == c2.R && c1.G == c2.G && c1.B == c2.B;
         }
 
-        private void byFilling(Point p)
+        private void fill(Point p)
         {
-            int back_av = back.Width / 2;
-            int back_yav = back.Height / 2;
-
-            int x_av = back_av - p.X;
-            int y_av = back_yav - p.Y;
+            back = new Bitmap(pictureBox.Image);
+            int pixelXOffset = (p.X - image.Width / 2) % image.Width;
+            int pixelYOffset = (p.Y - image.Height / 2) % image.Height;
 
             var g = Graphics.FromImage(pictureBox.Image);
-            foreach (var t in l)
+            foreach (var t in listOfLines)
             {
-                if (t.Item1.X < t.Item2.X)
-                {
-                    Rectangle r = new Rectangle(t.Item1.X + 1 + x_av, t.Item1.Y + y_av, t.Item2.X - t.Item1.X - 1, 1);
-                    Bitmap line = back.Clone(r, back.PixelFormat); //копируем линию из заданного изображения
+                int i = t.Item1.X + 1;
+                int start = (i % image.Width >= pixelXOffset ? 0 : image.Width) +
+                        i % image.Width - pixelXOffset;
+                int yImage = (t.Item1.Y % image.Height >= pixelYOffset ? 0 : image.Height) +
+                        t.Item1.Y % image.Height - pixelYOffset;
 
-                    r = new Rectangle(t.Item1.X + 1, t.Item1.Y, t.Item2.X - t.Item1.X - 1, 1);
-                    g.DrawImage(line, r);
-                    pictureBox.Image = pictureBox.Image;
+                for (int width = 0; i < t.Item2.X; i += width)
+                {
+                    start = (start + width) % image.Width;
+                    width = Math.Min(image.Width - start, t.Item2.X - i);
+                    
+                    for (int k = 0; k < width; ++k)
+                        back.SetPixel(i + k, t.Item1.Y, image.GetPixel(start + k, yImage));
                 }
+                pictureBox.Image = back;
             }
         }
 
-        //заливка
-        private void filling(Point p, Color c)
+        private void findArea(Point point, Color color)
         {
-            Bitmap b = (Bitmap)pictureBox.Image;
+            Bitmap bitmap = (Bitmap)pictureBox.Image;
 
-            if (l.Exists(t => t.Item1.Y == p.Y && t.Item1.X <= p.X && p.X <= t.Item2.X))
+            if (listOfLines.Exists(t => t.Item1.Y == point.Y && t.Item1.X <= point.X && point.X <= t.Item2.X))
                 return;
-            //если пиксель еще не был закрашен
-            if (0 < p.X && p.X < b.Width && 0 < p.Y && p.Y < b.Height)
+            // если пиксель не закрашен
+            if (0 < point.X && point.X < bitmap.Width && 0 < point.Y && point.Y < bitmap.Height)
             {
-                // var g = Graphics.FromImage(b);
-                Point left_b = p, right_b = p;
-                find_borders(p, ref left_b, ref right_b, b, c); //поиск границ
+                Point left_b = point, right_b = point;
+                findBorders(point, ref left_b, ref right_b, bitmap, color);
                 if (left_b.X < left)
                     left = left_b.X;
                 if (right_b.X > right)
@@ -105,22 +91,21 @@ namespace FirstTask
                 if (right_b.Y > right)
                     up = right_b.Y;
 
-                l.Add(Tuple.Create(left_b, right_b));
+                listOfLines.Add(Tuple.Create(left_b, right_b));
 
                 for (int i = left_b.X + 1; i < right_b.X; ++i)
-                    filling(new Point(i, p.Y + 1), c);
+                    findArea(new Point(i, point.Y + 1), color);
 
                 for (int i = left_b.X + 1; i < right_b.X; ++i)
-                    filling(new Point(i, p.Y - 1), c);
+                    findArea(new Point(i, point.Y - 1), color);
             }
         }
 
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
             start = new Point(e.X, e.Y);
-            if (radioButton1.Checked) //рисуем
+            if (radioButton1.Checked) // режим рисования
             {
-                orig = pictureBox.Image;
                 drawing = true;
             }
             else
@@ -130,9 +115,9 @@ namespace FirstTask
                 up = e.Location.Y;
                 down = e.Location.Y;
 
-                filling(start, pictureBox.BackColor);
-                byFilling(start);
-                l.Clear();
+                findArea(start, pictureBox.BackColor);
+                fill(start);
+                listOfLines.Clear();
             }
         }
 
@@ -156,11 +141,18 @@ namespace FirstTask
             drawing = false;
         }
 
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton1.Checked)
+                Clear();
+        }
+
         private void Clear()
         {
             var g = Graphics.FromImage(pictureBox.Image);
             g.Clear(pictureBox.BackColor);
             pictureBox.Image = pictureBox.Image;
+            listOfLines.Clear();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -168,67 +160,17 @@ namespace FirstTask
             Clear();
         }
 
-        //Заменяет кортинку на cntByWidth её копий вширину и cntByHeight ей копий ввысоту
-        private Bitmap multiplyImage(Bitmap im, int cntByWidth, int cntByHeight)
-        {
-            Bitmap res = new Bitmap(im);
-
-            int width = res.Size.Width / cntByWidth;
-            int height = res.Size.Height / cntByHeight;
-
-            //Создаём фрагмент - изначальную картинку, но меньшей ширины и высоты
-            Bitmap fragment = ResizeBitmap(res, width, height);
-            Rectangle r;
-            var g = Graphics.FromImage(res);
-            for (int w = 0; w < cntByWidth; ++w)
-            {
-                for (int h = 0; h < cntByHeight; ++h)
-                {
-                    //Находим координаты для рисования
-                    int x = width * w;
-                    int y = height * h;
-
-                    r = new Rectangle(x, y, width, height);
-                    //Рисуем поверх исходного изображения
-                    g.DrawImage(fragment, r);
-                }
-            }
-            return res;
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
-            open_dialog = new OpenFileDialog(); //создание диалогового окна для выбора файла
+            OpenFileDialog open_dialog = new OpenFileDialog();
             open_dialog.Filter = "Image Files(*.BMP;*.JPG;**.PNG)|*.BMP;*.JPG;**.PNG|All files (*.*)|*.*";
             DialogResult dr = open_dialog.ShowDialog();
+            Clear();
+
             if (dr == DialogResult.OK)
             {
-                Bitmap b = new Bitmap(open_dialog.FileName);
-                //Получаем увеличенную картинку
-                back = new Bitmap(b, pictureBox.Size.Width * 3, pictureBox.Size.Height * 3);
-                pictureBox1.Image = new Bitmap(b, pictureBox1.Size);
-
-                //Получаем расклонированную картинку
-                back = new Bitmap(multiplyImage(back, 3, 3));
-            }
-        }
-
-
-        private void radioButton1_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (radioButton2.Checked)
-            {
-                radioButton1.Checked = true;
-                radioButton2.Checked = false;
-            }
-        }
-
-        private void radioButton2_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (radioButton1.Checked)
-            {
-                radioButton2.Checked = true;
-                radioButton1.Checked = false;
+                image = new Bitmap(open_dialog.FileName);
+                pictureBox1.Image = new Bitmap(image, pictureBox1.Size);
             }
         }
     }
