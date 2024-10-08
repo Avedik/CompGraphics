@@ -47,6 +47,23 @@ namespace SecondTask
             type = true;
             pictureBox1.Image = null;
         }
+
+        private float fpart(float x)
+        {
+            return x - (float)Math.Floor(x);
+        }
+
+        private int ipart(float x)
+        {
+            return (int)Math.Floor(x);
+        }
+
+        private void plot(Bitmap btp, int x, int y, float brightness, Color color)
+        {
+            Color newColor = Color.FromArgb((int)(color.A * brightness), color.R, color.G, color.B);
+            btp.SetPixel(x, y, newColor);
+        }
+
         private void DrawSegment()
         {
             b = new Bitmap(pictureBox1.Width, pictureBox1.Height);
@@ -59,65 +76,13 @@ namespace SecondTask
                         DrawSegmentLowBresen(sX, sY, fX, fY);
                 else
                     if (sY > fY)
-                        DrawSegmentHighBresen(fX, fY, sX, sY);
-                    else
-                        DrawSegmentHighBresen(sX, sY, fX, fY);
+                    DrawSegmentHighBresen(fX, fY, sX, sY);
+                else
+                    DrawSegmentHighBresen(sX, sY, fX, fY);
             }
             else
             {
-                float gradient;
-                int num;
-                b.SetPixel(sX, sY, Color.Black);
-                b.SetPixel(fX, fY, Color.Black);
-                bool flag = Math.Abs(fY - sY) > Math.Abs(fX - sX);
-                if (flag)
-                {
-                    num = sY;
-                    sY = sX;
-                    sX = num;
-                    num = fY;
-                    fY = fX;
-                    fX = num;
-                }
-                if (sX > fX)
-                {
-                    num = sX;
-                    sX = fX;
-                    fX = num;
-                    num = fY;
-                    fY = sY;
-                    sY = num;
-                }
-                int dx = fX - sX;
-                int dy = fY - sY;
-
-                if (dx == 0)
-                    gradient = 1.0f;
-                else
-                    gradient = dy / (float)dx;
-                float y = sY + gradient;
-                if (flag)
-                {
-                    for (int x = sX + 1; x <= fX - 1; x++)
-                    {
-                        int f = (int)((1 - (y - (int)y))* 255);
-                        int s = (int)((y - (int)y)* 255);
-                        b.SetPixel((int)y, x, Color.FromArgb(f, f, f));
-                        b.SetPixel((int)y + 1, x, Color.FromArgb(s, s, s));
-                        y += gradient;
-                    }
-                }
-                else
-                {
-                    for (int x = sX + 1; x <= fX - 1; x++)
-                    {
-                        int f = (int)((1 - (y - (int)y))* 255);
-                        int s = (int)((y - (int)y)* 255);
-                        b.SetPixel(x, (int)y, Color.FromArgb(f, f, f));
-                        b.SetPixel(x, (int)y + 1, Color.FromArgb(s, s, s));
-                        y += gradient;
-                    }
-                }
+                WuLine(sX, sY, fX, fY);
             }
             pictureBox1.Image = b;
         }
@@ -173,6 +138,74 @@ namespace SecondTask
         private void Form1_Load(object sender, EventArgs e)
         {
             // ActiveControl
+        }
+
+        public void WuLine(int x1, int y1, int x2, int y2)
+        {
+            int num;
+            bool flag = Math.Abs((int)(y2 - y1)) > Math.Abs(x2 - x1);
+            if (flag)
+            {
+                num = y1;
+                y1 = x1;
+                x1 = num;
+                num = y2;
+                y2 = x2;
+                x2 = num;
+            }
+            if (x1 > x2)
+            {
+                num = x1;
+                x1 = x2;
+                x2 = num;
+                num = y2;
+                y2 = y1;
+                y1 = num;
+            }
+
+
+            int dx = x2 - x1;
+            int dy = y2 - y1;
+            float gradient = (float)dy / (float)dx;
+
+            float xgap = 1 - fpart((float)(x1 + 0.5f));
+
+            plot(b, x1, ipart(y1), (1 - fpart(y1)) * xgap, Color.Black);
+            plot(b, x1, ipart(y1) + 1, fpart(y1) * xgap, Color.Black);
+
+
+            float y = y1 + gradient;
+
+            xgap = fpart(x2 + 0.5f);
+            plot(b, x2, ipart(y2), (1 - fpart(y1)) * xgap, Color.Black);
+            plot(b, x2, ipart(y2) + 1, fpart(y1) * xgap, Color.Black);
+
+
+            if (dx == 0)
+            {
+                for (int i = y1; i <= y2; ++i)
+                    plot(b, x1, i, 1.0f, Color.Black);
+                return;
+            }
+
+            if (flag)
+            {
+                for (int x = x1 + 1; x <= x2 - 1; x++)
+                {
+                    plot(b, ipart(y), x, 1 - fpart(y), Color.Black);
+                    plot(b, ipart(y) + 1, x, fpart(y), Color.Black);
+                    y += gradient;
+                }
+            }
+            else
+            {
+                for (int x = x1 + 1; x <= x2 - 1; x++)
+                {
+                    plot(b, x, ipart(y), 1 - fpart(y), Color.Black);
+                    plot(b, x, ipart(y) + 1, fpart(y), Color.Black);
+                    y += gradient;
+                }
+            }
         }
     }
 }
