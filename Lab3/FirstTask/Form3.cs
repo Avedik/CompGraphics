@@ -14,63 +14,30 @@ namespace FirstTask
     {
         private static Bitmap image;
         private static Color borderColor, innerColor, myBorderColor;
+        private static int firstX;
+        private static int firstY;
 
         public Form3()
         {
             InitializeComponent();
         }
 
-        public Bitmap ResizeBitmap(Bitmap bmp, int width, int height)
-        {
-            Bitmap result = new Bitmap(width, height);
-            using (Graphics g = Graphics.FromImage(result))
-            {
-                g.DrawImage(bmp, 0, 0, width, height);
-            }
-
-            return result;
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             openFileDialog1.ShowDialog();
 
-            Bitmap imageSource = new Bitmap(openFileDialog1.FileName, true);
-            image = ResizeBitmap(imageSource, pictureBox1.Size.Width, pictureBox1.Size.Height);
+            Bitmap imageSource = new Bitmap(openFileDialog1.FileName);
+            image = new Bitmap(imageSource, pictureBox1.Size);
 
             pictureBox1.Image = image;
-
         }
-
-        private int norma(Color c1, Color c2)
-        {
-            return (System.Math.Abs(c1.R - c2.R) +
-                System.Math.Abs(c1.G - c2.G) +
-                System.Math.Abs(c1.B - c2.B));
-        }
-
-        private int differenceBetweenColors = 125;
 
         private bool colorsEqual(Color c1, Color c2)
         {
-            return (System.Math.Abs(c1.R - c2.R) < differenceBetweenColors &&
-                System.Math.Abs(c1.G - c2.G) < differenceBetweenColors &&
-                System.Math.Abs(c1.B - c2.B) < differenceBetweenColors);
+            return (c1.R - c2.R == 0 &&
+                c1.G - c2.G == 0 &&
+                c1.B - c2.B == 0);
         }
-
-        private bool colorsEqual2(Color c1, Color c2)
-        {
-            return (norma(c1, c2) < differenceBetweenColors);
-        }
-
-        private bool colorsEqual(Color c1, int x, int y)
-        {
-            Color c2 = image.GetPixel(x, y);
-            return (norma(c1, c2) < differenceBetweenColors);
-        }
-
-        private static int firstX;
-        private static int firstY;
 
         private void getRightBorder(int x, int y)
         {
@@ -82,8 +49,9 @@ namespace FirstTask
             
             while (colorsEqual(innerColor, currColor) && x < image.Width)
             {
-                x += 1;
+                
                 currColor = image.GetPixel(x, y);
+                x += 1;
             }
             borderColor = image.GetPixel(x, y);
             firstX = x - 1;
@@ -179,101 +147,14 @@ namespace FirstTask
             }
         }
 
-        private void pointsToFile(ref LinkedList<Tuple<int, int>> points, string fname = "points.txt")
-        {
-            using (System.IO.StreamWriter writetext = new System.IO.StreamWriter(fname))
-            {
-                foreach (var t in points)
-                    writetext.WriteLine("x = " + t.Item1 + "| y = " + t.Item2);
-            }
-        }
-
-        private void pointsToFile(ref List<Tuple<int, int>> points, string fname = "points.txt")
-        {
-            using (System.IO.StreamWriter writetext = new System.IO.StreamWriter(fname))
-            {
-                foreach (var t in points)
-                    writetext.WriteLine("x = " + t.Item1 + "| y = " + t.Item2);
-            }
-        }
-
-        private LinkedList<Tuple<int, LinkedList<Tuple<int, int>>>> getYandBorders(ref List<Tuple<int, int>> points)
-        {
-            LinkedList<Tuple<int, LinkedList<Tuple<int, int>>>> yBorders = new LinkedList<Tuple<int, LinkedList<Tuple<int, int>>>>();
-            int y = points.First().Item2;
-            int x = points.First().Item1;
-            int x_first = points.First().Item1;
-            LinkedList<Tuple<int, int>> borders = new LinkedList<Tuple<int, int>>();
-
-            foreach (var t in points)
-            {
-                if (t != points.First())
-                {
-                    int curry = t.Item2;
-                    int currx = t.Item1;
-
-                    if (curry == y)
-                    {
-                        if (currx == x + 1)
-                        {
-                            x += 1;
-                        }
-                        else
-                        {
-                            borders.AddLast(Tuple.Create(x_first, x));
-                            x_first = currx;
-                            x = currx;
-                        }
-                    }
-                    else
-                    {
-                        borders.AddLast(Tuple.Create(x_first, x));
-                        yBorders.AddLast(Tuple.Create(y, borders));
-                        borders = new LinkedList<Tuple<int, int>>();
-
-                        x_first = currx;
-                        x = currx;
-                        y = curry;
-                    }
-                }
-            }
-            borders.AddLast(Tuple.Create(x_first, x));
-            yBorders.AddLast(Tuple.Create(y, borders));
-            return yBorders;
-        }
-
-        private void yBordersToFile(ref LinkedList<Tuple<int, LinkedList<Tuple<int, int>>>> yBorders, string fname = "yBorders.txt")
-        {
-            using (System.IO.StreamWriter writetext = new System.IO.StreamWriter(fname))
-            {
-                foreach (var t1 in yBorders)
-                {
-                    writetext.WriteLine("y = " + t1.Item1 + ": ");
-                    foreach (var t2 in t1.Item2)
-                        writetext.WriteLine("       (x1 = " + t2.Item1 + ", x2 = " + t2.Item2 + ") ");
-                    writetext.WriteLine();
-                }
-            }
-        }
-
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
         {
-
-            var loc = e.Location;
-            var x = loc.X;
-            var y = loc.Y;
+            var x = e.X;
+            var y = e.Y;
 
             getRightBorder(x, y);
             LinkedList<Tuple<int, int>> points = getFullBorder(firstX, firstY);
             fillMyBorderPoints(ref points);
-
-            pointsToFile(ref points, "points1.txt");
-            List<Tuple<int, int>> pointsSorted = new List<Tuple<int, int>>(
-                points.OrderBy(t => t.Item2).ThenBy(t => t.Item1).ToList().Distinct().ToList());
-            pointsToFile(ref pointsSorted, "points2.txt");
-
-            LinkedList<Tuple<int, LinkedList<Tuple<int, int>>>> yBorders = getYandBorders(ref pointsSorted);
-            yBordersToFile(ref yBorders);
 
             pictureBox1.Image = image;
         }
