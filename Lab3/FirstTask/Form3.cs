@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,12 +15,12 @@ namespace FirstTask
     {
         private static Bitmap image;
         private static Color borderColor, innerColor, myBorderColor;
-        private static int firstX;
-        private static int firstY;
+        List<Tuple<int, int>> border;
 
         public Form3()
         {
             InitializeComponent();
+            border = new List<Tuple<int, int>>();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -46,16 +47,14 @@ namespace FirstTask
             innerColor = pixelColor;
 
             myBorderColor = Color.FromArgb(255, 0, 0);
-            
+
             while (colorsEqual(innerColor, currColor) && x < image.Width)
             {
-                
                 currColor = image.GetPixel(x, y);
                 x += 1;
             }
             borderColor = image.GetPixel(x, y);
-            firstX = x - 1;
-            firstY = y;
+            border.Add(Tuple.Create(x, y));
         }
 
         private Tuple<int, int> moveByDirection(int x, int y, int direction)
@@ -100,46 +99,24 @@ namespace FirstTask
             return image.GetPixel(t.Item1, t.Item2);
         }
 
-        private void getNextPixel(ref int x, ref int y, ref int whereBorder)
+        private void getFullBorder()
         {
-            if (x > 0 && x < image.Width && y > 0 && y < image.Height)
+            for (int index = 0; index < border.Count(); ++index)
             {
-                int d = whereBorder;
-                while (colorsEqual(borderColor, colorByDirection(x, y, d)))
-                    d = (d + 2) % 8;
-                if (colorsEqual(borderColor, colorByDirection(x, y, (d - 1 + 8) % 8)))
+                int x = border[index].Item1;
+                int y = border[index].Item2;
+
+                for (int i = 0; i < 8; ++i)
                 {
-                    Tuple<int, int> t = moveByDirection(x, y, d);
-                    x = t.Item1;
-                    y = t.Item2;
-                    whereBorder = (d + 8 - 2) % 8;
-                }
-                else
-                {
-                    Tuple<int, int> t = moveByDirection(x, y, (d - 1 + 8) % 8);
-                    x = t.Item1;
-                    y = t.Item2;
-                    whereBorder = (d - 1 + 8 - 3) % 8;
+                    Tuple<int, int> point = moveByDirection(x, y, i);
+                    Color pixColor = image.GetPixel(point.Item1, point.Item2);
+                    if (colorsEqual(borderColor, pixColor) && !border.Contains(point))
+                        border.Add(point);
                 }
             }
         }
 
-        private LinkedList<Tuple<int, int>> getFullBorder(int x, int y)
-        {
-            LinkedList<Tuple<int, int>> points = new LinkedList<Tuple<int, int>>();
-            int whereBorder = 0;
-            do
-            {
-                Tuple<int, int> newt = Tuple.Create(x, y);
-                if (points.Count() == 0 || points.Last() != newt)
-                    points.AddLast(newt);
-                getNextPixel(ref x, ref y, ref whereBorder);
-
-            } while (((x != firstX) || (y != firstY)) && (points.Count() < (image.Width + image.Height) * 10));
-            return points;
-        }
-
-        private void fillMyBorderPoints(ref LinkedList<Tuple<int, int>> points)
+        private void fillBorderPoints(ref List<Tuple<int, int>> points)
         {
             foreach (var t in points)
             {
@@ -153,8 +130,8 @@ namespace FirstTask
             var y = e.Y;
 
             getRightBorder(x, y);
-            LinkedList<Tuple<int, int>> points = getFullBorder(firstX, firstY);
-            fillMyBorderPoints(ref points);
+            getFullBorder();
+            fillBorderPoints(ref border);
 
             pictureBox1.Image = image;
         }
