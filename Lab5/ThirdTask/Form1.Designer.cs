@@ -42,7 +42,9 @@
             this.pictureBox1.Size = new System.Drawing.Size(604, 451);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseClick);
             this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
+            this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
             // 
             // button1
             // 
@@ -56,7 +58,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(28, 124);
+            this.button2.Location = new System.Drawing.Point(28, 137);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(142, 45);
             this.button2.TabIndex = 2;
