@@ -20,169 +20,171 @@
             base.Dispose(disposing);
         }
 
-        #region Код, автоматически созданный конструктором форм Windows
+        #region Windows Form Designer generated code
 
         /// <summary>
-        /// Требуемый метод для поддержки конструктора — не изменяйте 
-        /// содержимое этого метода с помощью редактора кода.
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
+            this.ComboBoxLSystemChange = new System.Windows.Forms.ComboBox();
+            this.textBoxChangeGeneration = new System.Windows.Forms.TextBox();
+            this.labelGeneration = new System.Windows.Forms.Label();
+            this.buttonDrawFractal = new System.Windows.Forms.Button();
+            this.labelRandom = new System.Windows.Forms.Label();
+            this.labelRandomFrom = new System.Windows.Forms.Label();
+            this.labelRandomTo = new System.Windows.Forms.Label();
+            this.textBoxRandomFrom = new System.Windows.Forms.TextBox();
+            this.textBoxRandomTo = new System.Windows.Forms.TextBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.inputControl = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.inputBox = new System.Windows.Forms.TextBox();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.outputBox = new System.Windows.Forms.TextBox();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonClear = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.createBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.inputControl.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
+            // 
+            // ComboBoxLSystemChange
+            // 
+            this.ComboBoxLSystemChange.FormattingEnabled = true;
+            this.ComboBoxLSystemChange.Items.AddRange(new object[] {
+            "Кривая Коха",
+            "Снежинка Коха",
+            "Наконечник Серпинского",
+            "Ковер Серпинского",
+            "Шестиугольная кривая Госпера",
+            "Кривая Гильберта",
+            "Кривая Дракона",
+            "Высокое Дерево",
+            "Широкое Дерево",
+            "Куст1",
+            "Куст2",
+            "Куст3"});
+            this.ComboBoxLSystemChange.Location = new System.Drawing.Point(9, 57);
+            this.ComboBoxLSystemChange.Name = "ComboBoxLSystemChange";
+            this.ComboBoxLSystemChange.Size = new System.Drawing.Size(171, 21);
+            this.ComboBoxLSystemChange.TabIndex = 0;
+            this.ComboBoxLSystemChange.Text = "Кривая Коха";
+            this.ComboBoxLSystemChange.SelectedIndexChanged += new System.EventHandler(this.ComboBoxLSystemChange_SelectedIndexChanged);
+            // 
+            // textBoxChangeGeneration
+            // 
+            this.textBoxChangeGeneration.Location = new System.Drawing.Point(9, 109);
+            this.textBoxChangeGeneration.Name = "textBoxChangeGeneration";
+            this.textBoxChangeGeneration.Size = new System.Drawing.Size(86, 20);
+            this.textBoxChangeGeneration.TabIndex = 1;
+            this.textBoxChangeGeneration.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxChangeGeneration_KeyPress);
+            // 
+            // labelGeneration
+            // 
+            this.labelGeneration.AutoSize = true;
+            this.labelGeneration.Location = new System.Drawing.Point(9, 93);
+            this.labelGeneration.Name = "labelGeneration";
+            this.labelGeneration.Size = new System.Drawing.Size(63, 13);
+            this.labelGeneration.TabIndex = 2;
+            this.labelGeneration.Text = "Поколение";
+            // 
+            // buttonDrawFractal
+            // 
+            this.buttonDrawFractal.Location = new System.Drawing.Point(9, 208);
+            this.buttonDrawFractal.Name = "buttonDrawFractal";
+            this.buttonDrawFractal.Size = new System.Drawing.Size(114, 20);
+            this.buttonDrawFractal.TabIndex = 3;
+            this.buttonDrawFractal.Text = "Нарисовать";
+            this.buttonDrawFractal.UseVisualStyleBackColor = true;
+            this.buttonDrawFractal.Click += new System.EventHandler(this.buttonDrawFractal_Click);
+            // 
+            // labelRandom
+            // 
+            this.labelRandom.AutoSize = true;
+            this.labelRandom.Location = new System.Drawing.Point(43, 143);
+            this.labelRandom.Name = "labelRandom";
+            this.labelRandom.Size = new System.Drawing.Size(71, 13);
+            this.labelRandom.TabIndex = 4;
+            this.labelRandom.Text = "Случайность";
+            // 
+            // labelRandomFrom
+            // 
+            this.labelRandomFrom.AutoSize = true;
+            this.labelRandomFrom.Location = new System.Drawing.Point(9, 168);
+            this.labelRandomFrom.Name = "labelRandomFrom";
+            this.labelRandomFrom.Size = new System.Drawing.Size(18, 13);
+            this.labelRandomFrom.TabIndex = 5;
+            this.labelRandomFrom.Text = "от";
+            // 
+            // labelRandomTo
+            // 
+            this.labelRandomTo.AutoSize = true;
+            this.labelRandomTo.Location = new System.Drawing.Point(74, 175);
+            this.labelRandomTo.Name = "labelRandomTo";
+            this.labelRandomTo.Size = new System.Drawing.Size(19, 13);
+            this.labelRandomTo.TabIndex = 6;
+            this.labelRandomTo.Text = "до";
+            // 
+            // textBoxRandomFrom
+            // 
+            this.textBoxRandomFrom.Location = new System.Drawing.Point(33, 168);
+            this.textBoxRandomFrom.Name = "textBoxRandomFrom";
+            this.textBoxRandomFrom.Size = new System.Drawing.Size(35, 20);
+            this.textBoxRandomFrom.TabIndex = 7;
+            this.textBoxRandomFrom.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxRandomFrom_KeyPress);
+            // 
+            // textBoxRandomTo
+            // 
+            this.textBoxRandomTo.Location = new System.Drawing.Point(99, 168);
+            this.textBoxRandomTo.Name = "textBoxRandomTo";
+            this.textBoxRandomTo.Size = new System.Drawing.Size(35, 20);
+            this.textBoxRandomTo.TabIndex = 8;
+            this.textBoxRandomTo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxRandomTo_KeyPress);
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(12, 74);
+            this.pictureBox1.Location = new System.Drawing.Point(185, 10);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(502, 371);
-            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.Size = new System.Drawing.Size(575, 403);
+            this.pictureBox1.TabIndex = 9;
             this.pictureBox1.TabStop = false;
             // 
-            // inputControl
+            // buttonClear
             // 
-            this.inputControl.Controls.Add(this.tabPage1);
-            this.inputControl.Controls.Add(this.tabPage2);
-            this.inputControl.Location = new System.Drawing.Point(0, 451);
-            this.inputControl.Name = "inputControl";
-            this.inputControl.Padding = new System.Drawing.Point(20, 3);
-            this.inputControl.SelectedIndex = 0;
-            this.inputControl.Size = new System.Drawing.Size(526, 148);
-            this.inputControl.TabIndex = 1;
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.inputBox);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(518, 122);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Input";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // inputBox
-            // 
-            this.inputBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.inputBox.Location = new System.Drawing.Point(3, 3);
-            this.inputBox.Multiline = true;
-            this.inputBox.Name = "inputBox";
-            this.inputBox.ReadOnly = true;
-            this.inputBox.Size = new System.Drawing.Size(512, 116);
-            this.inputBox.TabIndex = 0;
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.outputBox);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(518, 122);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Output";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // outputBox
-            // 
-            this.outputBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.outputBox.Location = new System.Drawing.Point(3, 3);
-            this.outputBox.Multiline = true;
-            this.outputBox.Name = "outputBox";
-            this.outputBox.Size = new System.Drawing.Size(512, 116);
-            this.outputBox.TabIndex = 0;
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(526, 24);
-            this.menuStrip1.TabIndex = 2;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // fileToolStripMenuItem
-            // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "File";
-            // 
-            // openToolStripMenuItem
-            // 
-            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.openToolStripMenuItem.Text = "Open";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            this.buttonClear.Location = new System.Drawing.Point(9, 243);
+            this.buttonClear.Name = "buttonClear";
+            this.buttonClear.Size = new System.Drawing.Size(114, 20);
+            this.buttonClear.TabIndex = 10;
+            this.buttonClear.Text = "Очистка";
+            this.buttonClear.UseVisualStyleBackColor = true;
+            this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 38);
+            this.label1.Location = new System.Drawing.Point(9, 34);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(53, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Iterations:";
-            // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(71, 36);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(40, 20);
-            this.numericUpDown1.TabIndex = 4;
-            // 
-            // createBtn
-            // 
-            this.createBtn.Location = new System.Drawing.Point(129, 34);
-            this.createBtn.Name = "createBtn";
-            this.createBtn.Size = new System.Drawing.Size(96, 23);
-            this.createBtn.TabIndex = 5;
-            this.createBtn.Text = "Create";
-            this.createBtn.UseVisualStyleBackColor = true;
-            this.createBtn.Click += new System.EventHandler(this.createBtn_Click);
+            this.label1.Size = new System.Drawing.Size(105, 13);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "Выбрать L-систему";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(526, 599);
-            this.Controls.Add(this.createBtn);
-            this.Controls.Add(this.numericUpDown1);
+            this.ClientSize = new System.Drawing.Size(773, 424);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.inputControl);
+            this.Controls.Add(this.buttonClear);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.menuStrip1);
-            this.MainMenuStrip = this.menuStrip1;
+            this.Controls.Add(this.textBoxRandomTo);
+            this.Controls.Add(this.textBoxRandomFrom);
+            this.Controls.Add(this.labelRandomTo);
+            this.Controls.Add(this.labelRandomFrom);
+            this.Controls.Add(this.labelRandom);
+            this.Controls.Add(this.buttonDrawFractal);
+            this.Controls.Add(this.labelGeneration);
+            this.Controls.Add(this.textBoxChangeGeneration);
+            this.Controls.Add(this.ComboBoxLSystemChange);
             this.Name = "Form1";
-            this.Text = "L-System";
+            this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.inputControl.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -190,18 +192,18 @@
 
         #endregion
 
+        private System.Windows.Forms.ComboBox ComboBoxLSystemChange;
+        private System.Windows.Forms.TextBox textBoxChangeGeneration;
+        private System.Windows.Forms.Label labelGeneration;
+        private System.Windows.Forms.Button buttonDrawFractal;
+        private System.Windows.Forms.Label labelRandom;
+        private System.Windows.Forms.Label labelRandomFrom;
+        private System.Windows.Forms.Label labelRandomTo;
+        private System.Windows.Forms.TextBox textBoxRandomFrom;
+        private System.Windows.Forms.TextBox textBoxRandomTo;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.TabControl inputControl;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TextBox inputBox;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
-        private System.Windows.Forms.TextBox outputBox;
+        private System.Windows.Forms.Button buttonClear;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.Button createBtn;
     }
 }
 
