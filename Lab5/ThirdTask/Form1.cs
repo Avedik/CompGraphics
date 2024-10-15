@@ -131,7 +131,7 @@ namespace ThirdTask
                     p3 = list[2*i + 2];
                     p4 = listCenter[i];
                     for (double t = 0; t < 1; t = t + 0.01)
-                        DrawPoint(p1, p2, p3, p4, t);
+                        DrawLine(p1, p2, p3, p4, t);
                     p1 = p4;
                 }
                 pictureBox1.Image = bmp;
@@ -140,18 +140,22 @@ namespace ThirdTask
                 MessageBox.Show("Количество опорных точек должно быть чётным и не меньше 4");
         }
 
-        private void DrawPoint(Point p1, Point p2, Point p3, Point p4, double t)
+        private void DrawLine(Point p1, Point p2, Point p3, Point p4, double t)
         {
             double[,] points = new double[,] { { p1.X, p2.X, p3.X, p4.X },
                                                 { p1.Y, p2.Y, p3.Y, p4.Y }};
             double[,] tMatrix = new double[,] { { 1 },{ t }, { t*t }, {t*t*t } };
+            double[,] tMatrixNew = new double[,] { { 1 }, { t+ 0.01 }, { (t+ 0.01)*(t+ 0.01) }, { (t+ 0.01)*(t+ 0.01)*(t+ 0.01) } };
             double[,] matr = new double[,] { { 1, -3, 3, -1 },
                                              { 0, 3, -6, 3 },
                                              { 0, 0, 3, -3 },
                                              { 0, 0, 0, 1 }};
-            double[,] res = MatrixMultiplication(points, matr);
-            res = MatrixMultiplication(res, tMatrix);
-            bmp.SetPixel((int)res[0, 0], (int)res[1, 0], Color.Green);
+            matr = MatrixMultiplication(points, matr);
+            double[,] res = MatrixMultiplication(matr, tMatrix);
+            double[,] resNew = MatrixMultiplication(matr, tMatrixNew);
+            var pen = new Pen(Color.Green, 1);
+            g.DrawLine(pen, new Point((int)res[0, 0], (int)res[1, 0]), new Point((int)resNew[0, 0], (int)resNew[1, 0]));
+            pen.Dispose();
         }
 
         private double[,] MatrixMultiplication(double[,] m1, double[,] m2)
