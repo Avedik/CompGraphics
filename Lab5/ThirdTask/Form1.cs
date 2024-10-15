@@ -47,6 +47,7 @@ namespace ThirdTask
 
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
         {
+            // Добавление точки левой кнопкой мыши (без автоматического перестроения кривой)
             if (e.Button == MouseButtons.Left)
             {
                 if (!flag)
@@ -57,6 +58,7 @@ namespace ThirdTask
                     pictureBox1.Image = bmp;
                 }
             }
+            // Удаление точки правой кнопкой мыши (без автоматического перестроения кривой)
             else if (e.Button == MouseButtons.Right)
             {
                 for (int i = 0; i < listEllipse.Count; ++i)
@@ -73,6 +75,7 @@ namespace ThirdTask
             }
         }
 
+        // Распознание точки для перемещения 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -88,6 +91,7 @@ namespace ThirdTask
             }
         }
 
+        // Меняем координаты выбранной точки и перерисовываем опорные точки и составную кривую
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -102,12 +106,14 @@ namespace ThirdTask
             }
         }
 
+        // Очистка холста
         private void ClearPictureBox()
         {
             g.Clear(pictureBox1.BackColor);
             pictureBox1.Image = bmp;
         }
 
+        // Построение составной кубической кривой Безье
         private void Bezier()
         {
             if (list.Count >= 4 && list.Count % 2 == 0)
@@ -140,6 +146,7 @@ namespace ThirdTask
                 MessageBox.Show("Количество опорных точек должно быть чётным и не меньше 4");
         }
 
+        // Построить фрагмент кубической кривой для 4-ёх точек и заданного t
         private void DrawLine(Point p1, Point p2, Point p3, Point p4, double t)
         {
             double[,] points = new double[,] { { p1.X, p2.X, p3.X, p4.X },
@@ -158,6 +165,7 @@ namespace ThirdTask
             pen.Dispose();
         }
 
+        // Перемножение матриц
         private double[,] MatrixMultiplication(double[,] m1, double[,] m2)
         {
             double[,] res = new double[m1.GetLength(0), m2.GetLength(1)];
@@ -169,6 +177,7 @@ namespace ThirdTask
             return res;
         }
 
+        // Перерисовка опорных точек и составной кубической кривой Безье
         private void Redraw()
         {
             ClearPictureBox();
