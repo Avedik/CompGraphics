@@ -55,8 +55,11 @@ namespace ThirdTask
                     g.FillEllipse(Brushes.Red, e.X - 3, e.Y - 3, 6, 6);
                     list.Add(new Point(e.X, e.Y));
                     listEllipse.Add(new Rectangle(e.X - 3, e.Y - 3, 6, 6));
+                    if (list.Count >= 4)
+                        Redraw();
                     pictureBox1.Image = bmp;
                 }
+                
             }
             // Удаление точки правой кнопкой мыши (без автоматического перестроения кривой)
             else if (e.Button == MouseButtons.Right)
@@ -116,14 +119,14 @@ namespace ThirdTask
         // Построение составной кубической кривой Безье
         private void Bezier()
         {
-            if (list.Count >= 4 && list.Count % 2 == 0)
+            if (list.Count >= 4)
             {
                 listCenter.Clear();
-                for (int i = 2; i < list.Count; i = i + 2)
+                for (int i = 2; i < list.Count; i += 2)
                 {
                     var pen = new Pen(Color.Yellow, 1);
-                    g.DrawLine(pen, list[i], list[i + 1]);
-                    listCenter.Add(new Point((list[i].X + list[i + 1].X) / 2, (list[i].Y + list[i + 1].Y) / 2));
+                    g.DrawLine(pen, list[i], (i + 1 < list.Count) ? list[i + 1] : list[i]);
+                    listCenter.Add(new Point((list[i].X + ((i + 1 < list.Count) ? list[i + 1].X : list[i].X)) / 2, (list[i].Y + ((i + 1 < list.Count) ? list[i + 1].Y : list[i].Y)) / 2));
                     pen.Dispose();
                 }
 
@@ -133,17 +136,24 @@ namespace ThirdTask
                 Point p4;
                 for (int i = 0; i < listCenter.Count; ++i)
                 {
-                    p2 = list[2*i + 1];
-                    p3 = list[2*i + 2];
+                    p2 = list[2 * i + 1];
+
+                    // Проверяем границы массива
+                    p3 = (2 * i + 2 < list.Count) ? list[2 * i + 2] : list[2 * i + 1];
                     p4 = listCenter[i];
-                    for (double t = 0; t < 1; t = t + 0.01)
+                    for (double t = 0; t < 1; t += 0.01)
+                    {
+                        if (p4 == listCenter.Last())
+                            p4 = list.Last();
                         DrawLine(p1, p2, p3, p4, t);
+                    }
+
                     p1 = p4;
                 }
                 pictureBox1.Image = bmp;
             }
             else
-                MessageBox.Show("Количество опорных точек должно быть чётным и не меньше 4");
+                MessageBox.Show("Количество опорных точек должно быть не меньше 4");
         }
 
         // Построить фрагмент кубической кривой для 4-ёх точек и заданного t
