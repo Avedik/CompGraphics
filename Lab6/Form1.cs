@@ -35,11 +35,12 @@ namespace Lab6
         }
         void setFlags(bool interactiveMode = false)
         {
-            isInteractiveMode = selectAxis.Enabled = buttonRotate.Enabled = 
-                buttonScale.Enabled = buttonShift.Enabled = rbPerspective.Enabled = 
-                rbIsometric.Enabled = textAngle.Enabled = textScaleX.Enabled = 
-                textScaleY.Enabled = textScaleZ.Enabled = textShiftX.Enabled = 
-                textShiftY.Enabled = textShiftZ.Enabled = rbWorldCenter.Enabled = interactiveMode;
+            isInteractiveMode = selectAxis.Enabled = selectPlane.Enabled = 
+                buttonRotate.Enabled = buttonScale.Enabled = buttonShift.Enabled = 
+                buttonReflection.Enabled = rbPerspective.Enabled = rbIsometric.Enabled = 
+                textAngle.Enabled = textScaleX.Enabled = textScaleY.Enabled =
+                textScaleZ.Enabled = textShiftX.Enabled = textShiftY.Enabled = 
+                textShiftZ.Enabled = rbWorldCenter.Enabled = rbCenter.Enabled = interactiveMode;
 
             buttonShape.Text = interactiveMode ? "Очистить" : "Нарисовать";
             selectShape.Enabled = !interactiveMode;
@@ -135,5 +136,15 @@ namespace Lab6
             }
         }
 
+        private void selectPlane_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (selectPlane.SelectedIndex)
+            {
+                case 0: currentPlane = PlaneType.XY; break;
+                case 1: currentPlane = PlaneType.YZ; break;
+                case 2: currentPlane = PlaneType.XZ; break;
+                default: throw new Exception("Bad plane");
+            }
+        }
     }
 }

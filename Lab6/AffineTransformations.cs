@@ -9,10 +9,12 @@ namespace Lab6
 {
     // Тип координатной прямой (для поворотов)
     public enum AxisType { X, Y, Z };
+    public enum PlaneType { XY, YZ, XZ };
 
     public partial class Form1
     {
         public AxisType currentAxis;
+        public PlaneType currentPlane;
         public AxisType currentMirrorAxis;
         public AxisType currentRollAxis;
 
@@ -34,6 +36,11 @@ namespace Lab6
             redraw();
         }
 
+        private void buttonReflection_Click(object sender, EventArgs e)
+        {
+            reflect(ref currentShape, currentPlane);
+            redraw();
+        }
 
         // Сдвинуть фигуру на заданные расстояния
         void shift(ref Polyhedron shape, double dx, double dy, double dz)
@@ -81,5 +88,32 @@ namespace Lab6
             });
         }
 
+        // Отразить фигуру относительно заданной координатной плоскости
+        void reflect(ref Polyhedron shape, PlaneType type)
+        {
+            Matrix rotation = new Matrix(0, 0);
+            switch (type)
+            {
+                case PlaneType.XY:
+                    rotation = new Matrix(4, 4).fill(1, 0, 0, 0,  0, 1, 0, 0,  0, 0, -1, 0,  0, 0, 0, 1);
+                    //throw new Exception("XY");
+                    break;
+                case PlaneType.YZ:
+                    rotation = new Matrix(4, 4).fill(-1, 0, 0, 0,  0, 1, 0, 0,  0, 0, 1, 0,  0, 0, 0, 1);
+                    //throw new Exception("YZ");
+                    break;
+                case PlaneType.XZ:
+                    rotation = new Matrix(4, 4).fill(1, 0, 0, 0,  0, -1, 0, 0,  0, 0, 1, 0,  0, 0, 0, 1);
+                    //throw new Exception("XZ");
+                    break;
+            }
+
+            shape.transformPoints((ref Point p) =>
+            {
+                var res = rotation * new Matrix(4, 1).fill(p.Xf, p.Yf, p.Zf, 1);
+                p = new Point(res[0, 0], res[1, 0], res[2, 0]);
+            });
         }
+
+    }
     }
