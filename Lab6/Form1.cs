@@ -40,7 +40,10 @@ namespace Lab6
                 buttonReflection.Enabled = rbPerspective.Enabled = rbIsometric.Enabled = 
                 textAngle.Enabled = textScaleX.Enabled = textScaleY.Enabled =
                 textScaleZ.Enabled = textShiftX.Enabled = textShiftY.Enabled = 
-                textShiftZ.Enabled = rbWorldCenter.Enabled = rbCenter.Enabled = interactiveMode;
+                textShiftZ.Enabled = rbWorldCenter.Enabled = rbCenter.Enabled = textX1.Enabled = 
+                textX2.Enabled = textY1.Enabled = textY2.Enabled = textZ1.Enabled = textZ2.Enabled = 
+                buttonRotateAroundLine.Enabled = buttonRoll.Enabled = selectRollAxis.Enabled =
+                textAngleForLineRotation.Enabled = textBoxAngleRotCenter.Enabled = interactiveMode;
 
             buttonShape.Text = interactiveMode ? "Очистить" : "Нарисовать";
             selectShape.Enabled = !interactiveMode;
@@ -56,6 +59,17 @@ namespace Lab6
                 case 3: currentShapeType = ShapeType.ICOSAHEDRON; break;
                 case 4: currentShapeType = ShapeType.DODECAHEDRON; break;
                 default: throw new Exception("Bad figure");
+            }
+        }
+
+        private void selectRollAxis_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (selectRollAxis.SelectedIndex)
+            {
+                case 0: currentRollAxis = AxisType.X; break;
+                case 1: currentRollAxis = AxisType.Y; break;
+                case 2: currentRollAxis = AxisType.Z; break;
+                default: throw new Exception("Bad axes");
             }
         }
 
@@ -145,6 +159,45 @@ namespace Lab6
                 case 2: currentPlane = PlaneType.XZ; break;
                 default: throw new Exception("Bad plane");
             }
+        }
+
+        private void buttonRoll_Click(object sender, EventArgs e)
+        {
+            rotationThroughTheCenter(ref currentShape, currentRollAxis, int.Parse(textBoxAngleRotCenter.Text));
+            redraw();
+        }
+
+        private void buttonRotateAroundLine_Click(object sender, EventArgs e)
+        {
+            int angle = int.Parse(textAngleForLineRotation.Text);
+            Point p1 = new Point(int.Parse(textX1.Text), int.Parse(textY1.Text), int.Parse(textZ1.Text));
+            Point p2 = new Point(int.Parse(textX2.Text), int.Parse(textY2.Text), int.Parse(textZ2.Text));
+            if (p1.Z == 0 && p1.X == 0 && p1.Y == 0 && (p2.Z != 0 || p2.Y == 0 || p2.X == 0))
+
+            {
+                Point tmp = p1;
+                p1 = p2;
+                p2 = tmp;
+            }
+            if (p2.Z == 0 && p2.X == 0 && p2.Y == 0 && (p1.Z != 0 || p1.Y == 0 || p1.X == 0))
+
+            {
+                Point tmp = p1;
+                p1 = p2;
+                p2 = tmp;
+            }
+
+            rotate_around_line(ref currentShape, angle, p1, p2);
+            double A = p1.Yf - p2.Yf;//общее уравнение прямой, проходящей через заданные точки
+            double B = p2.Xf - p1.Xf;//вектор нормали 
+            double C = p1.Xf * p2.Yf - p2.Xf * p1.Yf;
+            Point p3 = new Point(p2.Xf - p1.Xf, p2.Yf - p1.Yf, p2.Zf - p1.Zf);
+            shift(ref currentShape, p1.Xf - shiftx, p1.Yf - shifty, p1.Zf - shiftz);
+            shiftx = p1.Xf;
+            shifty = p1.Yf;
+            shiftz = p1.Zf;
+            redraw();
+            drawLine(new Line(p1, p2), new Pen(Color.Aquamarine, 4));
         }
     }
 }

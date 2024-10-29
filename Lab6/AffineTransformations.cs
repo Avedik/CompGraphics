@@ -96,6 +96,37 @@ namespace Lab6
             });
         }
 
+        void rotate_around_line(ref Polyhedron shape, int angle, Point p1, Point p2)
+        {
+            //матрица
+            Matrix rotation = new Matrix(0, 0);
+            if (p2.Z < p1.Z || (p2.Z == p1.Z && p2.Y < p1.Y) ||
+               (p2.Z == p1.Z && p2.Y == p1.Y) && p2.X < p1.X)
+            {
+                Point tmp = p1;
+                p1 = p2;
+                p2 = tmp;
+            }
+
+            Point vector = new Point(p2.Xf - p1.Xf, p2.Yf - p1.Yf, p2.Zf - p1.Zf);//прямая, вокруг которой будем вращать
+            double length = Math.Sqrt(vector.Xf * vector.Xf + vector.Yf * vector.Yf + vector.Zf * vector.Zf);
+            double l = vector.Xf / length;
+            double m = vector.Yf / length;
+            double n = vector.Zf / length;
+            double anglesin = Math.Sin(ShapeGetter.degreesToRadians(angle));
+            double anglecos = Math.Cos(ShapeGetter.degreesToRadians(angle));
+            rotation = new Matrix(4, 4).fill(l * l + anglecos * (1 - l * l), l * (1 - anglecos) * m - n * anglesin, l * (1 - anglecos) * n + m * anglesin, 0,
+                                 l * (1 - anglecos) * m + n * anglesin, m * m + anglecos * (1 - m * m), m * (1 - anglecos) * n - l * anglesin, 0,
+                                 l * (1 - anglecos) * n - m * anglesin, m * (1 - anglecos) * n + l * anglesin, n * n + anglecos * (1 - n * n), 0,
+                                 0, 0, 0, 1);
+
+            shape.transformPoints((ref Point p) =>
+            {
+                var res = rotation * new Matrix(4, 1).fill(p.Xf, p.Yf, p.Zf, 1);
+                p = new Point(res[0, 0], res[1, 0], res[2, 0]);
+            });
+        }
+
         // Отразить фигуру относительно заданной координатной плоскости
         void reflect(ref Polyhedron shape, PlaneType type)
         {
@@ -132,5 +163,40 @@ namespace Lab6
             });
         }
 
+        // Вращение многогранника вокруг прямой проходящей через центр многогранника, параллельно выбранной координатной оси
+        void rotationThroughTheCenter(ref Polyhedron shape, AxisType axis, int angle)
+        {
+            double sumX = 0, sumY = 0, sumZ = 0;
+            foreach (var face in shape.Faces)
+            {
+                sumX += face.getCenter().Xf;
+                sumY += face.getCenter().Yf;
+                sumZ += face.getCenter().Zf;
+            }
+
+            // центр фигуры
+            Point center = new Point(sumX / shape.Faces.Count(), sumY / shape.Faces.Count(), sumZ / shape.Faces.Count());
+
+            Matrix rotationMatrix;
+            // переносим в начало координат
+            rotationMatrix = new Matrix(4, 4).fill(1, 0, 0, -center.Xf, 0, 1, 0, -center.Yf, 0, 0, 1, -center.Zf, 0, 0, 0, 1);
+            shape.transformPoints((ref Point p) =>
+            {
+                var res = rotationMatrix * new Matrix(4, 1).fill(p.Xf, p.Yf, p.Zf, 1);
+                p = new Point(res[0, 0], res[1, 0], res[2, 0]);
+            });
+
+            // поворачиваем относительно оси
+            rotate(ref shape, axis, angle);
+
+            // возвращаем на исходное место
+            rotationMatrix = new Matrix(4, 4).fill(1, 0, 0, center.Xf, 0, 1, 0, center.Yf, 0, 0, 1, center.Zf, 0, 0, 0, 1);
+            shape.transformPoints((ref Point p) =>
+            {
+                var res = rotationMatrix * new Matrix(4, 1).fill(p.Xf, p.Yf, p.Zf, 1);
+                p = new Point(res[0, 0], res[1, 0], res[2, 0]);
+            });
+
+        }
     }
-    }
+}
