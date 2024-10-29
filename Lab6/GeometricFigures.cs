@@ -160,6 +160,19 @@ namespace Lab6
                 }
             }
         }
+
+        // Получение центра тяжести многогранника
+        public Point getCenter()
+        {
+            double x = 0, y = 0, z = 0;
+            foreach (var face in faces)
+            {
+                x += face.getCenter().X;
+                y += face.getCenter().Y;
+                z += face.getCenter().Z;
+            }
+            return new Point(x / faces.Count, y / faces.Count, z / faces.Count);
+        }
     }
 
     class Tetrahedron : Polyhedron

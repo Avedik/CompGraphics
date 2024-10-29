@@ -20,7 +20,15 @@ namespace Lab6
 
         private void buttonScale_Click(object sender, EventArgs e)
         {
-            scale(ref currentShape, int.Parse(textScaleX.Text), int.Parse(textScaleY.Text), int.Parse(textScaleZ.Text));
+            if (rbWorldCenter.Checked == true)
+            {
+                scale(ref currentShape, double.Parse(textScaleX.Text), double.Parse(textScaleY.Text), double.Parse(textScaleZ.Text));
+            }
+            else
+            if (rbCenter.Checked == true)
+            {
+                scaleCenter(ref currentShape, double.Parse(textScaleX.Text), double.Parse(textScaleY.Text), double.Parse(textScaleZ.Text));
+            }
             redraw();
 
         }
@@ -96,22 +104,31 @@ namespace Lab6
             {
                 case PlaneType.XY:
                     rotation = new Matrix(4, 4).fill(1, 0, 0, 0,  0, 1, 0, 0,  0, 0, -1, 0,  0, 0, 0, 1);
-                    //throw new Exception("XY");
                     break;
                 case PlaneType.YZ:
                     rotation = new Matrix(4, 4).fill(-1, 0, 0, 0,  0, 1, 0, 0,  0, 0, 1, 0,  0, 0, 0, 1);
-                    //throw new Exception("YZ");
                     break;
                 case PlaneType.XZ:
                     rotation = new Matrix(4, 4).fill(1, 0, 0, 0,  0, -1, 0, 0,  0, 0, 1, 0,  0, 0, 0, 1);
-                    //throw new Exception("XZ");
                     break;
             }
 
             shape.transformPoints((ref Point p) =>
             {
-                var res = rotation * new Matrix(4, 1).fill(p.Xf, p.Yf, p.Zf, 1);
-                p = new Point(res[0, 0], res[1, 0], res[2, 0]);
+                var res = new Matrix(1, 4).fill(p.Xf, p.Yf, p.Zf, 1) * rotation;
+                p = new Point(res[0, 0], res[0, 1], res[0, 2]);
+            });
+        }
+
+        // Растянуть фигуру на заданные коэффициенты относительно своего центра
+        void scaleCenter(ref Polyhedron shape, double cx, double cy, double cz)
+        {
+            Point Center = shape.getCenter();
+            Matrix scaleCenter = new Matrix(4, 4).fill(cx, 0, 0, 0,  0, cy, 0, 0,  0, 0, cz, 0,  (1-cx)* Center.Xf, (1-cy)* Center.Yf, (1-cz)* Center.Zf, 1);
+            shape.transformPoints((ref Point p) =>
+            {
+                var res = new Matrix(1, 4).fill(p.Xf, p.Yf, p.Zf, 1) * scaleCenter;
+                p = new Point(res[0, 0], res[0, 1], res[0, 2]);
             });
         }
 
