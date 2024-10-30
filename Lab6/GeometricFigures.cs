@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Permissions;
 
 namespace Lab6
 {
@@ -19,7 +20,10 @@ namespace Lab6
         public static PointF sceneCenter;
 
         static Matrix isometricMatrix = new Matrix(3, 3).fill(Math.Sqrt(3), 0, -Math.Sqrt(3), 1, 2, 1, Math.Sqrt(2), -Math.Sqrt(2), Math.Sqrt(2)) * (1 / Math.Sqrt(6));
-        static Matrix centralMatrix = new Matrix(4, 4).fill(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, k, 0, 0, 0, 1);
+        static Matrix centralMatrix = new Matrix(4, 4).fill(1, 0, 0, 0,
+                                                            0, 1, 0, 0, 
+                                                            0, 0, 0, k, 
+                                                            0, 0, 0, 1);
         const double k = 0.001f;
 
         public Point(double x, double y, double z)
@@ -64,45 +68,35 @@ namespace Lab6
         public Point End { get => end; set => end = value; }
     }
 
-    // Многогранник (грань фигуры, состоящая из конечного числа отрезков)
+    // Многоугольник (грань фигуры)
     class Polygon
     {
-        List<Line> edges;
+        List<Point> points;
 
         public Polygon()
         {
-            edges = new List<Line>();
+            points = new List<Point>();
         }
 
-        public Polygon(IEnumerable<Line> edges) : this()
+        public Polygon addEdge(Point point)
         {
-            this.edges.AddRange(edges);
-        }
-
-        public Polygon addEdge(Line edge)
-        {
-            edges.Add(edge);
-            return this;
-        }
-        public Polygon addEdges(IEnumerable<Line> edges)
-        {
-            this.edges.AddRange(edges);
+            points.Add(point);
             return this;
         }
 
-        public List<Line> Edges { get => edges; }
+        public List<Point> Points { get => points; }
 
         // Получение центра тяжести грани
         public Point getCenter()
         {
             double x = 0, y = 0, z = 0;
-            foreach (var line in edges)
+            foreach (var point in points)
             {
-                x += line.Start.X;
-                y += line.Start.Y;
-                z += line.Start.Z;
+                x += point.X;
+                y += point.Y;
+                z += point.Z;
             }
-            return new Point(x / edges.Count, y / edges.Count, z / edges.Count);
+            return new Point(x / points.Count, y / points.Count, z / points.Count);
         }
     }
 
@@ -142,11 +136,7 @@ namespace Lab6
         {
             foreach (var face in Faces)
             {
-                foreach (var line in face.Edges)
-                {
-                    f(ref line.start);
-                    f(ref line.end);
-                }
+                face.Points.ForEach(p => f(ref p));
             }
         }
 
@@ -193,6 +183,8 @@ namespace Lab6
     // Класс для получения фигур различного типа
     class ShapeGetter
     {
+        static int length = 150;
+
         // Получает фигуру фиксированного размера
         public static Polyhedron getShape(ShapeType type)
         {
@@ -213,13 +205,13 @@ namespace Lab6
         {
             Tetrahedron res = new Tetrahedron();
             Point a = new Point(0, 0, 0);
-            Point c = new Point(200, 0, 200);
-            Point f = new Point(200, 200, 0);
-            Point h = new Point(0, 200, 200);
-            res.addFace(new Polygon().addEdge(new Line(a, f)).addEdge(new Line(f, c)).addEdge(new Line(c, a)));
-            res.addFace(new Polygon().addEdge(new Line(f, c)).addEdge(new Line(c, h)).addEdge(new Line(h, f)));
-            res.addFace(new Polygon().addEdge(new Line(c, h)).addEdge(new Line(h, a)).addEdge(new Line(a, c)));
-            res.addFace(new Polygon().addEdge(new Line(f, h)).addEdge(new Line(h, a)).addEdge(new Line(a, f)));
+            Point c = new Point(length, 0, length);
+            Point f = new Point(length, length, 0);
+            Point h = new Point(0, length, length);
+            res.addFace(new Polygon().addEdge(a).addEdge(f).addEdge(c));
+            res.addFace(new Polygon().addEdge(f).addEdge(c).addEdge(h));
+            res.addFace(new Polygon().addEdge(c).addEdge(h).addEdge(a));
+            res.addFace(new Polygon().addEdge(f).addEdge(h).addEdge(a));
             return res;
         }
 
@@ -235,14 +227,14 @@ namespace Lab6
             Point e = cube.Faces[4].getCenter();
             Point f = cube.Faces[5].getCenter();
 
-            res.addFace(new Polygon().addEdge(new Line(a, f)).addEdge(new Line(f, b)).addEdge(new Line(b, a)));
-            res.addFace(new Polygon().addEdge(new Line(b, c)).addEdge(new Line(c, f)).addEdge(new Line(f, b)));
-            res.addFace(new Polygon().addEdge(new Line(c, d)).addEdge(new Line(d, f)).addEdge(new Line(f, c)));
-            res.addFace(new Polygon().addEdge(new Line(d, a)).addEdge(new Line(a, f)).addEdge(new Line(f, d)));
-            res.addFace(new Polygon().addEdge(new Line(a, e)).addEdge(new Line(e, b)).addEdge(new Line(b, a)));
-            res.addFace(new Polygon().addEdge(new Line(b, e)).addEdge(new Line(e, c)).addEdge(new Line(c, b)));
-            res.addFace(new Polygon().addEdge(new Line(c, e)).addEdge(new Line(e, d)).addEdge(new Line(d, c)));
-            res.addFace(new Polygon().addEdge(new Line(d, e)).addEdge(new Line(e, a)).addEdge(new Line(a, d)));
+            res.addFace(new Polygon().addEdge(a).addEdge(f).addEdge(b));
+            res.addFace(new Polygon().addEdge(b).addEdge(c).addEdge(f));
+            res.addFace(new Polygon().addEdge(c).addEdge(d).addEdge(f));
+            res.addFace(new Polygon().addEdge(d).addEdge(a).addEdge(f));
+            res.addFace(new Polygon().addEdge(a).addEdge(e).addEdge(b));
+            res.addFace(new Polygon().addEdge(b).addEdge(e).addEdge(c));
+            res.addFace(new Polygon().addEdge(c).addEdge(e).addEdge(d));
+            res.addFace(new Polygon().addEdge(d).addEdge(e).addEdge(a));
             return res;
         }
 
@@ -251,19 +243,20 @@ namespace Lab6
         {
             Hexahedron res = new Hexahedron();
             Point a = new Point(0, 0, 0);
-            Point b = new Point(200, 0, 0);
-            Point c = new Point(200, 0, 200);
-            Point d = new Point(0, 0, 200);
-            Point e = new Point(0, 200, 0);
-            Point f = new Point(200, 200, 0);
-            Point g = new Point(200, 200, 200);
-            Point h = new Point(0, 200, 200);
-            res.addFace(new Polygon().addEdge(new Line(a, b)).addEdge(new Line(b, c)).addEdge(new Line(c, d)).addEdge(new Line(d, a)));
-            res.addFace(new Polygon().addEdge(new Line(b, c)).addEdge(new Line(c, g)).addEdge(new Line(g, f)).addEdge(new Line(f, b)));
-            res.addFace(new Polygon().addEdge(new Line(f, g)).addEdge(new Line(g, h)).addEdge(new Line(h, e)).addEdge(new Line(e, f)));
-            res.addFace(new Polygon().addEdge(new Line(h, e)).addEdge(new Line(e, a)).addEdge(new Line(a, d)).addEdge(new Line(d, h)));
-            res.addFace(new Polygon().addEdge(new Line(a, b)).addEdge(new Line(b, f)).addEdge(new Line(f, e)).addEdge(new Line(e, a)));
-            res.addFace(new Polygon().addEdge(new Line(d, c)).addEdge(new Line(c, g)).addEdge(new Line(g, h)).addEdge(new Line(h, d)));
+            Point b = new Point(length, 0, 0);
+            Point c = new Point(length, 0, length);
+            Point d = new Point(0, 0, length);
+            Point e = new Point(0, length, 0);
+            Point f = new Point(length, length, 0);
+            Point g = new Point(length, length, length);
+            Point h = new Point(0, length, length);
+            
+            res.addFace(new Polygon().addEdge(a).addEdge(b).addEdge(c).addEdge(d));
+            res.addFace(new Polygon().addEdge(b).addEdge(c).addEdge(g).addEdge(f));
+            res.addFace(new Polygon().addEdge(f).addEdge(g).addEdge(h).addEdge(e));
+            res.addFace(new Polygon().addEdge(h).addEdge(e).addEdge(a).addEdge(d));
+            res.addFace(new Polygon().addEdge(a).addEdge(b).addEdge(f).addEdge(e));
+            res.addFace(new Polygon().addEdge(d).addEdge(c).addEdge(g).addEdge(h));
             return res;
         }
 
@@ -288,23 +281,25 @@ namespace Lab6
                 }
                 circlePoints.Add(new Point(circleCenter.X + (100 * Math.Cos(degreesToRadians(angle))), circleCenter.Y, circleCenter.Z + (100 * Math.Sin(degreesToRadians(angle)))));
             }
+            
             Point a = new Point(100, 50, 100);
             Point b = new Point(100, 250, 100);
             for (int i = 0; i < 10; i++)
             {
-                res.addFace(new Polygon().addEdge(new Line(circlePoints[i], circlePoints[(i + 1) % 10])).addEdge(new Line(circlePoints[(i + 1) % 10], circlePoints[(i + 2) % 10])).addEdge(new Line(circlePoints[(i + 2) % 10], circlePoints[i])));
+                res.addFace(new Polygon().addEdge(circlePoints[i]).addEdge(circlePoints[(i + 1) % 10]).addEdge(circlePoints[(i + 2) % 10]));
             }
-            res.addFace(new Polygon().addEdge(new Line(circlePoints[1], a)).addEdge(new Line(a, circlePoints[3])).addEdge(new Line(circlePoints[3], circlePoints[1])));
-            res.addFace(new Polygon().addEdge(new Line(circlePoints[3], a)).addEdge(new Line(a, circlePoints[5])).addEdge(new Line(circlePoints[5], circlePoints[3])));
-            res.addFace(new Polygon().addEdge(new Line(circlePoints[5], a)).addEdge(new Line(a, circlePoints[7])).addEdge(new Line(circlePoints[7], circlePoints[5])));
-            res.addFace(new Polygon().addEdge(new Line(circlePoints[7], a)).addEdge(new Line(a, circlePoints[9])).addEdge(new Line(circlePoints[9], circlePoints[7])));
-            res.addFace(new Polygon().addEdge(new Line(circlePoints[9], a)).addEdge(new Line(a, circlePoints[1])).addEdge(new Line(circlePoints[1], circlePoints[9])));
+            
+            res.addFace(new Polygon().addEdge(circlePoints[1]).addEdge(a).addEdge(circlePoints[3]));
+            res.addFace(new Polygon().addEdge(circlePoints[3]).addEdge(a).addEdge(circlePoints[5]));
+            res.addFace(new Polygon().addEdge(circlePoints[5]).addEdge(a).addEdge(circlePoints[7]));
+            res.addFace(new Polygon().addEdge(circlePoints[7]).addEdge(a).addEdge(circlePoints[9]));
+            res.addFace(new Polygon().addEdge(circlePoints[9]).addEdge(a).addEdge(circlePoints[1]));
 
-            res.addFace(new Polygon().addEdge(new Line(circlePoints[0], b)).addEdge(new Line(b, circlePoints[2])).addEdge(new Line(circlePoints[2], circlePoints[0])));
-            res.addFace(new Polygon().addEdge(new Line(circlePoints[2], b)).addEdge(new Line(b, circlePoints[4])).addEdge(new Line(circlePoints[4], circlePoints[2])));
-            res.addFace(new Polygon().addEdge(new Line(circlePoints[4], b)).addEdge(new Line(b, circlePoints[6])).addEdge(new Line(circlePoints[6], circlePoints[4])));
-            res.addFace(new Polygon().addEdge(new Line(circlePoints[6], b)).addEdge(new Line(b, circlePoints[8])).addEdge(new Line(circlePoints[8], circlePoints[6])));
-            res.addFace(new Polygon().addEdge(new Line(circlePoints[8], b)).addEdge(new Line(b, circlePoints[0])).addEdge(new Line(circlePoints[0], circlePoints[8])));
+            res.addFace(new Polygon().addEdge(circlePoints[0]).addEdge(b).addEdge(circlePoints[2]));
+            res.addFace(new Polygon().addEdge(circlePoints[2]).addEdge(b).addEdge(circlePoints[4]));
+            res.addFace(new Polygon().addEdge(circlePoints[4]).addEdge(b).addEdge(circlePoints[6]));
+            res.addFace(new Polygon().addEdge(circlePoints[6]).addEdge(b).addEdge(circlePoints[8]));
+            res.addFace(new Polygon().addEdge(circlePoints[8]).addEdge(b).addEdge(circlePoints[0]));
             return res;
         }
 
@@ -320,20 +315,20 @@ namespace Lab6
                 var c = face.getCenter();
                 centers.Add(c);
             }
-
+            
             for (int i = 0; i < 10; i++)
             {
                 if (i % 2 == 0)
                 {
-                    res.addFace(new Polygon().addEdge(new Line(centers[i], centers[(i + 1) % 10])).addEdge(new Line(centers[(i + 1) % 10], centers[(i + 2) % 10])).addEdge(new Line(centers[(i + 2) % 10], centers[15 + (i / 2 + 1) % 5])).addEdge(new Line(centers[15 + (i / 2 + 1) % 5], centers[15 + i / 2])).addEdge(new Line(centers[15 + i / 2], centers[i])));
+                    res.addFace(new Polygon().addEdge(centers[i]).addEdge(centers[(i + 1) % 10]).addEdge(centers[(i + 2) % 10]).addEdge(centers[15 + (i / 2 + 1) % 5]).addEdge(centers[15 + i / 2]));
 
                     continue;
                 }
-                res.addFace(new Polygon().addEdge(new Line(centers[i], centers[(i + 1) % 10])).addEdge(new Line(centers[(i + 1) % 10], centers[(i + 2) % 10])).addEdge(new Line(centers[(i + 2) % 10], centers[10 + (i / 2 + 1) % 5])).addEdge(new Line(centers[10 + (i / 2 + 1) % 5], centers[10 + i / 2])).addEdge(new Line(centers[10 + i / 2], centers[i])));
+                res.addFace(new Polygon().addEdge(centers[i]).addEdge(centers[(i + 1) % 10]).addEdge(centers[(i + 2) % 10]).addEdge(centers[10 + (i / 2 + 1) % 5]).addEdge(centers[10 + i / 2]));
             }
-            res.addFace(new Polygon().addEdge(new Line(centers[15], centers[16])).addEdge(new Line(centers[16], centers[17])).addEdge(new Line(centers[17], centers[18])).addEdge(new Line(centers[18], centers[19])).addEdge(new Line(centers[19], centers[15])));
-            res.addFace(new Polygon().addEdge(new Line(centers[10], centers[11])).addEdge(new Line(centers[11], centers[12])).addEdge(new Line(centers[12], centers[13])).addEdge(new Line(centers[13], centers[14])).addEdge(new Line(centers[14], centers[10])));
-
+            res.addFace(new Polygon().addEdge(centers[15]).addEdge(centers[16]).addEdge(centers[17]).addEdge(centers[18]).addEdge(centers[19]));
+            res.addFace(new Polygon().addEdge(centers[10]).addEdge(centers[11]).addEdge(centers[12]).addEdge(centers[13]).addEdge(centers[14]));
+            
             return res;
         }
     }

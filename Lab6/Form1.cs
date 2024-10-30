@@ -197,7 +197,7 @@ namespace Lab6
             shifty = p1.Y;
             shiftz = p1.Z;
             redraw();
-            drawLine(new Line(p1, p2), new Pen(Color.Aquamarine, 4));
+            drawLine(p1, p2, new Pen(Color.Aquamarine, 4));
         }
     }
 }
