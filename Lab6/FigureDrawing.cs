@@ -57,16 +57,19 @@ namespace Lab6
         // Рисует заданную границу грани заданным цветом
         void drawFace(Polygon face, Pen pen)
         {
-            foreach(var line in face.Edges)
+            Point prev = face.Points.First();
+            foreach (var point in face.Points)
             {
-                drawLine(line, pen);
+                drawLine(prev, point, pen);
+                prev = point;
             }
+            drawLine(face.Points.Last(), face.Points.First(), pen);
         }
 
         // Рисует линию, переводя её координаты из 3D в 2D
-        void drawLine(Line line, Pen pen)
+        void drawLine(Point prev, Point point, Pen pen)
         {
-            g.DrawLine(pen, line.Start.to2D(), line.End.to2D());
+            g.DrawLine(pen, prev.to2D(), point.to2D());
         }
 
         // Рисует коодинатные прямые (с подписями)
@@ -75,9 +78,9 @@ namespace Lab6
             Line axisX = new Line(new Point(0, 0, 0), new Point(300, 0, 0));
             Line axisY = new Line(new Point(0, 0, 0), new Point(0, 300, 0));
             Line axisZ = new Line(new Point(0, 0, 0), new Point(0, 0, 300));
-            drawLine(axisX, new Pen(Color.Green, 4));
-            drawLine(axisY, new Pen(Color.Blue, 4));
-            drawLine(axisZ, new Pen(Color.Red, 4));
+            drawLine(axisX.Start, axisX.End, new Pen(Color.Green, 4));
+            drawLine(axisY.Start, axisY.End, new Pen(Color.Blue, 4));
+            drawLine(axisZ.Start, axisZ.End, new Pen(Color.Red, 4));
 
             g.ScaleTransform(1.0F, -1.0F);
             g.TranslateTransform(0.0F, -(float)pictureBox1.Height);
