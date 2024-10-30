@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Permissions;
+using System.Security.Cryptography;
 
 namespace Lab6
 {
@@ -98,6 +99,19 @@ namespace Lab6
             }
             return new Point(x / points.Count, y / points.Count, z / points.Count);
         }
+
+        public void transformPoints(ActionRef<Point> f)
+        {
+            Point point;
+            int pointCount = points.Count();
+
+            for (int i = 0; i < pointCount; ++i)
+            {
+                point = points[i];
+                f(ref point);
+                points[i] = point;
+            }
+        }
     }
 
     delegate void ActionRef<T>(ref T item);
@@ -136,7 +150,7 @@ namespace Lab6
         {
             foreach (var face in Faces)
             {
-                face.Points.ForEach(p => f(ref p));
+                face.transformPoints(f);
             }
         }
 
