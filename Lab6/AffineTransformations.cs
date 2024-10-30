@@ -56,7 +56,7 @@ namespace Lab6
             Matrix shift = new Matrix(4, 4).fill(1, 0, 0, dx, 0, 1, 0, dy, 0, 0, 1, dz, 0, 0, 0, 1);
             shape.transformPoints((ref Point p) =>
             {
-                var res = shift * new Matrix(4, 1).fill(p.Xf, p.Yf, p.Zf, 1);
+                var res = shift * new Matrix(4, 1).fill(p.X, p.Y, p.Z, 1);
                 p = new Point(res[0, 0], res[1, 0], res[2, 0]);
             });
         }
@@ -67,7 +67,7 @@ namespace Lab6
             Matrix scale = new Matrix(4, 4).fill(cx, 0, 0, 0, 0, cy, 0, 0, 0, 0, cz, 0, 0, 0, 0, 1);
             shape.transformPoints((ref Point p) =>
             {
-                var res = scale * new Matrix(4, 1).fill(p.Xf, p.Yf, p.Zf, 1);
+                var res = scale * new Matrix(4, 1).fill(p.X, p.Y, p.Z, 1);
                 p = new Point(res[0, 0], res[1, 0], res[2, 0]);
             });
         }
@@ -91,7 +91,7 @@ namespace Lab6
 
             shape.transformPoints((ref Point p) =>
             {
-                var res = rotation * new Matrix(4, 1).fill(p.Xf, p.Yf, p.Zf, 1);
+                var res = rotation * new Matrix(4, 1).fill(p.X, p.Y, p.Z, 1);
                 p = new Point(res[0, 0], res[1, 0], res[2, 0]);
             });
         }
@@ -108,11 +108,11 @@ namespace Lab6
                 p2 = tmp;
             }
 
-            Point vector = new Point(p2.Xf - p1.Xf, p2.Yf - p1.Yf, p2.Zf - p1.Zf);//прямая, вокруг которой будем вращать
-            double length = Math.Sqrt(vector.Xf * vector.Xf + vector.Yf * vector.Yf + vector.Zf * vector.Zf);
-            double l = vector.Xf / length;
-            double m = vector.Yf / length;
-            double n = vector.Zf / length;
+            Point vector = new Point(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p1.Z);//прямая, вокруг которой будем вращать
+            double length = Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y + vector.Z * vector.Z);
+            double l = vector.X / length;
+            double m = vector.Y / length;
+            double n = vector.Z / length;
             double anglesin = Math.Sin(ShapeGetter.degreesToRadians(angle));
             double anglecos = Math.Cos(ShapeGetter.degreesToRadians(angle));
             rotation = new Matrix(4, 4).fill(l * l + anglecos * (1 - l * l), l * (1 - anglecos) * m - n * anglesin, l * (1 - anglecos) * n + m * anglesin, 0,
@@ -122,7 +122,7 @@ namespace Lab6
 
             shape.transformPoints((ref Point p) =>
             {
-                var res = rotation * new Matrix(4, 1).fill(p.Xf, p.Yf, p.Zf, 1);
+                var res = rotation * new Matrix(4, 1).fill(p.X, p.Y, p.Z, 1);
                 p = new Point(res[0, 0], res[1, 0], res[2, 0]);
             });
         }
@@ -146,7 +146,7 @@ namespace Lab6
 
             shape.transformPoints((ref Point p) =>
             {
-                var res = new Matrix(1, 4).fill(p.Xf, p.Yf, p.Zf, 1) * rotation;
+                var res = new Matrix(1, 4).fill(p.X, p.Y, p.Z, 1) * rotation;
                 p = new Point(res[0, 0], res[0, 1], res[0, 2]);
             });
         }
@@ -155,10 +155,10 @@ namespace Lab6
         void scaleCenter(ref Polyhedron shape, double cx, double cy, double cz)
         {
             Point Center = shape.getCenter();
-            Matrix scaleCenter = new Matrix(4, 4).fill(cx, 0, 0, 0,  0, cy, 0, 0,  0, 0, cz, 0,  (1-cx)* Center.Xf, (1-cy)* Center.Yf, (1-cz)* Center.Zf, 1);
+            Matrix scaleCenter = new Matrix(4, 4).fill(cx, 0, 0, 0,  0, cy, 0, 0,  0, 0, cz, 0,  (1-cx)* Center.X, (1-cy)* Center.Y, (1-cz)* Center.Z, 1);
             shape.transformPoints((ref Point p) =>
             {
-                var res = new Matrix(1, 4).fill(p.Xf, p.Yf, p.Zf, 1) * scaleCenter;
+                var res = new Matrix(1, 4).fill(p.X, p.Y, p.Z, 1) * scaleCenter;
                 p = new Point(res[0, 0], res[0, 1], res[0, 2]);
             });
         }
@@ -169,9 +169,9 @@ namespace Lab6
             double sumX = 0, sumY = 0, sumZ = 0;
             foreach (var face in shape.Faces)
             {
-                sumX += face.getCenter().Xf;
-                sumY += face.getCenter().Yf;
-                sumZ += face.getCenter().Zf;
+                sumX += face.getCenter().X;
+                sumY += face.getCenter().Y;
+                sumZ += face.getCenter().Z;
             }
 
             // центр фигуры
@@ -179,10 +179,10 @@ namespace Lab6
 
             Matrix rotationMatrix;
             // переносим в начало координат
-            rotationMatrix = new Matrix(4, 4).fill(1, 0, 0, -center.Xf, 0, 1, 0, -center.Yf, 0, 0, 1, -center.Zf, 0, 0, 0, 1);
+            rotationMatrix = new Matrix(4, 4).fill(1, 0, 0, -center.X, 0, 1, 0, -center.Y, 0, 0, 1, -center.Z, 0, 0, 0, 1);
             shape.transformPoints((ref Point p) =>
             {
-                var res = rotationMatrix * new Matrix(4, 1).fill(p.Xf, p.Yf, p.Zf, 1);
+                var res = rotationMatrix * new Matrix(4, 1).fill(p.X, p.Y, p.Z, 1);
                 p = new Point(res[0, 0], res[1, 0], res[2, 0]);
             });
 
@@ -190,10 +190,10 @@ namespace Lab6
             rotate(ref shape, axis, angle);
 
             // возвращаем на исходное место
-            rotationMatrix = new Matrix(4, 4).fill(1, 0, 0, center.Xf, 0, 1, 0, center.Yf, 0, 0, 1, center.Zf, 0, 0, 0, 1);
+            rotationMatrix = new Matrix(4, 4).fill(1, 0, 0, center.X, 0, 1, 0, center.Y, 0, 0, 1, center.Z, 0, 0, 0, 1);
             shape.transformPoints((ref Point p) =>
             {
-                var res = rotationMatrix * new Matrix(4, 1).fill(p.Xf, p.Yf, p.Zf, 1);
+                var res = rotationMatrix * new Matrix(4, 1).fill(p.X, p.Y, p.Z, 1);
                 p = new Point(res[0, 0], res[1, 0], res[2, 0]);
             });
 

@@ -22,13 +22,6 @@ namespace Lab6
         static Matrix centralMatrix = new Matrix(4, 4).fill(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, k, 0, 0, 0, 1);
         const double k = 0.001f;
 
-        public Point(int x, int y, int z)
-        {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-
         public Point(double x, double y, double z)
         {
             this.x = x;
@@ -36,25 +29,21 @@ namespace Lab6
             this.z = z;
         }
 
-        public int X { get => (int)x; set => x = value; }
-        public int Y { get => (int)y; set => y = value; }
-        public int Z { get => (int)z; set => z = value; }
-
-        public double Xf { get => x; set => x = value; }
-        public double Yf { get => y; set => y = value; }
-        public double Zf { get => z; set => z = value; }
+        public double X { get => x; set => x = value; }
+        public double Y { get => y; set => y = value; }
+        public double Z { get => z; set => z = value; }
 
         // Перевод точки из 3D в 2D
         public PointF to2D()
         {
             if (projection == ProjectionType.PERSPECTIVE)
             {
-                Matrix res = new Matrix(1, 4).fill(Xf, Yf, Zf, 1) * centralMatrix * (1 / (k * Zf + 1));
+                Matrix res = new Matrix(1, 4).fill(X, Y, Z, 1) * centralMatrix * (1 / (k * Z + 1));
                 return new PointF(sceneCenter.X + (float)res[0, 0], sceneCenter.Y + (float)res[0, 1]);
             }
             else
             {
-                Matrix res = new Matrix(3, 3).fill(1, 0, 0, 0, 1, 0, 0, 0, 0) * isometricMatrix * new Matrix(3, 1).fill(Xf, Yf, Zf);
+                Matrix res = new Matrix(3, 3).fill(1, 0, 0, 0, 1, 0, 0, 0, 0) * isometricMatrix * new Matrix(3, 1).fill(X, Y, Z);
                 return new PointF(sceneCenter.X + (float)res[0, 0], sceneCenter.Y + (float)res[1, 0]);
             }
         }
@@ -109,9 +98,9 @@ namespace Lab6
             double x = 0, y = 0, z = 0;
             foreach (var line in edges)
             {
-                x += line.Start.Xf;
-                y += line.Start.Yf;
-                z += line.Start.Zf;
+                x += line.Start.X;
+                y += line.Start.Y;
+                z += line.Start.Z;
             }
             return new Point(x / edges.Count, y / edges.Count, z / edges.Count);
         }
