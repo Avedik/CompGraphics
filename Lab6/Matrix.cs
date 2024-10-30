@@ -38,7 +38,7 @@ namespace Lab6
             {
                 for (int j = 0; j < colCount; j++)
                 {
-                    matr[i, j] = Math.Round(elems[i * colCount + j], 2);
+                    matr[i, j] = elems[i * colCount + j];
                 }
             }
             return this;
