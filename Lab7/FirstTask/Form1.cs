@@ -211,6 +211,7 @@ namespace FirstTask
                 {
                     currentShape = LoadOBJ(openFileDialog.FileName);
                     redraw();
+                    setFlags(true);
                 }
                 catch (Exception ex)
                 {
@@ -236,7 +237,19 @@ namespace FirstTask
                         foreach (Point p in points)
                             sw.WriteLine("v {0} {1} {2}", p.X, p.Y, p.Z);
 
-                        List<int> indexes = new List<int>() { -1, -1, -1, -1 };
+                        sw.WriteLine("");
+                        List<int> indexes;
+                        switch (currentShapeType)
+                        {
+                            case ShapeType.TETRAHEDRON: indexes = new List<int>() { -1, -1, -1 }; sw.WriteLine("g Tetrahedron"); break;
+                            case ShapeType.OCTAHEDRON: indexes = new List<int>() { -1, -1, -1 }; sw.WriteLine("g Octahedron"); break;
+                            case ShapeType.HEXAHEDRON: indexes = new List<int>() { -1, -1, -1, -1 }; sw.WriteLine("g Hexahedron"); break;
+                            case ShapeType.ICOSAHEDRON: indexes = new List<int>() { -1, -1, -1 }; sw.WriteLine("g Icosahedron"); break;
+                            case ShapeType.DODECAHEDRON: indexes = new List<int>() { -1, -1, -1, -1, -1 }; sw.WriteLine("g Dodecahedron"); break;
+
+                            default: throw new Exception();
+                        }
+
                         foreach (Polygon f in currentShape.Faces)
                         {
                             for (int i = 0; i < f.Points.Count; ++i)
@@ -252,7 +265,14 @@ namespace FirstTask
                                     ++j;
                                 }
                             }
-                            sw.WriteLine("f {0} {1} {2} {3}", indexes[0], indexes[1], indexes[2], indexes[3]);
+                            switch (currentShapeType)
+                            {
+                                case ShapeType.TETRAHEDRON: sw.WriteLine("f {0} {1} {2}", indexes[0], indexes[1], indexes[2]); break;
+                                case ShapeType.OCTAHEDRON: sw.WriteLine("f {0} {1} {2}", indexes[0], indexes[1], indexes[2]); break;
+                                case ShapeType.HEXAHEDRON: sw.WriteLine("f {0} {1} {2} {3}", indexes[0], indexes[1], indexes[2], indexes[3]); break;
+                                case ShapeType.ICOSAHEDRON: sw.WriteLine("f {0} {1} {2}", indexes[0], indexes[1], indexes[2]); break;
+                                case ShapeType.DODECAHEDRON: sw.WriteLine("f {0} {1} {2} {3} {4}", indexes[0], indexes[1], indexes[2], indexes[3], indexes[4]); break;
+                            }
                         }
                     }
                 }
@@ -275,22 +295,18 @@ namespace FirstTask
                 }
             }
 
-
+            List<int> faceIndices;
             for (int i = 0; i < lines.Count; i++)
             {
                 if (lines[i].StartsWith("f "))
                 {
                     string[] parts = lines[i].Split(' ');
-                    List<int> faceIndices = new List<int>();
+                    faceIndices = new List<int>();
                     for (int j = 1; j < parts.Length; j++)
-                    {
                         faceIndices.Add(int.Parse(parts[j].Split('/')[0]) - 1); // OBJ indices are 1-based
-                    }
                     Polygon face = new Polygon();
                     foreach (int index in faceIndices)
-                    {
                         face.addEdge(points[index]);
-                    }
                     shape.addFace(face);
                 }
             }
@@ -300,4 +316,6 @@ namespace FirstTask
 
     }
 }
+
+
 
