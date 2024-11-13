@@ -54,21 +54,6 @@ namespace Lab6
         }
     }
 
-    // Отрезок в пространстве
-    class Line
-    {
-        public Point start, end;
-
-        public Line(Point start, Point end)
-        {
-            this.start = start;
-            this.end = end;
-        }
-
-        public Point Start { get => start; set => start = value; }
-        public Point End { get => end; set => end = value; }
-    }
-
     // Многоугольник (грань фигуры)
     class Polygon
     {

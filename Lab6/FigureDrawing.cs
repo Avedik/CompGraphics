@@ -75,18 +75,20 @@ namespace Lab6
         // Рисует коодинатные прямые (с подписями)
         void drawAxis()
         {
-            Line axisX = new Line(new Point(0, 0, 0), new Point(300, 0, 0));
-            Line axisY = new Line(new Point(0, 0, 0), new Point(0, 300, 0));
-            Line axisZ = new Line(new Point(0, 0, 0), new Point(0, 0, 300));
-            drawLine(axisX.Start, axisX.End, new Pen(Color.Green, 4));
-            drawLine(axisY.Start, axisY.End, new Pen(Color.Blue, 4));
-            drawLine(axisZ.Start, axisZ.End, new Pen(Color.Red, 4));
+            Point start = new Point(0, 0, 0);
+            Point axisXEnd = new Point(300, 0, 0);
+            Point axisYEnd = new Point(0, 300, 0);
+            Point axisZEnd = new Point(0, 0, 300);
+
+            drawLine(start, axisXEnd, new Pen(Color.Green, 4));
+            drawLine(start, axisYEnd, new Pen(Color.Blue, 4));
+            drawLine(start, axisZEnd, new Pen(Color.Red, 4));
 
             g.ScaleTransform(1.0F, -1.0F);
             g.TranslateTransform(0.0F, -(float)pictureBox1.Height);
-            g.DrawString($" X", new Font("Arial", 10, FontStyle.Regular), new SolidBrush(Color.Green), axisX.End.to2D().X, pictureBox1.Height - axisX.End.to2D().Y);
-            g.DrawString($" Y", new Font("Arial", 10, FontStyle.Regular), new SolidBrush(Color.Blue), axisY.End.to2D().X, pictureBox1.Height - axisY.End.to2D().Y);
-            g.DrawString($" Z", new Font("Arial", 10, FontStyle.Regular), new SolidBrush(Color.Red), axisZ.End.to2D().X, pictureBox1.Height - axisZ.End.to2D().Y);
+            g.DrawString($" X", new Font("Arial", 10, FontStyle.Regular), new SolidBrush(Color.Green), axisXEnd.to2D().X, pictureBox1.Height - axisXEnd.to2D().Y);
+            g.DrawString($" Y", new Font("Arial", 10, FontStyle.Regular), new SolidBrush(Color.Blue), axisYEnd.to2D().X, pictureBox1.Height - axisYEnd.to2D().Y);
+            g.DrawString($" Z", new Font("Arial", 10, FontStyle.Regular), new SolidBrush(Color.Red), axisZEnd.to2D().X, pictureBox1.Height - axisZEnd.to2D().Y);
            
             g.ScaleTransform(1.0F, -1.0F);
             g.TranslateTransform(0.0F, -(float)pictureBox1.Height);
