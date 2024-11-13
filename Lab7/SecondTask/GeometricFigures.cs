@@ -160,23 +160,11 @@ namespace SecondTask
 
     class RotationShape : Polyhedron
     {
-        List<Point> formingline;
-        int Divisions;
         List<Point> allpoints;
-        Polygon edges;//ребра
 
         public RotationShape()
         {
             allpoints = new List<Point>();
-            edges = new Polygon();
-        }
-
-        public Polygon Edges { get => edges; }
-
-        public Polyhedron addEdge(Point p)
-        {
-            edges.addEdge(p);
-            return this;
         }
 
         public RotationShape addPoint(Point p)
@@ -299,11 +287,10 @@ namespace SecondTask
             List<Point> genline = general;
             int GeneralCount = genline.Count();
             int Count = divisions;
-            double angle = (360.0 / Count);//угол 
-            Polygon edges;//ребра
+            double angle = (360.0 / Count); //угол 
 
-            res.addPoints(genline);//добавили образующую
-            for (int i = 1; i < divisions; i++)//количество разбиений
+            res.addPoints(genline); //добавили образующую
+            for (int i = 1; i < divisions; i++) //количество разбиений
             {
                 res.addPoints(Geometry.RotatePoint(genline, axis, angle * i));
             }
@@ -314,29 +301,15 @@ namespace SecondTask
             {
                 for (int j = 0; j < GeneralCount; j++)
                 {
-                    int index = i * GeneralCount + j;//индекс точки
-                    if (index < divisions * GeneralCount)
+                    int index = i * GeneralCount + j; //индекс точки
+                    int e = (index + GeneralCount) % res.Points.Count;
+
+                    if ((index + 1) % GeneralCount != 0)
                     {
-                        int e = (index + GeneralCount) % res.Points.Count;
-                        if ((index + 1) % GeneralCount == 0)
-                        {
-                            res.addEdge(res.Points[index]);
-                            res.addEdge(res.Points[e]);
-                        }
-                        else
-                        {
-                            res.addEdge(res.Points[index]);
-                            res.addEdge(res.Points[index + 1]);
-                            res.addEdge(res.Points[index]);
-                            res.addEdge(res.Points[e]);
-
-                            int e1 = (index + 1 + GeneralCount) % res.Points.Count;
-                            res.addFace(new Polygon().addEdge(res.Points[index]).addEdge(res.Points[index + 1]).addEdge(res.Points[e1]).addEdge(res.Points[e]));
-                        }
+                        int e1 = (index + 1 + GeneralCount) % res.Points.Count;
+                        res.addFace(new Polygon().addEdge(res.Points[index]).addEdge(res.Points[index + 1]).addEdge(res.Points[e1]).addEdge(res.Points[e]));
                     }
-
                 }
-
 
             }
 
