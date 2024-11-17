@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Globalization;
 
 namespace FirstTask
 {
@@ -39,7 +40,7 @@ namespace FirstTask
         {
             selectAxis.Enabled = selectPlane.Enabled = 
                 buttonRotate.Enabled = buttonScale.Enabled = buttonShift.Enabled = 
-                buttonReflection.Enabled = rbPerspective.Enabled = rbIsometric.Enabled = 
+                buttonReflection.Enabled = rbIsometric.Enabled = 
                 textAngle.Enabled = textScaleX.Enabled = textScaleY.Enabled =
                 textScaleZ.Enabled = textShiftX.Enabled = textShiftY.Enabled = 
                 textShiftZ.Enabled = rbWorldCenter.Enabled = rbCenter.Enabled = textX1.Enabled = 
@@ -178,7 +179,7 @@ namespace FirstTask
         private void loadFigure()
         {
             OpenFileDialog open_dialog = new OpenFileDialog();
-            open_dialog.Filter = "Text Files(*.txt)|*.txt|All files (*.*)|*.*";
+            open_dialog.Filter = "Text Files(*.obj)|*.obj|All files (*.*)|*.*";
             if (open_dialog.ShowDialog() == DialogResult.OK)
             {
                 char[] delimiterChars = { ' ', '\r', '\n' };
@@ -186,24 +187,30 @@ namespace FirstTask
                 Surface surf = new Surface();
                 List<Point> points = new List<Point>();
                 int i = 0;
+                char[] delimiter = { '/' };
+
                 while (i < textElems.Length)
                 {
-                    if (textElems[i] == "")
-                        ++i;
-                    else if (textElems[i] == "v")
+                    if (textElems[i] == "v")
                     {
-                        points.Add(new Point(double.Parse(textElems[i + 1]), double.Parse(textElems[i + 2]), double.Parse(textElems[i + 3])));
+                        points.Add(new Point(double.Parse(textElems[i + 1], CultureInfo.InvariantCulture), 
+                            double.Parse(textElems[i + 2], CultureInfo.InvariantCulture), 
+                            double.Parse(textElems[i + 3], CultureInfo.InvariantCulture)));
                         i += 4;
                     }
 
                     else if (textElems[i] == "f")
                     {
-                        surf.addFace(new Polygon().addEdge(points[int.Parse(textElems[i + 1]) - 1]).
-                            addEdge(points[int.Parse(textElems[i + 2]) - 1]).
-                            addEdge(points[int.Parse(textElems[i + 3]) - 1]).
-                            addEdge(points[int.Parse(textElems[i + 4]) - 1]));
-                        i += 5;
+                        Polygon face = new Polygon();
+                        int parseResult;
+
+                        while (int.TryParse(textElems[++i].Split(delimiter).First(), out parseResult))
+                            face.addEdge(points[parseResult - 1]);
+
+                        surf.addFace(face);
                     }
+                    else
+                        i++;
                 }
                 currentShape = surf;
                 redraw();
@@ -216,7 +223,7 @@ namespace FirstTask
             if (currentShape != null)
             {
                 SaveFileDialog save_dialog = new SaveFileDialog();
-                save_dialog.Filter = "Text Files(*.txt)|*.txt|All files (*.*)|*.*";
+                save_dialog.Filter = "Text Files(*.obj)|*.obj|All files (*.*)|*.*";
                 if (save_dialog.ShowDialog() == DialogResult.OK)
                 {
                     HashSet<Point> points = new HashSet<Point>();
@@ -226,11 +233,14 @@ namespace FirstTask
                     using (StreamWriter sw = new StreamWriter(save_dialog.FileName))
                     {
                         foreach (Point p in points)
-                            sw.WriteLine("v {0} {1} {2}", p.X, p.Y, p.Z);
+                            sw.WriteLine("v {0} {1} {2}", p.X.ToString(CultureInfo.InvariantCulture), 
+                                p.Y.ToString(CultureInfo.InvariantCulture),
+                                p.Z.ToString(CultureInfo.InvariantCulture));
 
-                        List<int> indexes = new List<int>() { -1, -1, -1, -1 };
                         foreach (Polygon f in currentShape.Faces)
                         {
+                            List<int> indexes = new List<int>();
+
                             for (int i = 0; i < f.Points.Count; ++i)
                             {
                                 int j = 0;
@@ -238,17 +248,39 @@ namespace FirstTask
                                 {
                                     if (f.Points[i].X == p.X && f.Points[i].Y == p.Y && f.Points[i].Z == p.Z)
                                     {
-                                        indexes[i] = j + 1;
+                                        indexes.Add(j + 1);
                                         break;
                                     }
                                     ++j;
                                 }
                             }
-                            sw.WriteLine("f {0} {1} {2} {3}", indexes[0], indexes[1], indexes[2], indexes[3]);
+
+                            sw.Write("f");
+                            foreach (int index in indexes)
+                                sw.Write(" {0}", index);
+                            sw.WriteLine();
                         }
                     }
                 }
             }
+        }
+
+        private void buttonViewVector_Click(object sender, EventArgs e)
+        {
+            int x1 = int.Parse(textBoxX1.Text);
+            int y1 = int.Parse(textBoxY1.Text);
+            int z1 = int.Parse(textBoxZ1.Text);
+
+            int x2 = int.Parse(textBoxX2.Text);
+            int y2 = int.Parse(textBoxY2.Text);
+            int z2 = int.Parse(textBoxZ2.Text);
+
+            viewVector.X = x2 - x1;
+            viewVector.Y = y2 - y1;
+            viewVector.Z = z2 - z1;
+
+            viewVectorSelected = true;
+            redraw();
         }
     }
 }

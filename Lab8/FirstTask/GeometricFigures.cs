@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Permissions;
 using System.Security.Cryptography;
+using System.Numerics;
 
 namespace FirstTask
 {
@@ -25,6 +26,12 @@ namespace FirstTask
                                                             0, 1, 0, 0, 
                                                             0, 0, 0, k, 
                                                             0, 0, 0, 1);
+
+        public static Vector3 operator -(Point p1, Point p2)
+        {
+            return new Vector3((float)(p1.X - p2.X), (float)(p1.Y - p2.Y), (float)(p1.Z - p2.Z));
+        }
+
         const double k = 0.001f;
 
         public Point(double x, double y, double z)
@@ -37,6 +44,7 @@ namespace FirstTask
         public double X { get => x; set => x = value; }
         public double Y { get => y; set => y = value; }
         public double Z { get => z; set => z = value; }
+
 
         // Перевод точки из 3D в 2D
         public PointF to2D()
@@ -68,6 +76,14 @@ namespace FirstTask
         {
             points.Add(point);
             return this;
+        }
+
+        // Возвращает единичный вектор нормали к грани
+        public Vector3 getNormal()
+        {
+            Vector3 vectorA = points[0] - points[1];
+            Vector3 vectorB = points[2] - points[1];
+            return Vector3.Normalize(Vector3.Cross(vectorA, vectorB));
         }
 
         public List<Point> Points { get => points; }
@@ -137,6 +153,16 @@ namespace FirstTask
             {
                 face.transformPoints(f);
             }
+        }
+
+        public bool faceIsVisible(Polygon face, Vector3 viewVector)
+        {
+            Vector3 normal = face.getNormal();
+            Vector3 checkVector = getCenter() - face.Points.First();
+            if (Vector3.Dot(normal, checkVector) < 0)
+                normal *= -1;
+
+            return Vector3.Dot(normal, viewVector) > 0;
         }
 
         // Получение центра тяжести многогранника

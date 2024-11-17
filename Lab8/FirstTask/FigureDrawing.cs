@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,6 +12,8 @@ namespace FirstTask
     {
         Polyhedron currentShape;
         Graphics g;
+        Vector3 viewVector;
+        bool viewVectorSelected = false;
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
@@ -39,19 +42,24 @@ namespace FirstTask
             setFlags(false);
             g.Clear(Color.White);
             RotationShapePoints.Clear();
+            currentShape = null;
+            viewVectorSelected = false;
         }
 
-        // Рисует фигуры, выделяя цветом некоторые грани у додекаэдра и икосаэра
+        // Рисует фигуру
         void drawShape(Polyhedron shape)
         {
             foreach (var face in shape.Faces)
             {
+                if (viewVectorSelected && !shape.faceIsVisible(face, viewVector))
+                    continue;
+
                 Pen pen = new Pen(Color.Black, 3);
                 drawFace(face,pen);
             }
         }
 
-        // Рисует заданную границу грани заданным цветом
+        // Рисует заданную грань заданным цветом
         void drawFace(Polygon face, Pen pen)
         {
             Point prev = face.Points.First();
@@ -93,7 +101,9 @@ namespace FirstTask
         void redraw()
         {
             g.Clear(Color.White);
-            drawShape(currentShape);
+
+            if (currentShape != null)
+                drawShape(currentShape);
 
             foreach (Point p in RotationShapePoints)
                 drawPoint(p);

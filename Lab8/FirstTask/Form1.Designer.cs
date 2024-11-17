@@ -102,6 +102,20 @@ namespace FirstTask
             this.clearButton = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonLoad = new System.Windows.Forms.Button();
+            this.label28 = new System.Windows.Forms.Label();
+            this.label32 = new System.Windows.Forms.Label();
+            this.label33 = new System.Windows.Forms.Label();
+            this.label35 = new System.Windows.Forms.Label();
+            this.textBoxZ1 = new System.Windows.Forms.TextBox();
+            this.textBoxY1 = new System.Windows.Forms.TextBox();
+            this.textBoxX1 = new System.Windows.Forms.TextBox();
+            this.label36 = new System.Windows.Forms.Label();
+            this.label37 = new System.Windows.Forms.Label();
+            this.label38 = new System.Windows.Forms.Label();
+            this.textBoxZ2 = new System.Windows.Forms.TextBox();
+            this.textBoxY2 = new System.Windows.Forms.TextBox();
+            this.textBoxX2 = new System.Windows.Forms.TextBox();
+            this.buttonViewVector = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -122,6 +136,7 @@ namespace FirstTask
             this.rbPerspective.AutoSize = true;
             this.rbPerspective.BackColor = System.Drawing.Color.White;
             this.rbPerspective.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.rbPerspective.Enabled = false;
             this.rbPerspective.Location = new System.Drawing.Point(11, 11);
             this.rbPerspective.Margin = new System.Windows.Forms.Padding(2);
             this.rbPerspective.Name = "rbPerspective";
@@ -681,17 +696,17 @@ namespace FirstTask
             "Ox",
             "Oy",
             "Oz"});
-            this.axizRotate.Location = new System.Drawing.Point(980, 109);
+            this.axizRotate.Location = new System.Drawing.Point(1049, 64);
             this.axizRotate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.axizRotate.Name = "axizRotate";
-            this.axizRotate.Size = new System.Drawing.Size(115, 21);
+            this.axizRotate.Size = new System.Drawing.Size(55, 21);
             this.axizRotate.TabIndex = 88;
             this.axizRotate.SelectedIndexChanged += new System.EventHandler(this.axizRotate_SelectedIndexChanged);
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(880, 112);
+            this.label10.Location = new System.Drawing.Point(966, 68);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(84, 13);
             this.label10.TabIndex = 92;
@@ -699,7 +714,7 @@ namespace FirstTask
             // 
             // getDiv
             // 
-            this.getDiv.Location = new System.Drawing.Point(980, 85);
+            this.getDiv.Location = new System.Drawing.Point(894, 65);
             this.getDiv.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.getDiv.Name = "getDiv";
             this.getDiv.Size = new System.Drawing.Size(59, 20);
@@ -708,7 +723,7 @@ namespace FirstTask
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(867, 88);
+            this.label26.Location = new System.Drawing.Point(797, 68);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(99, 13);
             this.label26.TabIndex = 90;
@@ -717,7 +732,7 @@ namespace FirstTask
             // button1
             // 
             this.button1.AutoSize = true;
-            this.button1.Location = new System.Drawing.Point(1051, 38);
+            this.button1.Location = new System.Drawing.Point(1055, 33);
             this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(113, 23);
@@ -728,33 +743,33 @@ namespace FirstTask
             // 
             // getZ
             // 
-            this.getZ.Location = new System.Drawing.Point(999, 40);
+            this.getZ.Location = new System.Drawing.Point(983, 35);
             this.getZ.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.getZ.Name = "getZ";
-            this.getZ.Size = new System.Drawing.Size(22, 20);
+            this.getZ.Size = new System.Drawing.Size(62, 20);
             this.getZ.TabIndex = 87;
             // 
             // getY
             // 
-            this.getY.Location = new System.Drawing.Point(927, 40);
+            this.getY.Location = new System.Drawing.Point(903, 35);
             this.getY.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.getY.Name = "getY";
-            this.getY.Size = new System.Drawing.Size(22, 20);
+            this.getY.Size = new System.Drawing.Size(50, 20);
             this.getY.TabIndex = 86;
             // 
             // getX
             // 
-            this.getX.Location = new System.Drawing.Point(855, 41);
+            this.getX.Location = new System.Drawing.Point(825, 35);
             this.getX.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.getX.Name = "getX";
-            this.getX.Size = new System.Drawing.Size(22, 20);
+            this.getX.Size = new System.Drawing.Size(51, 20);
             this.getX.TabIndex = 85;
             // 
             // label27
             // 
             this.label27.AutoSize = true;
             this.label27.Font = new System.Drawing.Font("Segoe UI", 13.8F);
-            this.label27.Location = new System.Drawing.Point(970, 36);
+            this.label27.Location = new System.Drawing.Point(961, 31);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(23, 25);
             this.label27.TabIndex = 84;
@@ -764,7 +779,7 @@ namespace FirstTask
             // 
             this.label29.AutoSize = true;
             this.label29.Font = new System.Drawing.Font("Segoe UI", 13.8F);
-            this.label29.Location = new System.Drawing.Point(898, 37);
+            this.label29.Location = new System.Drawing.Point(882, 32);
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(23, 25);
             this.label29.TabIndex = 83;
@@ -774,7 +789,7 @@ namespace FirstTask
             // 
             this.label30.AutoSize = true;
             this.label30.Font = new System.Drawing.Font("Segoe UI", 13.8F);
-            this.label30.Location = new System.Drawing.Point(826, 38);
+            this.label30.Location = new System.Drawing.Point(801, 32);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(23, 25);
             this.label30.TabIndex = 82;
@@ -791,10 +806,10 @@ namespace FirstTask
             // 
             // buttonShape
             // 
-            this.buttonShape.Location = new System.Drawing.Point(855, 136);
+            this.buttonShape.Location = new System.Drawing.Point(797, 97);
             this.buttonShape.Margin = new System.Windows.Forms.Padding(2);
             this.buttonShape.Name = "buttonShape";
-            this.buttonShape.Size = new System.Drawing.Size(108, 23);
+            this.buttonShape.Size = new System.Drawing.Size(98, 23);
             this.buttonShape.TabIndex = 80;
             this.buttonShape.Text = "Нарисовать";
             this.buttonShape.UseVisualStyleBackColor = true;
@@ -804,7 +819,7 @@ namespace FirstTask
             // 
             this.checkBox1.AutoSize = true;
             this.checkBox1.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.checkBox1.Location = new System.Drawing.Point(1107, 139);
+            this.checkBox1.Location = new System.Drawing.Point(1122, 67);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(46, 17);
             this.checkBox1.TabIndex = 94;
@@ -814,7 +829,7 @@ namespace FirstTask
             // 
             // clearButton
             // 
-            this.clearButton.Location = new System.Drawing.Point(978, 135);
+            this.clearButton.Location = new System.Drawing.Point(900, 97);
             this.clearButton.Name = "clearButton";
             this.clearButton.Size = new System.Drawing.Size(88, 23);
             this.clearButton.TabIndex = 95;
@@ -824,9 +839,9 @@ namespace FirstTask
             // 
             // buttonSave
             // 
-            this.buttonSave.Location = new System.Drawing.Point(855, 165);
+            this.buttonSave.Location = new System.Drawing.Point(994, 97);
             this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(108, 23);
+            this.buttonSave.Size = new System.Drawing.Size(85, 23);
             this.buttonSave.TabIndex = 96;
             this.buttonSave.Text = "Сохранить";
             this.buttonSave.UseVisualStyleBackColor = true;
@@ -834,13 +849,153 @@ namespace FirstTask
             // 
             // buttonLoad
             // 
-            this.buttonLoad.Location = new System.Drawing.Point(977, 164);
+            this.buttonLoad.Location = new System.Drawing.Point(1085, 97);
             this.buttonLoad.Name = "buttonLoad";
             this.buttonLoad.Size = new System.Drawing.Size(89, 23);
             this.buttonLoad.TabIndex = 97;
             this.buttonLoad.Text = "Загрузить";
             this.buttonLoad.UseVisualStyleBackColor = true;
             this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(796, 130);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(123, 13);
+            this.label28.TabIndex = 98;
+            this.label28.Text = "Задать вектор обзора:";
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(925, 152);
+            this.label32.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(23, 13);
+            this.label32.TabIndex = 102;
+            this.label32.Text = "Z1:";
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(864, 151);
+            this.label33.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(23, 13);
+            this.label33.TabIndex = 103;
+            this.label33.Text = "Y1:";
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(805, 152);
+            this.label35.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(23, 13);
+            this.label35.TabIndex = 104;
+            this.label35.Text = "Х1:";
+            // 
+            // textBoxZ1
+            // 
+            this.textBoxZ1.Location = new System.Drawing.Point(948, 149);
+            this.textBoxZ1.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxZ1.MaxLength = 5;
+            this.textBoxZ1.Name = "textBoxZ1";
+            this.textBoxZ1.Size = new System.Drawing.Size(32, 20);
+            this.textBoxZ1.TabIndex = 99;
+            this.textBoxZ1.Text = "0";
+            // 
+            // textBoxY1
+            // 
+            this.textBoxY1.Location = new System.Drawing.Point(887, 149);
+            this.textBoxY1.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxY1.MaxLength = 5;
+            this.textBoxY1.Name = "textBoxY1";
+            this.textBoxY1.Size = new System.Drawing.Size(32, 20);
+            this.textBoxY1.TabIndex = 100;
+            this.textBoxY1.Text = "0";
+            // 
+            // textBoxX1
+            // 
+            this.textBoxX1.Location = new System.Drawing.Point(828, 149);
+            this.textBoxX1.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxX1.MaxLength = 5;
+            this.textBoxX1.Name = "textBoxX1";
+            this.textBoxX1.Size = new System.Drawing.Size(32, 20);
+            this.textBoxX1.TabIndex = 101;
+            this.textBoxX1.Text = "0";
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(925, 176);
+            this.label36.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(23, 13);
+            this.label36.TabIndex = 108;
+            this.label36.Text = "Z2:";
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Location = new System.Drawing.Point(864, 175);
+            this.label37.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(23, 13);
+            this.label37.TabIndex = 109;
+            this.label37.Text = "Y2:";
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(805, 176);
+            this.label38.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(23, 13);
+            this.label38.TabIndex = 110;
+            this.label38.Text = "Х2:";
+            // 
+            // textBoxZ2
+            // 
+            this.textBoxZ2.Location = new System.Drawing.Point(948, 173);
+            this.textBoxZ2.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxZ2.MaxLength = 5;
+            this.textBoxZ2.Name = "textBoxZ2";
+            this.textBoxZ2.Size = new System.Drawing.Size(32, 20);
+            this.textBoxZ2.TabIndex = 105;
+            this.textBoxZ2.Text = "0";
+            // 
+            // textBoxY2
+            // 
+            this.textBoxY2.Location = new System.Drawing.Point(887, 173);
+            this.textBoxY2.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxY2.MaxLength = 5;
+            this.textBoxY2.Name = "textBoxY2";
+            this.textBoxY2.Size = new System.Drawing.Size(32, 20);
+            this.textBoxY2.TabIndex = 106;
+            this.textBoxY2.Text = "0";
+            // 
+            // textBoxX2
+            // 
+            this.textBoxX2.Location = new System.Drawing.Point(828, 173);
+            this.textBoxX2.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxX2.MaxLength = 5;
+            this.textBoxX2.Name = "textBoxX2";
+            this.textBoxX2.Size = new System.Drawing.Size(32, 20);
+            this.textBoxX2.TabIndex = 107;
+            this.textBoxX2.Text = "0";
+            // 
+            // buttonViewVector
+            // 
+            this.buttonViewVector.Location = new System.Drawing.Point(1014, 159);
+            this.buttonViewVector.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonViewVector.Name = "buttonViewVector";
+            this.buttonViewVector.Size = new System.Drawing.Size(126, 23);
+            this.buttonViewVector.TabIndex = 111;
+            this.buttonViewVector.Text = "Задать";
+            this.buttonViewVector.UseVisualStyleBackColor = true;
+            this.buttonViewVector.Click += new System.EventHandler(this.buttonViewVector_Click);
             // 
             // Form1
             // 
@@ -849,6 +1004,20 @@ namespace FirstTask
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.ClientSize = new System.Drawing.Size(1176, 652);
+            this.Controls.Add(this.buttonViewVector);
+            this.Controls.Add(this.label36);
+            this.Controls.Add(this.label37);
+            this.Controls.Add(this.label38);
+            this.Controls.Add(this.textBoxZ2);
+            this.Controls.Add(this.textBoxY2);
+            this.Controls.Add(this.textBoxX2);
+            this.Controls.Add(this.label32);
+            this.Controls.Add(this.label33);
+            this.Controls.Add(this.label35);
+            this.Controls.Add(this.textBoxZ1);
+            this.Controls.Add(this.textBoxY1);
+            this.Controls.Add(this.textBoxX1);
+            this.Controls.Add(this.label28);
             this.Controls.Add(this.buttonLoad);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.clearButton);
@@ -1006,6 +1175,20 @@ namespace FirstTask
         private System.Windows.Forms.Button clearButton;
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.Button buttonLoad;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.Label label35;
+        private System.Windows.Forms.TextBox textBoxZ1;
+        private System.Windows.Forms.TextBox textBoxY1;
+        private System.Windows.Forms.TextBox textBoxX1;
+        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.Label label38;
+        private System.Windows.Forms.TextBox textBoxZ2;
+        private System.Windows.Forms.TextBox textBoxY2;
+        private System.Windows.Forms.TextBox textBoxX2;
+        private System.Windows.Forms.Button buttonViewVector;
     }
 }
 
