@@ -82,54 +82,6 @@ namespace ThirdTask
             }
         }
 
-        private void textScaleX_TextChanged(object sender, EventArgs e)
-        {
-            if (textScaleX.Text == "")
-            {
-                textScaleX.Text = "1";
-            }
-        }
-
-        private void textScaleY_TextChanged(object sender, EventArgs e)
-        {
-            if (textScaleY.Text == "")
-            {
-                textScaleY.Text = "1";
-            }
-        }
-
-        private void textScaleZ_TextChanged(object sender, EventArgs e)
-        {
-            if (textScaleZ.Text == "")
-            {
-                textScaleZ.Text = "1";
-            }
-        }
-
-        private void textShiftX_TextChanged(object sender, EventArgs e)
-        {
-            if (textShiftX.Text == "")
-            {
-                textShiftX.Text = "0";
-            }
-        }
-
-        private void textShiftY_TextChanged(object sender, EventArgs e)
-        {
-            if (textShiftY.Text == "")
-            {
-                textShiftY.Text = "0";
-            }
-        }
-
-        private void textShiftZ_TextChanged(object sender, EventArgs e)
-        {
-            if (textShiftZ.Text == "")
-            {
-                textShiftZ.Text = "0";
-            }
-        }
-
         private void rbIsometric_CheckedChanged(object sender, EventArgs e)
         {
             if (rbIsometric.Checked)

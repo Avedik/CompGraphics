@@ -43,14 +43,13 @@ namespace ThirdTask
         {
             if (projection == ProjectionType.PERSPECTIVE)
             {
-                Matrix res = new Matrix(1, 4).fill(X, Y, Z, 1);
+                Matrix res = new Matrix(4, 1).fill(X, Y, Z, 1);
                 if (c == null)
-                    res = res * centralMatrix * (1 / (k * Z + 1));
+                    res = centralMatrix * res *(1 / (k * Z + 1));
                 else
-                    res = res * c.cM;
+                    res = c.cM * res;
 
-
-                return new PointF(sceneCenter.X + (float)res[0, 0], sceneCenter.Y + (float)res[0, 1]);
+                return new PointF(sceneCenter.X + (float)res[0, 0], sceneCenter.Y + (float)res[1, 0]);
             }
             else
             {
@@ -58,21 +57,6 @@ namespace ThirdTask
                 return new PointF(sceneCenter.X + (float)res[0, 0], sceneCenter.Y + (float)res[1, 0]);
             }
         }
-    }
-
-    // Отрезок в пространстве
-    class Line
-    {
-        public Point start, end;
-
-        public Line(Point start, Point end)
-        {
-            this.start = start;
-            this.end = end;
-        }
-
-        public Point Start { get => start; set => start = value; }
-        public Point End { get => end; set => end = value; }
     }
 
     // Многоугольник (грань фигуры)

@@ -88,6 +88,18 @@ namespace ThirdTask
             this.textZ2 = new System.Windows.Forms.TextBox();
             this.textAngleForLineRotation = new System.Windows.Forms.TextBox();
             this.buttonRotateAroundLine = new System.Windows.Forms.Button();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
+            this.textCamX = new System.Windows.Forms.TextBox();
+            this.textCamY = new System.Windows.Forms.TextBox();
+            this.textCamZ = new System.Windows.Forms.TextBox();
+            this.textNZ = new System.Windows.Forms.TextBox();
+            this.textNY = new System.Windows.Forms.TextBox();
+            this.textNX = new System.Windows.Forms.TextBox();
+            this.label29 = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
+            this.label31 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -99,7 +111,7 @@ namespace ThirdTask
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(789, 652);
+            this.pictureBox1.Size = new System.Drawing.Size(789, 666);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
@@ -119,10 +131,10 @@ namespace ThirdTask
             // 
             // buttonShape
             // 
-            this.buttonShape.Location = new System.Drawing.Point(824, 59);
+            this.buttonShape.Location = new System.Drawing.Point(826, 69);
             this.buttonShape.Margin = new System.Windows.Forms.Padding(2);
             this.buttonShape.Name = "buttonShape";
-            this.buttonShape.Size = new System.Drawing.Size(164, 23);
+            this.buttonShape.Size = new System.Drawing.Size(141, 23);
             this.buttonShape.TabIndex = 1;
             this.buttonShape.Text = "Нарисовать";
             this.buttonShape.UseVisualStyleBackColor = true;
@@ -137,7 +149,7 @@ namespace ThirdTask
             "Октаэдр",
             "Икосаэдр",
             "Додекаэдр"});
-            this.selectShape.Location = new System.Drawing.Point(808, 34);
+            this.selectShape.Location = new System.Drawing.Point(817, 32);
             this.selectShape.Margin = new System.Windows.Forms.Padding(2);
             this.selectShape.Name = "selectShape";
             this.selectShape.Size = new System.Drawing.Size(150, 21);
@@ -147,10 +159,10 @@ namespace ThirdTask
             // buttonShift
             // 
             this.buttonShift.Enabled = false;
-            this.buttonShift.Location = new System.Drawing.Point(824, 136);
+            this.buttonShift.Location = new System.Drawing.Point(841, 168);
             this.buttonShift.Margin = new System.Windows.Forms.Padding(2);
             this.buttonShift.Name = "buttonShift";
-            this.buttonShift.Size = new System.Drawing.Size(164, 23);
+            this.buttonShift.Size = new System.Drawing.Size(141, 23);
             this.buttonShift.TabIndex = 1;
             this.buttonShift.Text = "Сместить";
             this.buttonShift.UseVisualStyleBackColor = true;
@@ -159,10 +171,10 @@ namespace ThirdTask
             // buttonRotate
             // 
             this.buttonRotate.Enabled = false;
-            this.buttonRotate.Location = new System.Drawing.Point(822, 219);
+            this.buttonRotate.Location = new System.Drawing.Point(1063, 168);
             this.buttonRotate.Margin = new System.Windows.Forms.Padding(2);
             this.buttonRotate.Name = "buttonRotate";
-            this.buttonRotate.Size = new System.Drawing.Size(164, 23);
+            this.buttonRotate.Size = new System.Drawing.Size(141, 23);
             this.buttonRotate.TabIndex = 1;
             this.buttonRotate.Text = "Повернуть";
             this.buttonRotate.UseVisualStyleBackColor = true;
@@ -171,7 +183,7 @@ namespace ThirdTask
             // textAngle
             // 
             this.textAngle.Enabled = false;
-            this.textAngle.Location = new System.Drawing.Point(857, 193);
+            this.textAngle.Location = new System.Drawing.Point(1087, 136);
             this.textAngle.Margin = new System.Windows.Forms.Padding(2);
             this.textAngle.MaxLength = 5;
             this.textAngle.Name = "textAngle";
@@ -182,7 +194,7 @@ namespace ThirdTask
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(821, 197);
+            this.label3.Location = new System.Drawing.Point(1051, 140);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 13);
@@ -193,10 +205,10 @@ namespace ThirdTask
             // 
             this.buttonScale.Enabled = false;
             this.buttonScale.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.buttonScale.Location = new System.Drawing.Point(818, 381);
+            this.buttonScale.Location = new System.Drawing.Point(949, 349);
             this.buttonScale.Margin = new System.Windows.Forms.Padding(2);
             this.buttonScale.Name = "buttonScale";
-            this.buttonScale.Size = new System.Drawing.Size(164, 23);
+            this.buttonScale.Size = new System.Drawing.Size(141, 23);
             this.buttonScale.TabIndex = 1;
             this.buttonScale.Text = "Масштабировать";
             this.buttonScale.UseVisualStyleBackColor = true;
@@ -205,7 +217,7 @@ namespace ThirdTask
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(960, 114);
+            this.label6.Location = new System.Drawing.Point(957, 137);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(17, 13);
@@ -215,7 +227,7 @@ namespace ThirdTask
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(884, 114);
+            this.label2.Location = new System.Drawing.Point(879, 137);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(17, 13);
@@ -225,7 +237,7 @@ namespace ThirdTask
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(801, 114);
+            this.label1.Location = new System.Drawing.Point(798, 137);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(17, 13);
@@ -235,43 +247,40 @@ namespace ThirdTask
             // textShiftZ
             // 
             this.textShiftZ.Enabled = false;
-            this.textShiftZ.Location = new System.Drawing.Point(979, 112);
+            this.textShiftZ.Location = new System.Drawing.Point(976, 135);
             this.textShiftZ.Margin = new System.Windows.Forms.Padding(2);
             this.textShiftZ.MaxLength = 5;
             this.textShiftZ.Name = "textShiftZ";
             this.textShiftZ.Size = new System.Drawing.Size(32, 20);
             this.textShiftZ.TabIndex = 5;
             this.textShiftZ.Text = "0";
-            this.textShiftZ.TextChanged += new System.EventHandler(this.textShiftZ_TextChanged);
             // 
             // textShiftY
             // 
             this.textShiftY.Enabled = false;
-            this.textShiftY.Location = new System.Drawing.Point(904, 112);
+            this.textShiftY.Location = new System.Drawing.Point(899, 135);
             this.textShiftY.Margin = new System.Windows.Forms.Padding(2);
             this.textShiftY.MaxLength = 5;
             this.textShiftY.Name = "textShiftY";
             this.textShiftY.Size = new System.Drawing.Size(32, 20);
             this.textShiftY.TabIndex = 6;
             this.textShiftY.Text = "0";
-            this.textShiftY.TextChanged += new System.EventHandler(this.textShiftY_TextChanged);
             // 
             // textShiftX
             // 
             this.textShiftX.Enabled = false;
-            this.textShiftX.Location = new System.Drawing.Point(822, 112);
+            this.textShiftX.Location = new System.Drawing.Point(819, 135);
             this.textShiftX.Margin = new System.Windows.Forms.Padding(2);
             this.textShiftX.MaxLength = 5;
             this.textShiftX.Name = "textShiftX";
             this.textShiftX.Size = new System.Drawing.Size(32, 20);
             this.textShiftX.TabIndex = 7;
             this.textShiftX.Text = "0";
-            this.textShiftX.TextChanged += new System.EventHandler(this.textShiftX_TextChanged);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(941, 282);
+            this.label4.Location = new System.Drawing.Point(1055, 236);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(41, 13);
@@ -281,7 +290,7 @@ namespace ThirdTask
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(866, 282);
+            this.label5.Location = new System.Drawing.Point(980, 236);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(41, 13);
@@ -291,7 +300,7 @@ namespace ThirdTask
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(791, 282);
+            this.label7.Location = new System.Drawing.Point(905, 236);
             this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(41, 13);
@@ -301,43 +310,40 @@ namespace ThirdTask
             // textScaleZ
             // 
             this.textScaleZ.Enabled = false;
-            this.textScaleZ.Location = new System.Drawing.Point(983, 279);
+            this.textScaleZ.Location = new System.Drawing.Point(1097, 233);
             this.textScaleZ.Margin = new System.Windows.Forms.Padding(2);
             this.textScaleZ.MaxLength = 5;
             this.textScaleZ.Name = "textScaleZ";
             this.textScaleZ.Size = new System.Drawing.Size(32, 20);
             this.textScaleZ.TabIndex = 11;
             this.textScaleZ.Text = "1";
-            this.textScaleZ.TextChanged += new System.EventHandler(this.textScaleZ_TextChanged);
             // 
             // textScaleY
             // 
             this.textScaleY.Enabled = false;
-            this.textScaleY.Location = new System.Drawing.Point(907, 279);
+            this.textScaleY.Location = new System.Drawing.Point(1021, 233);
             this.textScaleY.Margin = new System.Windows.Forms.Padding(2);
             this.textScaleY.MaxLength = 5;
             this.textScaleY.Name = "textScaleY";
             this.textScaleY.Size = new System.Drawing.Size(32, 20);
             this.textScaleY.TabIndex = 12;
             this.textScaleY.Text = "1";
-            this.textScaleY.TextChanged += new System.EventHandler(this.textScaleY_TextChanged);
             // 
             // textScaleX
             // 
             this.textScaleX.Enabled = false;
-            this.textScaleX.Location = new System.Drawing.Point(832, 279);
+            this.textScaleX.Location = new System.Drawing.Point(946, 233);
             this.textScaleX.Margin = new System.Windows.Forms.Padding(2);
             this.textScaleX.MaxLength = 5;
             this.textScaleX.Name = "textScaleX";
             this.textScaleX.Size = new System.Drawing.Size(32, 20);
             this.textScaleX.TabIndex = 13;
             this.textScaleX.Text = "1";
-            this.textScaleX.TextChanged += new System.EventHandler(this.textScaleX_TextChanged);
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(924, 198);
+            this.label8.Location = new System.Drawing.Point(1154, 141);
             this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(30, 13);
@@ -352,7 +358,7 @@ namespace ThirdTask
             "X",
             "Y",
             "Z"});
-            this.selectAxis.Location = new System.Drawing.Point(954, 193);
+            this.selectAxis.Location = new System.Drawing.Point(1184, 136);
             this.selectAxis.Margin = new System.Windows.Forms.Padding(2);
             this.selectAxis.Name = "selectAxis";
             this.selectAxis.Size = new System.Drawing.Size(32, 21);
@@ -378,7 +384,7 @@ namespace ThirdTask
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(821, 317);
+            this.label9.Location = new System.Drawing.Point(966, 271);
             this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(82, 13);
@@ -389,7 +395,7 @@ namespace ThirdTask
             // 
             this.panel1.Controls.Add(this.rbCenter);
             this.panel1.Controls.Add(this.rbWorldCenter);
-            this.panel1.Location = new System.Drawing.Point(808, 341);
+            this.panel1.Location = new System.Drawing.Point(922, 295);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(189, 36);
@@ -422,7 +428,7 @@ namespace ThirdTask
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(969, 36);
+            this.checkBox1.Location = new System.Drawing.Point(978, 34);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(46, 17);
             this.checkBox1.TabIndex = 20;
@@ -433,7 +439,7 @@ namespace ThirdTask
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(819, 13);
+            this.label10.Location = new System.Drawing.Point(849, 9);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(80, 13);
             this.label10.TabIndex = 21;
@@ -442,7 +448,7 @@ namespace ThirdTask
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(809, 94);
+            this.label11.Location = new System.Drawing.Point(875, 110);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(61, 13);
             this.label11.TabIndex = 1;
@@ -451,7 +457,7 @@ namespace ThirdTask
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(813, 176);
+            this.label12.Location = new System.Drawing.Point(1043, 110);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(184, 13);
             this.label12.TabIndex = 22;
@@ -460,7 +466,7 @@ namespace ThirdTask
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(835, 258);
+            this.label13.Location = new System.Drawing.Point(957, 207);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(101, 13);
             this.label13.TabIndex = 23;
@@ -469,7 +475,7 @@ namespace ThirdTask
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(817, 412);
+            this.label14.Location = new System.Drawing.Point(865, 390);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(64, 13);
             this.label14.TabIndex = 24;
@@ -478,7 +484,7 @@ namespace ThirdTask
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(792, 435);
+            this.label15.Location = new System.Drawing.Point(791, 420);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(138, 13);
             this.label15.TabIndex = 25;
@@ -491,7 +497,7 @@ namespace ThirdTask
             "XY",
             "YZ",
             "XZ"});
-            this.selectPlane.Location = new System.Drawing.Point(933, 432);
+            this.selectPlane.Location = new System.Drawing.Point(932, 417);
             this.selectPlane.Name = "selectPlane";
             this.selectPlane.Size = new System.Drawing.Size(76, 21);
             this.selectPlane.TabIndex = 26;
@@ -499,9 +505,9 @@ namespace ThirdTask
             // 
             // buttonReflection
             // 
-            this.buttonReflection.Location = new System.Drawing.Point(824, 451);
+            this.buttonReflection.Location = new System.Drawing.Point(833, 453);
             this.buttonReflection.Name = "buttonReflection";
-            this.buttonReflection.Size = new System.Drawing.Size(164, 23);
+            this.buttonReflection.Size = new System.Drawing.Size(141, 23);
             this.buttonReflection.TabIndex = 27;
             this.buttonReflection.Text = "Отразить";
             this.buttonReflection.UseVisualStyleBackColor = true;
@@ -510,7 +516,7 @@ namespace ThirdTask
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(806, 492);
+            this.label16.Location = new System.Drawing.Point(1037, 421);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(35, 13);
             this.label16.TabIndex = 28;
@@ -519,7 +525,7 @@ namespace ThirdTask
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(909, 492);
+            this.label17.Location = new System.Drawing.Point(1140, 421);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(30, 13);
             this.label17.TabIndex = 29;
@@ -527,7 +533,7 @@ namespace ThirdTask
             // 
             // textBoxAngleRotCenter
             // 
-            this.textBoxAngleRotCenter.Location = new System.Drawing.Point(847, 489);
+            this.textBoxAngleRotCenter.Location = new System.Drawing.Point(1078, 418);
             this.textBoxAngleRotCenter.Name = "textBoxAngleRotCenter";
             this.textBoxAngleRotCenter.Size = new System.Drawing.Size(45, 20);
             this.textBoxAngleRotCenter.TabIndex = 30;
@@ -541,7 +547,7 @@ namespace ThirdTask
             "X",
             "Y",
             "Z"});
-            this.selectRollAxis.Location = new System.Drawing.Point(947, 489);
+            this.selectRollAxis.Location = new System.Drawing.Point(1178, 418);
             this.selectRollAxis.Margin = new System.Windows.Forms.Padding(2);
             this.selectRollAxis.Name = "selectRollAxis";
             this.selectRollAxis.Size = new System.Drawing.Size(49, 21);
@@ -551,10 +557,10 @@ namespace ThirdTask
             // buttonRoll
             // 
             this.buttonRoll.Enabled = false;
-            this.buttonRoll.Location = new System.Drawing.Point(822, 511);
+            this.buttonRoll.Location = new System.Drawing.Point(1078, 453);
             this.buttonRoll.Margin = new System.Windows.Forms.Padding(2);
             this.buttonRoll.Name = "buttonRoll";
-            this.buttonRoll.Size = new System.Drawing.Size(169, 26);
+            this.buttonRoll.Size = new System.Drawing.Size(141, 26);
             this.buttonRoll.TabIndex = 32;
             this.buttonRoll.Text = "Вращать вокруг центра";
             this.buttonRoll.UseVisualStyleBackColor = true;
@@ -563,7 +569,7 @@ namespace ThirdTask
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(804, 544);
+            this.label18.Location = new System.Drawing.Point(966, 494);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(113, 13);
             this.label18.TabIndex = 33;
@@ -572,7 +578,7 @@ namespace ThirdTask
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(805, 565);
+            this.label19.Location = new System.Drawing.Point(920, 527);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(21, 13);
             this.label19.TabIndex = 34;
@@ -581,7 +587,7 @@ namespace ThirdTask
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(805, 583);
+            this.label20.Location = new System.Drawing.Point(920, 550);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(21, 13);
             this.label20.TabIndex = 35;
@@ -590,7 +596,7 @@ namespace ThirdTask
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(876, 562);
+            this.label21.Location = new System.Drawing.Point(991, 527);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(21, 13);
             this.label21.TabIndex = 36;
@@ -599,7 +605,7 @@ namespace ThirdTask
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(876, 585);
+            this.label22.Location = new System.Drawing.Point(991, 550);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(21, 13);
             this.label22.TabIndex = 37;
@@ -608,7 +614,7 @@ namespace ThirdTask
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(945, 562);
+            this.label23.Location = new System.Drawing.Point(1060, 527);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(21, 13);
             this.label23.TabIndex = 38;
@@ -617,7 +623,7 @@ namespace ThirdTask
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(945, 584);
+            this.label24.Location = new System.Drawing.Point(1060, 549);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(21, 13);
             this.label24.TabIndex = 39;
@@ -626,7 +632,7 @@ namespace ThirdTask
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(835, 606);
+            this.label25.Location = new System.Drawing.Point(976, 579);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(35, 13);
             this.label25.TabIndex = 40;
@@ -635,7 +641,7 @@ namespace ThirdTask
             // textX1
             // 
             this.textX1.Enabled = false;
-            this.textX1.Location = new System.Drawing.Point(829, 562);
+            this.textX1.Location = new System.Drawing.Point(944, 524);
             this.textX1.Margin = new System.Windows.Forms.Padding(2);
             this.textX1.Name = "textX1";
             this.textX1.Size = new System.Drawing.Size(38, 20);
@@ -644,7 +650,7 @@ namespace ThirdTask
             // 
             // textX2
             // 
-            this.textX2.Location = new System.Drawing.Point(829, 584);
+            this.textX2.Location = new System.Drawing.Point(944, 546);
             this.textX2.Name = "textX2";
             this.textX2.Size = new System.Drawing.Size(38, 20);
             this.textX2.TabIndex = 42;
@@ -652,7 +658,7 @@ namespace ThirdTask
             // 
             // textY1
             // 
-            this.textY1.Location = new System.Drawing.Point(898, 558);
+            this.textY1.Location = new System.Drawing.Point(1013, 523);
             this.textY1.Name = "textY1";
             this.textY1.Size = new System.Drawing.Size(38, 20);
             this.textY1.TabIndex = 43;
@@ -660,7 +666,7 @@ namespace ThirdTask
             // 
             // textY2
             // 
-            this.textY2.Location = new System.Drawing.Point(898, 582);
+            this.textY2.Location = new System.Drawing.Point(1013, 547);
             this.textY2.Name = "textY2";
             this.textY2.Size = new System.Drawing.Size(38, 20);
             this.textY2.TabIndex = 44;
@@ -668,7 +674,7 @@ namespace ThirdTask
             // 
             // textZ1
             // 
-            this.textZ1.Location = new System.Drawing.Point(969, 559);
+            this.textZ1.Location = new System.Drawing.Point(1084, 524);
             this.textZ1.Name = "textZ1";
             this.textZ1.Size = new System.Drawing.Size(38, 20);
             this.textZ1.TabIndex = 45;
@@ -676,7 +682,7 @@ namespace ThirdTask
             // 
             // textZ2
             // 
-            this.textZ2.Location = new System.Drawing.Point(969, 583);
+            this.textZ2.Location = new System.Drawing.Point(1084, 548);
             this.textZ2.Name = "textZ2";
             this.textZ2.Size = new System.Drawing.Size(38, 20);
             this.textZ2.TabIndex = 46;
@@ -685,7 +691,7 @@ namespace ThirdTask
             // textAngleForLineRotation
             // 
             this.textAngleForLineRotation.Enabled = false;
-            this.textAngleForLineRotation.Location = new System.Drawing.Point(873, 603);
+            this.textAngleForLineRotation.Location = new System.Drawing.Point(1014, 576);
             this.textAngleForLineRotation.Margin = new System.Windows.Forms.Padding(2);
             this.textAngleForLineRotation.Name = "textAngleForLineRotation";
             this.textAngleForLineRotation.Size = new System.Drawing.Size(38, 20);
@@ -695,14 +701,116 @@ namespace ThirdTask
             // buttonRotateAroundLine
             // 
             this.buttonRotateAroundLine.Enabled = false;
-            this.buttonRotateAroundLine.Location = new System.Drawing.Point(825, 627);
+            this.buttonRotateAroundLine.Location = new System.Drawing.Point(958, 611);
             this.buttonRotateAroundLine.Margin = new System.Windows.Forms.Padding(2);
             this.buttonRotateAroundLine.Name = "buttonRotateAroundLine";
-            this.buttonRotateAroundLine.Size = new System.Drawing.Size(162, 22);
+            this.buttonRotateAroundLine.Size = new System.Drawing.Size(138, 43);
             this.buttonRotateAroundLine.TabIndex = 48;
             this.buttonRotateAroundLine.Text = "Повернуть вокруг прямой";
             this.buttonRotateAroundLine.UseVisualStyleBackColor = true;
             this.buttonRotateAroundLine.Click += new System.EventHandler(this.buttonRotateAroundLine_Click);
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(1037, 15);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(38, 13);
+            this.label26.TabIndex = 49;
+            this.label26.Text = "CamX:";
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(1037, 42);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(38, 13);
+            this.label27.TabIndex = 50;
+            this.label27.Text = "CamY:";
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(1037, 66);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(38, 13);
+            this.label28.TabIndex = 51;
+            this.label28.Text = "CamZ:";
+            // 
+            // textCamX
+            // 
+            this.textCamX.Location = new System.Drawing.Point(1084, 10);
+            this.textCamX.Name = "textCamX";
+            this.textCamX.Size = new System.Drawing.Size(45, 20);
+            this.textCamX.TabIndex = 52;
+            this.textCamX.Text = "600";
+            // 
+            // textCamY
+            // 
+            this.textCamY.Location = new System.Drawing.Point(1084, 39);
+            this.textCamY.Name = "textCamY";
+            this.textCamY.Size = new System.Drawing.Size(45, 20);
+            this.textCamY.TabIndex = 53;
+            this.textCamY.Text = "600";
+            // 
+            // textCamZ
+            // 
+            this.textCamZ.Location = new System.Drawing.Point(1084, 65);
+            this.textCamZ.Name = "textCamZ";
+            this.textCamZ.Size = new System.Drawing.Size(45, 20);
+            this.textCamZ.TabIndex = 54;
+            this.textCamZ.Text = "600";
+            // 
+            // textNZ
+            // 
+            this.textNZ.Location = new System.Drawing.Point(1194, 65);
+            this.textNZ.Name = "textNZ";
+            this.textNZ.Size = new System.Drawing.Size(45, 20);
+            this.textNZ.TabIndex = 60;
+            this.textNZ.Text = "-1";
+            // 
+            // textNY
+            // 
+            this.textNY.Location = new System.Drawing.Point(1194, 39);
+            this.textNY.Name = "textNY";
+            this.textNY.Size = new System.Drawing.Size(45, 20);
+            this.textNY.TabIndex = 59;
+            this.textNY.Text = "-1";
+            // 
+            // textNX
+            // 
+            this.textNX.Location = new System.Drawing.Point(1194, 10);
+            this.textNX.Name = "textNX";
+            this.textNX.Size = new System.Drawing.Size(45, 20);
+            this.textNX.TabIndex = 58;
+            this.textNX.Text = "-1";
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(1147, 66);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(23, 13);
+            this.label29.TabIndex = 57;
+            this.label29.Text = "nZ:";
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(1147, 42);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(23, 13);
+            this.label30.TabIndex = 56;
+            this.label30.Text = "nY:";
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(1147, 15);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(23, 13);
+            this.label31.TabIndex = 55;
+            this.label31.Text = "nX:";
             // 
             // Form1
             // 
@@ -710,7 +818,19 @@ namespace ThirdTask
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.ClientSize = new System.Drawing.Size(1261, 652);
+            this.ClientSize = new System.Drawing.Size(1261, 666);
+            this.Controls.Add(this.textNZ);
+            this.Controls.Add(this.textNY);
+            this.Controls.Add(this.textNX);
+            this.Controls.Add(this.label29);
+            this.Controls.Add(this.label30);
+            this.Controls.Add(this.label31);
+            this.Controls.Add(this.textCamZ);
+            this.Controls.Add(this.textCamY);
+            this.Controls.Add(this.textCamX);
+            this.Controls.Add(this.label28);
+            this.Controls.Add(this.label27);
+            this.Controls.Add(this.label26);
             this.Controls.Add(this.buttonRotateAroundLine);
             this.Controls.Add(this.textAngleForLineRotation);
             this.Controls.Add(this.textZ2);
@@ -840,6 +960,18 @@ namespace ThirdTask
         private System.Windows.Forms.TextBox textZ2;
         private System.Windows.Forms.TextBox textAngleForLineRotation;
         private System.Windows.Forms.Button buttonRotateAroundLine;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.TextBox textCamX;
+        private System.Windows.Forms.TextBox textCamY;
+        private System.Windows.Forms.TextBox textCamZ;
+        private System.Windows.Forms.TextBox textNZ;
+        private System.Windows.Forms.TextBox textNY;
+        private System.Windows.Forms.TextBox textNX;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label label31;
     }
 }
 
