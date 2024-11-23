@@ -18,13 +18,17 @@ namespace ThirdTask
         double shifty = 0;
         double shiftz = 0;
 
+        double sphereLength;
+        double angleXZ;
+        double angleY;
+
         public Form1()
         {
             InitializeComponent();
             selectShape.SelectedIndex = 0;
             g = pictureBox1.CreateGraphics();
             g.SmoothingMode = SmoothingMode.AntiAlias;
-            
+
             // задаём Декартову систему координат
             g.ScaleTransform(1.0F, -1.0F);
             g.TranslateTransform(0.0F, -(float)pictureBox1.Height);
@@ -35,13 +39,13 @@ namespace ThirdTask
         }
         void setFlags(bool interactiveMode = false)
         {
-            isInteractiveMode = selectAxis.Enabled = selectPlane.Enabled = 
-                buttonRotate.Enabled = buttonScale.Enabled = buttonShift.Enabled = 
-                buttonReflection.Enabled = rbPerspective.Enabled = rbIsometric.Enabled = 
+            isInteractiveMode = selectAxis.Enabled = selectPlane.Enabled =
+                buttonRotate.Enabled = buttonScale.Enabled = buttonShift.Enabled =
+                buttonReflection.Enabled = rbPerspective.Enabled = rbIsometric.Enabled =
                 textAngle.Enabled = textScaleX.Enabled = textScaleY.Enabled =
-                textScaleZ.Enabled = textShiftX.Enabled = textShiftY.Enabled = 
-                textShiftZ.Enabled = rbWorldCenter.Enabled = rbCenter.Enabled = textX1.Enabled = 
-                textX2.Enabled = textY1.Enabled = textY2.Enabled = textZ1.Enabled = textZ2.Enabled = 
+                textScaleZ.Enabled = textShiftX.Enabled = textShiftY.Enabled =
+                textShiftZ.Enabled = rbWorldCenter.Enabled = rbCenter.Enabled = textX1.Enabled =
+                textX2.Enabled = textY1.Enabled = textY2.Enabled = textZ1.Enabled = textZ2.Enabled =
                 buttonRotateAroundLine.Enabled = buttonRoll.Enabled = selectRollAxis.Enabled =
                 textAngleForLineRotation.Enabled = textBoxAngleRotCenter.Enabled = interactiveMode;
 
@@ -140,8 +144,8 @@ namespace ThirdTask
             }
 
             rotate_around_line(ref currentShape, angle, p1, p2);
-            double A = p1.Y - p2.Y;//общее уравнение прямой, проходящей через заданные точки
-            double B = p2.X - p1.X;//вектор нормали 
+            double A = p1.Y - p2.Y; // общее уравнение прямой, проходящей через заданные точки
+            double B = p2.X - p1.X; // вектор нормали 
             double C = p1.X * p2.Y - p2.X * p1.Y;
             Point p3 = new Point(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p1.Z);
             shift(ref currentShape, p1.X - shiftx, p1.Y - shifty, p1.Z - shiftz);

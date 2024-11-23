@@ -22,8 +22,8 @@ namespace ThirdTask
 
         static Matrix isometricMatrix = new Matrix(3, 3).fill(Math.Sqrt(3), 0, -Math.Sqrt(3), 1, 2, 1, Math.Sqrt(2), -Math.Sqrt(2), Math.Sqrt(2)) * (1 / Math.Sqrt(6));
         static Matrix centralMatrix = new Matrix(4, 4).fill(1, 0, 0, 0,
-                                                            0, 1, 0, 0, 
-                                                            0, 0, 0, k, 
+                                                            0, 1, 0, 0,
+                                                            0, 0, 0, k,
                                                             0, 0, 0, 1);
         const double k = 0.001f;
 
@@ -45,7 +45,7 @@ namespace ThirdTask
             {
                 Matrix res = new Matrix(4, 1).fill(X, Y, Z, 1);
                 if (c == null)
-                    res = centralMatrix * res *(1 / (k * Z + 1));
+                    res = centralMatrix * res * (1 / (k * Z + 1));
                 else
                     res = c.cM * res;
 
@@ -254,7 +254,7 @@ namespace ThirdTask
             Point f = new Point(length, length, 0);
             Point g = new Point(length, length, length);
             Point h = new Point(0, length, length);
-            
+
             res.addFace(new Polygon().addEdge(a).addEdge(b).addEdge(c).addEdge(d));
             res.addFace(new Polygon().addEdge(b).addEdge(c).addEdge(g).addEdge(f));
             res.addFace(new Polygon().addEdge(f).addEdge(g).addEdge(h).addEdge(e));
@@ -268,6 +268,12 @@ namespace ThirdTask
         public static double degreesToRadians(double angle)
         {
             return Math.PI * angle / 180.0;
+        }
+
+        // Переводит угол из радиан в градусы
+        public static double radiansToDegrees(double angle)
+        {
+            return 180.0 * angle / Math.PI;
         }
 
         // Получение икосаэдра
@@ -285,14 +291,14 @@ namespace ThirdTask
                 }
                 circlePoints.Add(new Point(circleCenter.X + (100 * Math.Cos(degreesToRadians(angle))), circleCenter.Y, circleCenter.Z + (100 * Math.Sin(degreesToRadians(angle)))));
             }
-            
+
             Point a = new Point(100, 50, 100);
             Point b = new Point(100, 250, 100);
             for (int i = 0; i < 10; i++)
             {
                 res.addFace(new Polygon().addEdge(circlePoints[i]).addEdge(circlePoints[(i + 1) % 10]).addEdge(circlePoints[(i + 2) % 10]));
             }
-            
+
             res.addFace(new Polygon().addEdge(circlePoints[1]).addEdge(a).addEdge(circlePoints[3]));
             res.addFace(new Polygon().addEdge(circlePoints[3]).addEdge(a).addEdge(circlePoints[5]));
             res.addFace(new Polygon().addEdge(circlePoints[5]).addEdge(a).addEdge(circlePoints[7]));
@@ -319,7 +325,7 @@ namespace ThirdTask
                 var c = face.getCenter();
                 centers.Add(c);
             }
-            
+
             for (int i = 0; i < 10; i++)
             {
                 if (i % 2 == 0)
@@ -332,7 +338,7 @@ namespace ThirdTask
             }
             res.addFace(new Polygon().addEdge(centers[15]).addEdge(centers[16]).addEdge(centers[17]).addEdge(centers[18]).addEdge(centers[19]));
             res.addFace(new Polygon().addEdge(centers[10]).addEdge(centers[11]).addEdge(centers[12]).addEdge(centers[13]).addEdge(centers[14]));
-            
+
             return res;
         }
     }

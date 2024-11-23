@@ -94,12 +94,16 @@ namespace ThirdTask
             this.textCamX = new System.Windows.Forms.TextBox();
             this.textCamY = new System.Windows.Forms.TextBox();
             this.textCamZ = new System.Windows.Forms.TextBox();
-            this.textNZ = new System.Windows.Forms.TextBox();
-            this.textNY = new System.Windows.Forms.TextBox();
-            this.textNX = new System.Windows.Forms.TextBox();
+            this.textZView = new System.Windows.Forms.TextBox();
+            this.textYView = new System.Windows.Forms.TextBox();
+            this.textXView = new System.Windows.Forms.TextBox();
             this.label29 = new System.Windows.Forms.Label();
             this.label30 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
+            this.buttonW = new System.Windows.Forms.Button();
+            this.buttonA = new System.Windows.Forms.Button();
+            this.buttonS = new System.Windows.Forms.Button();
+            this.buttonD = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -131,7 +135,7 @@ namespace ThirdTask
             // 
             // buttonShape
             // 
-            this.buttonShape.Location = new System.Drawing.Point(826, 69);
+            this.buttonShape.Location = new System.Drawing.Point(810, 95);
             this.buttonShape.Margin = new System.Windows.Forms.Padding(2);
             this.buttonShape.Name = "buttonShape";
             this.buttonShape.Size = new System.Drawing.Size(141, 23);
@@ -149,17 +153,17 @@ namespace ThirdTask
             "Октаэдр",
             "Икосаэдр",
             "Додекаэдр"});
-            this.selectShape.Location = new System.Drawing.Point(817, 32);
+            this.selectShape.Location = new System.Drawing.Point(810, 45);
             this.selectShape.Margin = new System.Windows.Forms.Padding(2);
             this.selectShape.Name = "selectShape";
-            this.selectShape.Size = new System.Drawing.Size(150, 21);
+            this.selectShape.Size = new System.Drawing.Size(148, 21);
             this.selectShape.TabIndex = 2;
             this.selectShape.SelectedIndexChanged += new System.EventHandler(this.comboBoxShape_SelectedIndexChanged);
             // 
             // buttonShift
             // 
             this.buttonShift.Enabled = false;
-            this.buttonShift.Location = new System.Drawing.Point(841, 168);
+            this.buttonShift.Location = new System.Drawing.Point(841, 189);
             this.buttonShift.Margin = new System.Windows.Forms.Padding(2);
             this.buttonShift.Name = "buttonShift";
             this.buttonShift.Size = new System.Drawing.Size(141, 23);
@@ -171,7 +175,7 @@ namespace ThirdTask
             // buttonRotate
             // 
             this.buttonRotate.Enabled = false;
-            this.buttonRotate.Location = new System.Drawing.Point(1063, 168);
+            this.buttonRotate.Location = new System.Drawing.Point(1063, 189);
             this.buttonRotate.Margin = new System.Windows.Forms.Padding(2);
             this.buttonRotate.Name = "buttonRotate";
             this.buttonRotate.Size = new System.Drawing.Size(141, 23);
@@ -183,7 +187,7 @@ namespace ThirdTask
             // textAngle
             // 
             this.textAngle.Enabled = false;
-            this.textAngle.Location = new System.Drawing.Point(1087, 136);
+            this.textAngle.Location = new System.Drawing.Point(1087, 157);
             this.textAngle.Margin = new System.Windows.Forms.Padding(2);
             this.textAngle.MaxLength = 5;
             this.textAngle.Name = "textAngle";
@@ -194,7 +198,7 @@ namespace ThirdTask
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(1051, 140);
+            this.label3.Location = new System.Drawing.Point(1051, 161);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 13);
@@ -205,7 +209,7 @@ namespace ThirdTask
             // 
             this.buttonScale.Enabled = false;
             this.buttonScale.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.buttonScale.Location = new System.Drawing.Point(949, 349);
+            this.buttonScale.Location = new System.Drawing.Point(949, 362);
             this.buttonScale.Margin = new System.Windows.Forms.Padding(2);
             this.buttonScale.Name = "buttonScale";
             this.buttonScale.Size = new System.Drawing.Size(141, 23);
@@ -217,7 +221,7 @@ namespace ThirdTask
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(957, 137);
+            this.label6.Location = new System.Drawing.Point(957, 158);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(17, 13);
@@ -227,7 +231,7 @@ namespace ThirdTask
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(879, 137);
+            this.label2.Location = new System.Drawing.Point(879, 158);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(17, 13);
@@ -237,7 +241,7 @@ namespace ThirdTask
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(798, 137);
+            this.label1.Location = new System.Drawing.Point(798, 158);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(17, 13);
@@ -247,7 +251,7 @@ namespace ThirdTask
             // textShiftZ
             // 
             this.textShiftZ.Enabled = false;
-            this.textShiftZ.Location = new System.Drawing.Point(976, 135);
+            this.textShiftZ.Location = new System.Drawing.Point(976, 156);
             this.textShiftZ.Margin = new System.Windows.Forms.Padding(2);
             this.textShiftZ.MaxLength = 5;
             this.textShiftZ.Name = "textShiftZ";
@@ -258,7 +262,7 @@ namespace ThirdTask
             // textShiftY
             // 
             this.textShiftY.Enabled = false;
-            this.textShiftY.Location = new System.Drawing.Point(899, 135);
+            this.textShiftY.Location = new System.Drawing.Point(899, 156);
             this.textShiftY.Margin = new System.Windows.Forms.Padding(2);
             this.textShiftY.MaxLength = 5;
             this.textShiftY.Name = "textShiftY";
@@ -269,7 +273,7 @@ namespace ThirdTask
             // textShiftX
             // 
             this.textShiftX.Enabled = false;
-            this.textShiftX.Location = new System.Drawing.Point(819, 135);
+            this.textShiftX.Location = new System.Drawing.Point(819, 156);
             this.textShiftX.Margin = new System.Windows.Forms.Padding(2);
             this.textShiftX.MaxLength = 5;
             this.textShiftX.Name = "textShiftX";
@@ -280,7 +284,7 @@ namespace ThirdTask
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(1055, 236);
+            this.label4.Location = new System.Drawing.Point(1055, 252);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(41, 13);
@@ -290,7 +294,7 @@ namespace ThirdTask
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(980, 236);
+            this.label5.Location = new System.Drawing.Point(980, 252);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(41, 13);
@@ -300,7 +304,7 @@ namespace ThirdTask
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(905, 236);
+            this.label7.Location = new System.Drawing.Point(905, 252);
             this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(41, 13);
@@ -310,7 +314,7 @@ namespace ThirdTask
             // textScaleZ
             // 
             this.textScaleZ.Enabled = false;
-            this.textScaleZ.Location = new System.Drawing.Point(1097, 233);
+            this.textScaleZ.Location = new System.Drawing.Point(1097, 249);
             this.textScaleZ.Margin = new System.Windows.Forms.Padding(2);
             this.textScaleZ.MaxLength = 5;
             this.textScaleZ.Name = "textScaleZ";
@@ -321,7 +325,7 @@ namespace ThirdTask
             // textScaleY
             // 
             this.textScaleY.Enabled = false;
-            this.textScaleY.Location = new System.Drawing.Point(1021, 233);
+            this.textScaleY.Location = new System.Drawing.Point(1021, 249);
             this.textScaleY.Margin = new System.Windows.Forms.Padding(2);
             this.textScaleY.MaxLength = 5;
             this.textScaleY.Name = "textScaleY";
@@ -332,7 +336,7 @@ namespace ThirdTask
             // textScaleX
             // 
             this.textScaleX.Enabled = false;
-            this.textScaleX.Location = new System.Drawing.Point(946, 233);
+            this.textScaleX.Location = new System.Drawing.Point(946, 249);
             this.textScaleX.Margin = new System.Windows.Forms.Padding(2);
             this.textScaleX.MaxLength = 5;
             this.textScaleX.Name = "textScaleX";
@@ -343,7 +347,7 @@ namespace ThirdTask
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(1154, 141);
+            this.label8.Location = new System.Drawing.Point(1154, 162);
             this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(30, 13);
@@ -358,7 +362,7 @@ namespace ThirdTask
             "X",
             "Y",
             "Z"});
-            this.selectAxis.Location = new System.Drawing.Point(1184, 136);
+            this.selectAxis.Location = new System.Drawing.Point(1184, 157);
             this.selectAxis.Margin = new System.Windows.Forms.Padding(2);
             this.selectAxis.Name = "selectAxis";
             this.selectAxis.Size = new System.Drawing.Size(32, 21);
@@ -384,7 +388,7 @@ namespace ThirdTask
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(966, 271);
+            this.label9.Location = new System.Drawing.Point(966, 287);
             this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(82, 13);
@@ -395,7 +399,7 @@ namespace ThirdTask
             // 
             this.panel1.Controls.Add(this.rbCenter);
             this.panel1.Controls.Add(this.rbWorldCenter);
-            this.panel1.Location = new System.Drawing.Point(922, 295);
+            this.panel1.Location = new System.Drawing.Point(922, 311);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(189, 36);
@@ -428,7 +432,7 @@ namespace ThirdTask
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(978, 34);
+            this.checkBox1.Location = new System.Drawing.Point(969, 50);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(46, 17);
             this.checkBox1.TabIndex = 20;
@@ -439,7 +443,7 @@ namespace ThirdTask
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(849, 9);
+            this.label10.Location = new System.Drawing.Point(807, 13);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(80, 13);
             this.label10.TabIndex = 21;
@@ -448,7 +452,7 @@ namespace ThirdTask
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(875, 110);
+            this.label11.Location = new System.Drawing.Point(875, 131);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(61, 13);
             this.label11.TabIndex = 1;
@@ -457,7 +461,7 @@ namespace ThirdTask
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(1043, 110);
+            this.label12.Location = new System.Drawing.Point(1043, 131);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(184, 13);
             this.label12.TabIndex = 22;
@@ -466,7 +470,7 @@ namespace ThirdTask
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(957, 207);
+            this.label13.Location = new System.Drawing.Point(957, 223);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(101, 13);
             this.label13.TabIndex = 23;
@@ -761,56 +765,96 @@ namespace ThirdTask
             this.textCamZ.TabIndex = 54;
             this.textCamZ.Text = "600";
             // 
-            // textNZ
+            // textZView
             // 
-            this.textNZ.Location = new System.Drawing.Point(1194, 65);
-            this.textNZ.Name = "textNZ";
-            this.textNZ.Size = new System.Drawing.Size(45, 20);
-            this.textNZ.TabIndex = 60;
-            this.textNZ.Text = "-1";
+            this.textZView.Location = new System.Drawing.Point(1194, 65);
+            this.textZView.Name = "textZView";
+            this.textZView.Size = new System.Drawing.Size(45, 20);
+            this.textZView.TabIndex = 60;
+            this.textZView.Text = "0";
             // 
-            // textNY
+            // textYView
             // 
-            this.textNY.Location = new System.Drawing.Point(1194, 39);
-            this.textNY.Name = "textNY";
-            this.textNY.Size = new System.Drawing.Size(45, 20);
-            this.textNY.TabIndex = 59;
-            this.textNY.Text = "-1";
+            this.textYView.Location = new System.Drawing.Point(1194, 39);
+            this.textYView.Name = "textYView";
+            this.textYView.Size = new System.Drawing.Size(45, 20);
+            this.textYView.TabIndex = 59;
+            this.textYView.Text = "0";
             // 
-            // textNX
+            // textXView
             // 
-            this.textNX.Location = new System.Drawing.Point(1194, 10);
-            this.textNX.Name = "textNX";
-            this.textNX.Size = new System.Drawing.Size(45, 20);
-            this.textNX.TabIndex = 58;
-            this.textNX.Text = "-1";
+            this.textXView.Location = new System.Drawing.Point(1194, 10);
+            this.textXView.Name = "textXView";
+            this.textXView.Size = new System.Drawing.Size(45, 20);
+            this.textXView.TabIndex = 58;
+            this.textXView.Text = "0";
             // 
             // label29
             // 
             this.label29.AutoSize = true;
             this.label29.Location = new System.Drawing.Point(1147, 66);
             this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(23, 13);
+            this.label29.Size = new System.Drawing.Size(38, 13);
             this.label29.TabIndex = 57;
-            this.label29.Text = "nZ:";
+            this.label29.Text = "zView:";
             // 
             // label30
             // 
             this.label30.AutoSize = true;
             this.label30.Location = new System.Drawing.Point(1147, 42);
             this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(23, 13);
+            this.label30.Size = new System.Drawing.Size(38, 13);
             this.label30.TabIndex = 56;
-            this.label30.Text = "nY:";
+            this.label30.Text = "yView:";
             // 
             // label31
             // 
             this.label31.AutoSize = true;
             this.label31.Location = new System.Drawing.Point(1147, 15);
             this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(23, 13);
+            this.label31.Size = new System.Drawing.Size(38, 13);
             this.label31.TabIndex = 55;
-            this.label31.Text = "nX:";
+            this.label31.Text = "xView:";
+            // 
+            // buttonW
+            // 
+            this.buttonW.Location = new System.Drawing.Point(983, 95);
+            this.buttonW.Name = "buttonW";
+            this.buttonW.Size = new System.Drawing.Size(61, 23);
+            this.buttonW.TabIndex = 61;
+            this.buttonW.Text = "W";
+            this.buttonW.UseVisualStyleBackColor = true;
+            this.buttonW.Click += new System.EventHandler(this.W_Click);
+            // 
+            // buttonA
+            // 
+            this.buttonA.Location = new System.Drawing.Point(1050, 95);
+            this.buttonA.Name = "buttonA";
+            this.buttonA.Size = new System.Drawing.Size(61, 23);
+            this.buttonA.TabIndex = 62;
+            this.buttonA.Text = "A";
+            this.buttonA.UseVisualStyleBackColor = true;
+            this.buttonA.Click += new System.EventHandler(this.A_Click);
+            // 
+            // buttonS
+            // 
+            this.buttonS.Location = new System.Drawing.Point(1117, 95);
+            this.buttonS.Name = "buttonS";
+            this.buttonS.Size = new System.Drawing.Size(61, 23);
+            this.buttonS.TabIndex = 63;
+            this.buttonS.Text = "S";
+            this.buttonS.UseVisualStyleBackColor = true;
+            this.buttonS.Click += new System.EventHandler(this.S_Click);
+            // 
+            // buttonD
+            // 
+            this.buttonD.Location = new System.Drawing.Point(1184, 95);
+            this.buttonD.Name = "buttonD";
+            this.buttonD.Size = new System.Drawing.Size(61, 23);
+            this.buttonD.TabIndex = 64;
+            this.buttonD.Text = "D";
+            this.buttonD.UseVisualStyleBackColor = true;
+            this.buttonD.Click += new System.EventHandler(this.D_Click);
             // 
             // Form1
             // 
@@ -819,9 +863,13 @@ namespace ThirdTask
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.ClientSize = new System.Drawing.Size(1261, 666);
-            this.Controls.Add(this.textNZ);
-            this.Controls.Add(this.textNY);
-            this.Controls.Add(this.textNX);
+            this.Controls.Add(this.buttonD);
+            this.Controls.Add(this.buttonS);
+            this.Controls.Add(this.buttonA);
+            this.Controls.Add(this.buttonW);
+            this.Controls.Add(this.textZView);
+            this.Controls.Add(this.textYView);
+            this.Controls.Add(this.textXView);
             this.Controls.Add(this.label29);
             this.Controls.Add(this.label30);
             this.Controls.Add(this.label31);
@@ -966,12 +1014,16 @@ namespace ThirdTask
         private System.Windows.Forms.TextBox textCamX;
         private System.Windows.Forms.TextBox textCamY;
         private System.Windows.Forms.TextBox textCamZ;
-        private System.Windows.Forms.TextBox textNZ;
-        private System.Windows.Forms.TextBox textNY;
-        private System.Windows.Forms.TextBox textNX;
+        private System.Windows.Forms.TextBox textZView;
+        private System.Windows.Forms.TextBox textYView;
+        private System.Windows.Forms.TextBox textXView;
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Button buttonW;
+        private System.Windows.Forms.Button buttonA;
+        private System.Windows.Forms.Button buttonS;
+        private System.Windows.Forms.Button buttonD;
     }
 }
 
