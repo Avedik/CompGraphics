@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecondTask", "SecondTask\Se
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThirdTask", "ThirdTask\ThirdTask.csproj", "{362D1C9F-B33A-49B7-B560-A981BCF62E32}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3DVisualization", "3DVisualization\3DVisualization.csproj", "{682924C7-A8B4-498F-BFA6-44A59684B8D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{362D1C9F-B33A-49B7-B560-A981BCF62E32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{362D1C9F-B33A-49B7-B560-A981BCF62E32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{362D1C9F-B33A-49B7-B560-A981BCF62E32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{682924C7-A8B4-498F-BFA6-44A59684B8D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{682924C7-A8B4-498F-BFA6-44A59684B8D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{682924C7-A8B4-498F-BFA6-44A59684B8D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{682924C7-A8B4-498F-BFA6-44A59684B8D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
