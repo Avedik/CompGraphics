@@ -1,0 +1,11 @@
+#version 330 core
+in vec3 fragColor;
+out vec4 color;
+
+uniform vec4 uniformColor; // Для плоского закрашивания
+
+void main()
+{
+    //color = uniformColor; // uniform для плоского закрашивания
+    color = vec4(fragColor, 1.0); // для градиентного закрашивания
+}
