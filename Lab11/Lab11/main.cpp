@@ -73,16 +73,17 @@ GLuint createShaderProgram(const std::string filename) {
     return shaderProgram;
 }
 
+
 // Функция для получения программы по индексу
 GLuint getShaderProgram(GLuint count) {
 
     // Плоское закрашивание (const)
     if (count == 0 || count == 3 || count == 6)
-        return createShaderProgram("fragment_gradient_shader.glsl");
+        return createShaderProgram("const_shader.glsl");
 
     // Плоское закрашивание через uniform
     else if (count == 1 || count == 4 || count == 7)
-        return createShaderProgram("fragment_gradient_shader.glsl");
+        return createShaderProgram("uniform_shader.glsl");
 
     // Градиентное закрашивание
     else
@@ -161,13 +162,14 @@ int main() {
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat))); // Цвет
         glEnableVertexAttribArray(1);
 
-        /// <summary>
-        /// Первый if - заглушка, убрать. Здесь цвет задаётся константой в шейдере
-        /// </summary>
-        if (count == 0 || count == 3 || count == 6)
-            glUniform4f(glGetUniformLocation(shaderProgram, "uniformColor"), 0.5f, 0.5f, 0.5f, 1.0f);
-        // Плоское закрашивание через uniform
-        else if (count == 1 || count == 4 || count == 7)
+        // Получаем локатор uniform переменной
+        GLuint colorLocation = glGetUniformLocation(shaderProgram, "uniformcolor");
+        // Устанавливаем цвет
+        glUseProgram(shaderProgram);
+        glUniform3f(colorLocation, 1.0f, 0.0f, 0.0f); // Задаем цвет как красный
+
+
+        if (count == 1 || count == 4 || count == 7)
             glUniform4f(glGetUniformLocation(shaderProgram, "uniformColor"), 0.5f, 0.5f, 0.5f, 1.0f);
         // Градиентное закрашивание
         else
