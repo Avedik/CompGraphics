@@ -5,7 +5,7 @@
 #include <fstream>
 #include <sstream>
 
-// Четырёхугольник
+// Г—ГҐГІГ»Г°ВёГµГіГЈГ®Г«ГјГ­ГЁГЄ
 const std::vector<GLfloat> quadVertices = {
     -0.5f, -0.5f,     1.0f, 0.0f, 0.0f,
      0.5f, -0.5f,     0.0f, 1.0f, 0.0f,
@@ -13,7 +13,7 @@ const std::vector<GLfloat> quadVertices = {
     -0.5f,  0.5f,     1.0f, 1.0f, 0.0f
 };
 
-// Веер
+// Г‚ГҐГҐГ°
 const std::vector<GLfloat> fanVertices = {
       0.0f, 0.0f,    1.0f, 0.0f, 0.0f,
      -0.6f, 0.18f,   0.0f, 1.0f, 0.0f,
@@ -23,7 +23,7 @@ const std::vector<GLfloat> fanVertices = {
       0.8f, 0.0f,    0.0f, 1.0f, 1.0f
 };
 
-// Правильный пятиугольник
+// ГЏГ°Г ГўГЁГ«ГјГ­Г»Г© ГЇГїГІГЁГіГЈГ®Г«ГјГ­ГЁГЄ
 const std::vector<GLfloat> pentaVertices = {
      0.0f,   1.0f,   1.0f, 0.0f, 0.0f,
      0.95f,  0.31f,  0.0f, 1.0f, 0.0f,
@@ -32,7 +32,7 @@ const std::vector<GLfloat> pentaVertices = {
     -0.95f,  0.31f,  1.0f, 0.0f, 1.0f,
 };
 
-// Чтение из файла
+// Г—ГІГҐГ­ГЁГҐ ГЁГ§ ГґГ Г©Г«Г 
 std::string readAllFile(const std::string filename)
 {
     std::fstream fs(filename);
@@ -41,7 +41,7 @@ std::string readAllFile(const std::string filename)
     return sstr.str();
 }
 
-// Функция для компиляции шейдера
+// Г”ГіГ­ГЄГ¶ГЁГї Г¤Г«Гї ГЄГ®Г¬ГЇГЁГ«ГїГ¶ГЁГЁ ГёГҐГ©Г¤ГҐГ°Г 
 GLuint compileShader(const GLchar* source, GLenum type) {
     GLuint shader = glCreateShader(type);
     glShaderSource(shader, 1, &source, nullptr);
@@ -57,7 +57,7 @@ GLuint compileShader(const GLchar* source, GLenum type) {
     return shader;
 }
 
-// Функция для создания шейдерной программы
+// Г”ГіГ­ГЄГ¶ГЁГї Г¤Г«Гї Г±Г®Г§Г¤Г Г­ГЁГї ГёГҐГ©Г¤ГҐГ°Г­Г®Г© ГЇГ°Г®ГЈГ°Г Г¬Г¬Г»
 GLuint createShaderProgram(const std::string filename) {
     std::string vertexShaderSource = readAllFile("vertex_shader.glsl");
     std::string fragmentShaderSource = readAllFile(filename);
@@ -74,23 +74,23 @@ GLuint createShaderProgram(const std::string filename) {
 }
 
 
-// Функция для получения программы по индексу
+// Г”ГіГ­ГЄГ¶ГЁГї Г¤Г«Гї ГЇГ®Г«ГіГ·ГҐГ­ГЁГї ГЇГ°Г®ГЈГ°Г Г¬Г¬Г» ГЇГ® ГЁГ­Г¤ГҐГЄГ±Гі
 GLuint getShaderProgram(GLuint count) {
 
-    // Плоское закрашивание (const)
+    // ГЏГ«Г®Г±ГЄГ®ГҐ Г§Г ГЄГ°Г ГёГЁГўГ Г­ГЁГҐ (const)
     if (count == 0 || count == 3 || count == 6)
         return createShaderProgram("const_shader.glsl");
 
-    // Плоское закрашивание через uniform
+    // ГЏГ«Г®Г±ГЄГ®ГҐ Г§Г ГЄГ°Г ГёГЁГўГ Г­ГЁГҐ Г·ГҐГ°ГҐГ§ uniform
     else if (count == 1 || count == 4 || count == 7)
         return createShaderProgram("uniform_shader.glsl");
 
-    // Градиентное закрашивание
+    // ГѓГ°Г Г¤ГЁГҐГ­ГІГ­Г®ГҐ Г§Г ГЄГ°Г ГёГЁГўГ Г­ГЁГҐ
     else
         return createShaderProgram("fragment_gradient_shader.glsl");
 }
 
-// Функция для создания фигур
+// Г”ГіГ­ГЄГ¶ГЁГї Г¤Г«Гї Г±Г®Г§Г¤Г Г­ГЁГї ГґГЁГЈГіГ°
 void createShape(GLuint& VBO, const std::vector<GLfloat>& vertices) {
     glGenBuffers(1, &VBO);
 
@@ -100,18 +100,18 @@ void createShape(GLuint& VBO, const std::vector<GLfloat>& vertices) {
     glBindBuffer(GL_ARRAY_BUFFER, NULL);
 }
 
-// Функция для получения фигуры по индексу
+// Г”ГіГ­ГЄГ¶ГЁГї Г¤Г«Гї ГЇГ®Г«ГіГ·ГҐГ­ГЁГї ГґГЁГЈГіГ°Г» ГЇГ® ГЁГ­Г¤ГҐГЄГ±Гі
 void getShape(GLuint& VBO, GLuint count) {
 
-    // Четырехугольник
+    // Г—ГҐГІГ»Г°ГҐГµГіГЈГ®Г«ГјГ­ГЁГЄ
     if (count == 0)
         createShape(VBO, quadVertices);
 
-    // Веер
+    // Г‚ГҐГҐГ°
     else if (count == 3)
         createShape(VBO, fanVertices);
 
-    // Правильный пятиугольник
+    // ГЏГ°Г ГўГЁГ«ГјГ­Г»Г© ГЇГїГІГЁГіГЈГ®Г«ГјГ­ГЁГЄ
     else
         createShape(VBO, pentaVertices);
 }
@@ -126,20 +126,20 @@ int main() {
     GLuint VBO;
     GLuint count = 0;
 
-    // Получение первой программы и фигуры
+    // ГЏГ®Г«ГіГ·ГҐГ­ГЁГҐ ГЇГҐГ°ГўГ®Г© ГЇГ°Г®ГЈГ°Г Г¬Г¬Г» ГЁ ГґГЁГЈГіГ°Г»
     GLuint shaderProgram = getShaderProgram(count);
     getShape(VBO, count);
 
-    // Главный цикл
+    // ГѓГ«Г ГўГ­Г»Г© Г¶ГЁГЄГ«
     while (window.isOpen()) {
 
         sf::Event event;
-        // Цикл обработки событий
+        // Г–ГЁГЄГ« Г®ГЎГ°Г ГЎГ®ГІГЄГЁ Г±Г®ГЎГ»ГІГЁГ©
         while (window.pollEvent(event))
         {
-            // Событие закрытия окна
+            // Г‘Г®ГЎГ»ГІГЁГҐ Г§Г ГЄГ°Г»ГІГЁГї Г®ГЄГ­Г 
             if (event.type == sf::Event::Closed) { window.close(); }
-            // Событие нажатия кнопки мыши в окне
+            // Г‘Г®ГЎГ»ГІГЁГҐ Г­Г Г¦Г ГІГЁГї ГЄГ­Г®ГЇГЄГЁ Г¬Г»ГёГЁ Гў Г®ГЄГ­ГҐ
             else if (event.type == sf::Event::MouseButtonPressed) {
                 count = (count + 1) % 9;
                 shaderProgram = getShaderProgram(count);
@@ -154,46 +154,43 @@ int main() {
 
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-        // Сообщаем OpenGL как он должен интерпретировать вершинные данные
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)0); // Позиция
+        // Г‘Г®Г®ГЎГ№Г ГҐГ¬ OpenGL ГЄГ ГЄ Г®Г­ Г¤Г®Г«Г¦ГҐГ­ ГЁГ­ГІГҐГ°ГЇГ°ГҐГІГЁГ°Г®ГўГ ГІГј ГўГҐГ°ГёГЁГ­Г­Г»ГҐ Г¤Г Г­Г­Г»ГҐ
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)0); // ГЏГ®Г§ГЁГ¶ГЁГї
         glEnableVertexAttribArray(0);
 
-        // Сообщаем OpenGL как он должен интерпретировать цветовые данные
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat))); // Цвет
+        // Г‘Г®Г®ГЎГ№Г ГҐГ¬ OpenGL ГЄГ ГЄ Г®Г­ Г¤Г®Г«Г¦ГҐГ­ ГЁГ­ГІГҐГ°ГЇГ°ГҐГІГЁГ°Г®ГўГ ГІГј Г¶ГўГҐГІГ®ГўГ»ГҐ Г¤Г Г­Г­Г»ГҐ
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat))); // Г–ГўГҐГІ
         glEnableVertexAttribArray(1);
 
-        // Получаем локатор uniform переменной
+        // ГЏГ®Г«ГіГ·Г ГҐГ¬ Г«Г®ГЄГ ГІГ®Г° uniform ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г®Г©
         GLuint colorLocation = glGetUniformLocation(shaderProgram, "uniformcolor");
-        // Устанавливаем цвет
+        // Г“Г±ГІГ Г­Г ГўГ«ГЁГўГ ГҐГ¬ Г¶ГўГҐГІ
         glUseProgram(shaderProgram);
-        glUniform3f(colorLocation, 1.0f, 0.0f, 0.0f); // Задаем цвет как красный
+        glUniform3f(colorLocation, 1.0f, 0.0f, 0.0f); // Г‡Г Г¤Г ГҐГ¬ Г¶ГўГҐГІ ГЄГ ГЄ ГЄГ°Г Г±Г­Г»Г©
 
 
         if (count == 1 || count == 4 || count == 7)
             glUniform4f(glGetUniformLocation(shaderProgram, "uniformColor"), 0.5f, 0.5f, 0.5f, 1.0f);
-        // Градиентное закрашивание
-        else
-            glUniform4f(glGetUniformLocation(shaderProgram, "uniformColor"), 0.5f, 0.5f, 0.5f, 1.0f);
-
+        
         glBindBuffer(GL_ARRAY_BUFFER, NULL);
 
-        // Передаем данные на видеокарту (рисуем)
+        // ГЏГҐГ°ГҐГ¤Г ГҐГ¬ Г¤Г Г­Г­Г»ГҐ Г­Г  ГўГЁГ¤ГҐГ®ГЄГ Г°ГІГі (Г°ГЁГ±ГіГҐГ¬)
 
-        // Четырёхугольник
+        // Г—ГҐГІГ»Г°ВёГµГіГЈГ®Г«ГјГ­ГЁГЄ
         if (count == 0 || count == 1 || count == 2)
             glDrawArrays(GL_QUADS, 0, 4);
-        // Веер
+        // Г‚ГҐГҐГ°
         else if (count == 3 || count == 4 || count == 5)
             glDrawArrays(GL_TRIANGLE_FAN, 0, 6);
-        // Правильный пятиугольник
+        // ГЏГ°Г ГўГЁГ«ГјГ­Г»Г© ГЇГїГІГЁГіГЈГ®Г«ГјГ­ГЁГЄ
         else
             glDrawArrays(GL_POLYGON, 0, 5);
 
-        // Перерисовка окна
+        // ГЏГҐГ°ГҐГ°ГЁГ±Г®ГўГЄГ  Г®ГЄГ­Г 
         window.display();
     }
 
-    // Очистка ресурсов
+    // ГЋГ·ГЁГ±ГІГЄГ  Г°ГҐГ±ГіГ°Г±Г®Гў
     glDeleteBuffers(1, &VBO);
     glUseProgram(0);
     glDeleteProgram(shaderProgram);
