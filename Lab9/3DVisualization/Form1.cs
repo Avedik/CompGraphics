@@ -7,6 +7,7 @@ using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -23,6 +24,7 @@ namespace _3DVisualization
         List<Point> RotationShapePoints = new List<Point>();
         AxisType AxisforRotate;
         int Div;
+        Bitmap bitmap;
 
         bool isInteractiveMode = false;
         double sphereLength;
@@ -43,6 +45,9 @@ namespace _3DVisualization
             // задаём точку начала координат
             Point.sceneCenter = new PointF(pictureBox1.Width / 2, pictureBox1.Height / 2);
             setFlags();
+
+            bitmap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            vertexColor = getDefaultColor;
         }
 
         void setFlags(bool interactiveMode = false)
@@ -377,6 +382,49 @@ namespace _3DVisualization
             //textCamZ.Text = ((int)c.Z).ToString();
             currentShape = ShapeGetter.getShape(currentShapeType);
             redraw();
+        }
+
+        private void buttonObjectColor_Click(object sender, EventArgs e)
+        {
+            colorDialog1.ShowDialog();
+            vertexColor = getDefaultColor;
+        }
+
+        private void buttonLight_Click(object sender, EventArgs e)
+        {
+            int x1 = int.Parse(textBoxLightX1.Text);
+            int y1 = int.Parse(textBoxLightY1.Text);
+            int z1 = int.Parse(textBoxLightZ1.Text);
+
+            int x2 = int.Parse(textBoxLightX2.Text);
+            int y2 = int.Parse(textBoxLightY2.Text);
+            int z2 = int.Parse(textBoxLightZ2.Text);
+
+            lightDirection.X = x2 - x1;
+            lightDirection.Y = y2 - y1;
+            lightDirection.Z = z2 - z1;
+
+            lightDirection = Vector3.Normalize(lightDirection);
+        }
+
+        private void buttonShadingGuro_Click(object sender, EventArgs e)
+        {
+            currentShape.calculateFaceNormals();
+            currentShape.calculateVertexNormals();
+
+            foreach (var vertex in currentShape.Vertices)
+            {
+                vertex.Intensity = calculateVertexIntensity(vertex.Normal);
+            }
+
+            vertexColor = calculateLambertColor;
+            redraw();
+            setFlags(true);
+        }
+
+        private void buttonFongShading_Click(object sender, EventArgs e)
+        {
+            vertexColor = getDefaultColor;
         }
     }
 }

@@ -45,6 +45,10 @@ namespace _3DVisualization
         public double Y { get => y; set => y = value; }
         public double Z { get => z; set => z = value; }
 
+        public Vector3 toVector3()
+        {
+            return new Vector3((float)x, (float)y, (float)z);
+        }
 
         // Перевод точки из 3D в 2D
         public PointF to2D()
@@ -81,10 +85,26 @@ namespace _3DVisualization
         }
     }
 
+    class Point2D
+    {
+        PointF position;
+        float intensity;
+
+        public Point2D(PointF position, float intensity)
+        {
+            this.position = position;
+            this.intensity = intensity;
+        }
+
+        public PointF Position { get => position; set => position = value; }
+        public float Intensity { get => intensity; set => intensity = value; }
+    }
+
     // Многоугольник (грань фигуры)
     class Polygon
     {
         List<Point> points;
+        Vector3 normal;
 
         public Polygon()
         {
@@ -106,6 +126,7 @@ namespace _3DVisualization
         }
 
         public List<Point> Points { get => points; }
+        public Vector3 Normal { get => normal; set => normal = value; }
 
         // Получение центра тяжести грани
         public Point getCenter()
@@ -136,14 +157,31 @@ namespace _3DVisualization
 
     delegate void ActionRef<T>(ref T item);
 
+    public class Vertex
+    {
+        public Vector3 Position { get; set; }
+        public Color Color { get; set; }
+        public Vector3 Normal { get; set; }
+
+        public float Intensity { get; set; }
+
+        public Vertex(Vector3 position, Vector3 normal)
+        {
+            Position = position;
+            Normal = normal;
+        }
+    }
+
     // Объёмная фигура, состоящая из граней
     class Polyhedron
     {
+        HashSet<Vertex> vertices;
         // Грани
         List<Polygon> faces;
 
         public Polyhedron()
         {
+            Vertices = new HashSet<Vertex>();
             faces = new List<Polygon>();
         }
 
@@ -164,6 +202,7 @@ namespace _3DVisualization
         }
 
         public List<Polygon> Faces { get => faces; }
+        public HashSet<Vertex> Vertices { get => vertices; set => vertices = value; }
 
         // Преобразует все точки в фигуре по заданной функции
         public void transformPoints(ActionRef<Point> f)
@@ -174,14 +213,56 @@ namespace _3DVisualization
             }
         }
 
-        public bool faceIsVisible(Polygon face, Vector3 viewVector)
+        public Vector3 getFaceNormal(Polygon face)
         {
             Vector3 normal = face.getNormal();
             Vector3 checkVector = getCenter() - face.Points.First();
+
+            // Если вектор нормали направлен внутрь фигуры, то инвертируем его
             if (Vector3.Dot(normal, checkVector) < 0)
                 normal *= -1;
 
+            return normal;
+        }
+
+        public bool faceIsVisible(Polygon face, Vector3 viewVector)
+        {
+            Vector3 normal = getFaceNormal(face);
             return Vector3.Dot(normal, viewVector) > 0;
+        }
+
+        public void calculateFaceNormals()
+        {
+            foreach (Polygon face in faces)
+                face.Normal = getFaceNormal(face);
+        }
+
+        public void calculateVertexNormals()
+        {
+            Dictionary<Point, Vector3> normals = new Dictionary<Point, Vector3>();
+
+            foreach (Polygon face in faces)
+                foreach (Point point in face.Points)
+                    if (normals.ContainsKey(point))
+                        normals[point] += face.Normal;
+                    else
+                        normals.Add(point, face.Normal);
+
+            foreach (var pair in normals)
+            {
+                Vertices.Add(new Vertex(pair.Key.toVector3(), Vector3.Normalize(pair.Value)));
+            }
+        }
+
+        public float getIntensity(Point p)
+        {
+            Vector3 point = p.toVector3();
+
+            foreach (Vertex vertex in vertices)
+                if (vertex.Position.Equals(point))
+                    return vertex.Intensity;
+
+            return 0;
         }
 
         // Получение центра тяжести многогранника
