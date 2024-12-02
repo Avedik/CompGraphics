@@ -25,6 +25,7 @@ namespace _3DVisualization
         AxisType AxisforRotate;
         int Div;
         Bitmap bitmap;
+        Bitmap bTex;
 
         bool isInteractiveMode = false;
         double sphereLength;
@@ -323,9 +324,9 @@ namespace _3DVisualization
                            sphereLength * Math.Cos(ShapeGetter.degreesToRadians(angleY)),
                            sphereLength * Math.Sin(ShapeGetter.degreesToRadians(angleY)) * Math.Cos(ShapeGetter.degreesToRadians(angleXZ)),
                            0, 0, 0);
-            //textCamX.Text = ((int)c.X).ToString();
-            //textCamY.Text = ((int)c.Y).ToString();
-            //textCamZ.Text = ((int)c.Z).ToString();
+            textBoxX1.Text = ((int)c.X).ToString();
+            textBoxY1.Text = ((int)c.Y).ToString();
+            textBoxZ1.Text = ((int)c.Z).ToString();
             currentShape = ShapeGetter.getShape(currentShapeType);
             redraw();
         }
@@ -341,9 +342,9 @@ namespace _3DVisualization
                            sphereLength * Math.Cos(ShapeGetter.degreesToRadians(angleY)),
                            sphereLength * Math.Sin(ShapeGetter.degreesToRadians(angleY)) * Math.Cos(ShapeGetter.degreesToRadians(angleXZ)),
                            0, 0, 0);
-            //textCamX.Text = ((int)c.X).ToString();
-            //textCamY.Text = ((int)c.Y).ToString();
-            //textCamZ.Text = ((int)c.Z).ToString();
+            textBoxX1.Text = ((int)c.X).ToString();
+            textBoxY1.Text = ((int)c.Y).ToString();
+            textBoxZ1.Text = ((int)c.Z).ToString();
             currentShape = ShapeGetter.getShape(currentShapeType);
             redraw();
         }
@@ -359,9 +360,9 @@ namespace _3DVisualization
                            sphereLength * Math.Cos(ShapeGetter.degreesToRadians(angleY)),
                            sphereLength * Math.Sin(ShapeGetter.degreesToRadians(angleY)) * Math.Cos(ShapeGetter.degreesToRadians(angleXZ)),
                            0, 0, 0);
-            //textCamX.Text = ((int)c.X).ToString();
-            //textCamY.Text = ((int)c.Y).ToString();
-            //textCamZ.Text = ((int)c.Z).ToString();
+            textBoxX1.Text = ((int)c.X).ToString();
+            textBoxY1.Text = ((int)c.Y).ToString();
+            textBoxZ1.Text = ((int)c.Z).ToString();
             currentShape = ShapeGetter.getShape(currentShapeType);
             redraw();
         }
@@ -377,9 +378,9 @@ namespace _3DVisualization
                            sphereLength * Math.Cos(ShapeGetter.degreesToRadians(angleY)),
                            sphereLength * Math.Sin(ShapeGetter.degreesToRadians(angleY)) * Math.Cos(ShapeGetter.degreesToRadians(angleXZ)),
                            0, 0, 0);
-            //textCamX.Text = ((int)c.X).ToString();
-            //textCamY.Text = ((int)c.Y).ToString();
-            //textCamZ.Text = ((int)c.Z).ToString();
+            textBoxX1.Text = ((int)c.X).ToString();
+            textBoxY1.Text = ((int)c.Y).ToString();
+            textBoxZ1.Text = ((int)c.Z).ToString();
             currentShape = ShapeGetter.getShape(currentShapeType);
             redraw();
         }
@@ -425,6 +426,24 @@ namespace _3DVisualization
         private void buttonFongShading_Click(object sender, EventArgs e)
         {
             vertexColor = getDefaultColor;
+        }
+
+        private void buttonTex_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog open_dialog = new OpenFileDialog();
+            open_dialog.Filter = "Image Files(*.BMP;*.JPG;*.GIF;*.PNG)|*.BMP;*.JPG;*.GIF;*.PNG|All files (*.*)|*.*"; //
+            if (open_dialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    bTex = new Bitmap(open_dialog.FileName);
+                }
+                catch
+                {
+                    DialogResult rezult = MessageBox.Show("Невозможно открыть выбранный файл",
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

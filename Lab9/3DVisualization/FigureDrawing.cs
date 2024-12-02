@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace _3DVisualization
@@ -28,15 +29,16 @@ namespace _3DVisualization
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            g.Clear(Color.White);
-            if (checkBox1.Checked)
-                drawAxis();
+            redraw();
+        }
 
-            foreach (Point p in RotationShapePoints)
-                drawPoint(p);
-
-            if (currentShape != null)
-                drawShape(currentShape);
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            redraw();
+        }
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+            redraw();
         }
 
         private void buttonShape_Click(object sender, EventArgs e)
@@ -87,14 +89,21 @@ namespace _3DVisualization
         {
             g.Clear(Color.White);
 
-            if (currentShape != null)
-                drawShape(currentShape);
+            if (checkBox1.Checked)
+                drawAxis();
 
             foreach (Point p in RotationShapePoints)
                 drawPoint(p);
 
-            if (checkBox1.Checked)
-                drawAxis();
+            if (currentShape != null && !checkBox3.Checked)
+                drawShape(currentShape);
+
+            if (checkBox3.Checked && !checkBox2.Checked)
+                drawColor(currentShape);
+
+            if (checkBox2.Checked && !checkBox3.Checked)
+                if (bTex != null)
+                    drawTex(currentShape);
         }
 
         void Clear()
@@ -109,15 +118,24 @@ namespace _3DVisualization
         // Рисует фигуру
         void drawShape(Polyhedron shape)
         {
+            foreach (var face in shape.Faces)
+            {
+                if (viewVectorSelected && !shape.faceIsVisible(face, viewVector))
+                    continue;
+
+                Pen pen = new Pen(Color.Black, 3);
+                drawFace(face, pen);
+            }
+        }
+
+        void drawColor(Polyhedron shape)
+        {
             bitmap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
 
             foreach (var face in shape.Faces)
             {
                 if (viewVectorSelected && !shape.faceIsVisible(face, viewVector))
                     continue;
-
-                //Pen pen = new Pen(Color.Black, 3);
-                //drawFace(face, pen);
 
                 using (var fastBitmap = new FastBitmap.FastBitmap(bitmap))
                 {
@@ -126,6 +144,7 @@ namespace _3DVisualization
             }
             pictureBox1.Image = bitmap;
         }
+
 
         // Рисует заданную грань заданным цветом
         void drawFace(Polygon face, Pen pen)
@@ -163,12 +182,12 @@ namespace _3DVisualization
             for (int i = 1; i < pointCount; i++)
             {
                 current = face.Points[i];
-                edges2D.Add((new Point2D(prev.to2D(), shape.getIntensity(prev)),
-                    new Point2D(current.to2D(), shape.getIntensity(current))));
+                edges2D.Add((new Point2D(prev.to2D(c), shape.getIntensity(prev)),
+                    new Point2D(current.to2D(c), shape.getIntensity(current))));
                 prev = current;
             }
-            edges2D.Add((new Point2D(prev.to2D(), shape.getIntensity(prev)),
-                    new Point2D(face.Points.First().to2D(), shape.getIntensity(face.Points.First()))));
+            edges2D.Add((new Point2D(prev.to2D(c), shape.getIntensity(prev)),
+                    new Point2D(face.Points.First().to2D(c), shape.getIntensity(face.Points.First()))));
 
             // Первый шаг алгоритма растеризации (со списком рёберных точек)
             Dictionary<int, List<(int, float)>> segments = new Dictionary<int, List<(int, float)>>();
@@ -240,6 +259,7 @@ namespace _3DVisualization
             }
         }
 
+
         private Color getDefaultColor(int x, int y, float intensity)
         {
             return colorDialog1.Color;
@@ -263,5 +283,75 @@ namespace _3DVisualization
             return t * I1 + (1 - t) * I2;
         }
 
+        void drawTex(Polyhedron shape)
+        {
+            Point p;
+            PointF pF;
+            (double, double, double) u;
+            (double, double, double) v;
+
+            if (currentShapeType == ShapeType.HEXAHEDRON)
+            {
+                foreach (Polygon face in currentShape.Faces)
+                {
+                    if (viewVectorSelected && !currentShape.faceIsVisible(face, viewVector))
+                        continue;
+
+                    u = (face.Points[2].X - face.Points[3].X, face.Points[2].Y -  face.Points[3].Y, face.Points[2].Z -  face.Points[3].Z);
+                    v = (face.Points[0].X -  face.Points[3].X, face.Points[0].Y -  face.Points[3].Y, face.Points[0].Z -  face.Points[3].Z);
+                    for (int imgX = 0; imgX < bTex.Width; ++imgX)
+                        for (int imgY = 0; imgY < bTex.Height; ++imgY)
+                        {
+                            p = new Point(face.Points[3].X + (double)imgX / bTex.Width * u.Item1 + (double)imgY / bTex.Height * v.Item1,
+                                           face.Points[3].Y + (double)imgX / bTex.Width * u.Item2 + (double)imgY / bTex.Height * v.Item2,
+                                           face.Points[3].Z + (double)imgX / bTex.Width * u.Item3 + (double)imgY / bTex.Height * v.Item3);
+                            pF = p.to2D(c);
+                            Pen pn = new Pen(bTex.GetPixel(imgX, imgY), 1);
+                            g.DrawEllipse(pn, pF.X, pF.Y, 1, 1);
+                            pn.Dispose();
+                        }
+                }
+            }
+            else
+            {
+                //float len = Math.Max(bTex.Width, bTex.Height);
+                foreach (Polygon face in currentShape.Faces)
+                {
+                    if (viewVectorSelected && !currentShape.faceIsVisible(face, viewVector))
+                        continue;
+                    u = (face.Points[1].X - face.Points[0].X, face.Points[1].Y - face.Points[0].Y, face.Points[1].Z - face.Points[0].Z);
+                    v = (face.Points[2].X - face.Points[0].X, face.Points[2].Y - face.Points[0].Y, face.Points[2].Z - face.Points[0].Z);
+
+                    for (int imgX = 0; imgX < bTex.Width / 2; ++imgX)
+                    {
+                        for (int imgY = 0; imgY <= Math.Sqrt(3) * imgX; ++imgY)
+                        {
+                            p = new Point(face.Points[0].X + (imgX - imgY / Math.Sqrt(3)) / bTex.Width * u.Item1 + 2 * imgY / (bTex.Width * Math.Sqrt(3)) * v.Item1,
+                                          face.Points[0].Y + (imgX - imgY / Math.Sqrt(3)) / bTex.Width * u.Item2 + 2 * imgY / (bTex.Width * Math.Sqrt(3)) * v.Item2,
+                                          face.Points[0].Z + (imgX - imgY / Math.Sqrt(3)) / bTex.Width * u.Item3 + 2 * imgY / (bTex.Width * Math.Sqrt(3)) * v.Item3);
+                            pF = p.to2D(c);
+                            Pen pn = new Pen(bTex.GetPixel(imgX, imgY), 1);
+                            g.DrawEllipse(pn, pF.X, pF.Y, 1, 1);
+                            pn.Dispose();
+                        }
+
+                    }
+
+                    for (int imgX = bTex.Width / 2; imgX < bTex.Width; ++imgX)
+                    {
+                        for (int imgY = 0; imgY <= Math.Sqrt(3) * (bTex.Width - imgX); ++imgY)
+                        {
+                            p = new Point(face.Points[0].X + (imgX - imgY / Math.Sqrt(3)) / bTex.Width * u.Item1 + 2 * imgY / (bTex.Width * Math.Sqrt(3)) * v.Item1,
+                                          face.Points[0].Y + (imgX - imgY / Math.Sqrt(3)) / bTex.Width * u.Item2 + 2 * imgY / (bTex.Width * Math.Sqrt(3)) * v.Item2,
+                                          face.Points[0].Z + (imgX - imgY / Math.Sqrt(3)) / bTex.Width * u.Item3 + 2 * imgY / (bTex.Width * Math.Sqrt(3)) * v.Item3);
+                            pF = p.to2D(c);
+                            Pen pn = new Pen(bTex.GetPixel(imgX, imgY), 1);
+                            g.DrawEllipse(pn, pF.X, pF.Y, 1, 1);
+                            pn.Dispose();
+                        }
+                    }
+                }
+            }
+        }
     }
 }

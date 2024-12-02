@@ -150,6 +150,9 @@
             this.textBoxLightZ2 = new System.Windows.Forms.TextBox();
             this.textBoxLightY2 = new System.Windows.Forms.TextBox();
             this.textBoxLightX2 = new System.Windows.Forms.TextBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.buttonTex = new System.Windows.Forms.Button();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -730,7 +733,7 @@
             "Ox",
             "Oy",
             "Oz"});
-            this.axizRotate.Location = new System.Drawing.Point(1074, 44);
+            this.axizRotate.Location = new System.Drawing.Point(1045, 44);
             this.axizRotate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.axizRotate.Name = "axizRotate";
             this.axizRotate.Size = new System.Drawing.Size(55, 21);
@@ -740,7 +743,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(991, 48);
+            this.label10.Location = new System.Drawing.Point(962, 48);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(84, 13);
             this.label10.TabIndex = 92;
@@ -748,7 +751,7 @@
             // 
             // getDiv
             // 
-            this.getDiv.Location = new System.Drawing.Point(919, 45);
+            this.getDiv.Location = new System.Drawing.Point(890, 45);
             this.getDiv.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.getDiv.Name = "getDiv";
             this.getDiv.Size = new System.Drawing.Size(59, 20);
@@ -757,7 +760,7 @@
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(822, 48);
+            this.label26.Location = new System.Drawing.Point(793, 48);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(99, 13);
             this.label26.TabIndex = 90;
@@ -840,7 +843,7 @@
             // 
             // buttonShape
             // 
-            this.buttonShape.Location = new System.Drawing.Point(822, 77);
+            this.buttonShape.Location = new System.Drawing.Point(796, 77);
             this.buttonShape.Margin = new System.Windows.Forms.Padding(2);
             this.buttonShape.Name = "buttonShape";
             this.buttonShape.Size = new System.Drawing.Size(98, 23);
@@ -853,7 +856,7 @@
             // 
             this.checkBox1.AutoSize = true;
             this.checkBox1.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.checkBox1.Location = new System.Drawing.Point(1147, 47);
+            this.checkBox1.Location = new System.Drawing.Point(1191, 77);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(46, 17);
             this.checkBox1.TabIndex = 94;
@@ -863,7 +866,7 @@
             // 
             // clearButton
             // 
-            this.clearButton.Location = new System.Drawing.Point(925, 77);
+            this.clearButton.Location = new System.Drawing.Point(899, 77);
             this.clearButton.Name = "clearButton";
             this.clearButton.Size = new System.Drawing.Size(88, 23);
             this.clearButton.TabIndex = 95;
@@ -873,7 +876,7 @@
             // 
             // buttonSave
             // 
-            this.buttonSave.Location = new System.Drawing.Point(1019, 77);
+            this.buttonSave.Location = new System.Drawing.Point(993, 77);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(85, 23);
             this.buttonSave.TabIndex = 96;
@@ -883,7 +886,7 @@
             // 
             // buttonLoad
             // 
-            this.buttonLoad.Location = new System.Drawing.Point(1110, 77);
+            this.buttonLoad.Location = new System.Drawing.Point(1084, 77);
             this.buttonLoad.Name = "buttonLoad";
             this.buttonLoad.Size = new System.Drawing.Size(89, 23);
             this.buttonLoad.TabIndex = 97;
@@ -1176,7 +1179,7 @@
             // label45
             // 
             this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(828, 308);
+            this.label45.Location = new System.Drawing.Point(808, 360);
             this.label45.Name = "label45";
             this.label45.Size = new System.Drawing.Size(80, 13);
             this.label45.TabIndex = 115;
@@ -1191,7 +1194,7 @@
             "Октаэдр",
             "Икосаэдр",
             "Додекаэдр"});
-            this.selectShape.Location = new System.Drawing.Point(831, 336);
+            this.selectShape.Location = new System.Drawing.Point(811, 388);
             this.selectShape.Margin = new System.Windows.Forms.Padding(2);
             this.selectShape.Name = "selectShape";
             this.selectShape.Size = new System.Drawing.Size(148, 21);
@@ -1356,6 +1359,40 @@
             this.textBoxLightX2.TabIndex = 149;
             this.textBoxLightX2.Text = "0";
             // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.checkBox2.Location = new System.Drawing.Point(1170, 48);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(73, 17);
+            this.checkBox2.TabIndex = 152;
+            this.checkBox2.Text = "Текстура";
+            this.checkBox2.UseVisualStyleBackColor = false;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            // 
+            // buttonTex
+            // 
+            this.buttonTex.Location = new System.Drawing.Point(816, 298);
+            this.buttonTex.Name = "buttonTex";
+            this.buttonTex.Size = new System.Drawing.Size(96, 51);
+            this.buttonTex.TabIndex = 153;
+            this.buttonTex.Text = "Загрузить текстуру";
+            this.buttonTex.UseVisualStyleBackColor = true;
+            this.buttonTex.Click += new System.EventHandler(this.buttonTex_Click);
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.checkBox3.Location = new System.Drawing.Point(1114, 48);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(51, 17);
+            this.checkBox3.TabIndex = 154;
+            this.checkBox3.Text = "Цвет";
+            this.checkBox3.UseVisualStyleBackColor = false;
+            this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1363,6 +1400,9 @@
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.ClientSize = new System.Drawing.Size(1259, 745);
+            this.Controls.Add(this.checkBox3);
+            this.Controls.Add(this.buttonTex);
+            this.Controls.Add(this.checkBox2);
             this.Controls.Add(this.textBoxLightZ2);
             this.Controls.Add(this.textBoxLightY2);
             this.Controls.Add(this.textBoxLightX2);
@@ -1619,6 +1659,9 @@
         private System.Windows.Forms.TextBox textBoxLightZ2;
         private System.Windows.Forms.TextBox textBoxLightY2;
         private System.Windows.Forms.TextBox textBoxLightX2;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.Button buttonTex;
+        private System.Windows.Forms.CheckBox checkBox3;
     }
 }
 
