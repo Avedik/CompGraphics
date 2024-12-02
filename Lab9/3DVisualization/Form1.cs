@@ -327,7 +327,6 @@ namespace _3DVisualization
             textBoxX1.Text = ((int)c.X).ToString();
             textBoxY1.Text = ((int)c.Y).ToString();
             textBoxZ1.Text = ((int)c.Z).ToString();
-            currentShape = ShapeGetter.getShape(currentShapeType);
             redraw();
         }
 
@@ -345,7 +344,6 @@ namespace _3DVisualization
             textBoxX1.Text = ((int)c.X).ToString();
             textBoxY1.Text = ((int)c.Y).ToString();
             textBoxZ1.Text = ((int)c.Z).ToString();
-            currentShape = ShapeGetter.getShape(currentShapeType);
             redraw();
         }
 
@@ -363,7 +361,6 @@ namespace _3DVisualization
             textBoxX1.Text = ((int)c.X).ToString();
             textBoxY1.Text = ((int)c.Y).ToString();
             textBoxZ1.Text = ((int)c.Z).ToString();
-            currentShape = ShapeGetter.getShape(currentShapeType);
             redraw();
         }
 
@@ -381,7 +378,6 @@ namespace _3DVisualization
             textBoxX1.Text = ((int)c.X).ToString();
             textBoxY1.Text = ((int)c.Y).ToString();
             textBoxZ1.Text = ((int)c.Z).ToString();
-            currentShape = ShapeGetter.getShape(currentShapeType);
             redraw();
         }
 
