@@ -249,7 +249,7 @@ namespace _3DVisualization
 
                     for (int x = x1; x < x2; x++)
                     {
-                        fastBitmap[bitmap.Width - x, bitmap.Height - pair.Key] = vertexColor(x, pair.Key,
+                        fastBitmap[x, bitmap.Height - pair.Key] = vertexColor(x, pair.Key,
                             x2 == x1 ? pair.Value[i].Item2 :
                             linearInterpolation(pair.Value[i].Item2,
                                 pair.Value[i + 1].Item2,
