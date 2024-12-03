@@ -1369,7 +1369,6 @@
             this.checkBox2.TabIndex = 152;
             this.checkBox2.Text = "Текстура";
             this.checkBox2.UseVisualStyleBackColor = false;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // buttonTex
             // 
@@ -1391,7 +1390,6 @@
             this.checkBox3.TabIndex = 154;
             this.checkBox3.Text = "Цвет";
             this.checkBox3.UseVisualStyleBackColor = false;
-            this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
             // 
             // Form1
             // 
