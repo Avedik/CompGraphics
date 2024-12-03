@@ -289,6 +289,8 @@ namespace _3DVisualization
             PointF pF;
             (double, double, double) u;
             (double, double, double) v;
+            double uLen;
+            double vLen;
 
             bitmap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
 
@@ -303,16 +305,18 @@ namespace _3DVisualization
 
                         u = (face.Points[2].X - face.Points[3].X, face.Points[2].Y -  face.Points[3].Y, face.Points[2].Z -  face.Points[3].Z);
                         v = (face.Points[0].X -  face.Points[3].X, face.Points[0].Y -  face.Points[3].Y, face.Points[0].Z -  face.Points[3].Z);
+                        uLen = Math.Sqrt(u.Item1 * u.Item1 + u.Item2 * u.Item2 + u.Item3 * u.Item3);
+                        vLen = Math.Sqrt(v.Item1 * v.Item1 + v.Item2 * v.Item2 + v.Item3 * v.Item3);
 
-
-                        for (int imgX = 0; imgX < bTex.Width; ++imgX)
-                            for (int imgY = 0; imgY < bTex.Height; ++imgY)
+                        for (int x = 0; x < uLen; ++x)
+                            for (int y = 0; y < vLen; ++y)
                             {
-                                p = new Point(face.Points[3].X + (double)imgX / bTex.Width * u.Item1 + (double)imgY / bTex.Height * v.Item1,
-                                               face.Points[3].Y + (double)imgX / bTex.Width * u.Item2 + (double)imgY / bTex.Height * v.Item2,
-                                               face.Points[3].Z + (double)imgX / bTex.Width * u.Item3 + (double)imgY / bTex.Height * v.Item3);
+                                p = new Point(face.Points[3].X + (x / uLen) * u.Item1 + (y / vLen) * v.Item1,
+                                               face.Points[3].Y + (x / uLen) * u.Item2 + (y / vLen) * v.Item2,
+                                               face.Points[3].Z + (x / uLen) * u.Item3 + (y / vLen) * v.Item3);
                                 pF = p.to2D(c);
-                                fastBitmap[(int)pF.X, pictureBox1.Height - (int)pF.Y] = bTex.GetPixel(imgX, imgY);
+                                if (pictureBox1.Height - (int)pF.Y >= 0 || pictureBox1.Height - (int)pF.Y <= pictureBox1.Height)
+                                    fastBitmap[(int)pF.X, pictureBox1.Height - (int)pF.Y] = bTex.GetPixel((int)(x / uLen * bTex.Width), (int)(y / vLen * bTex.Height));
                             }
                     }
                 }
@@ -329,31 +333,19 @@ namespace _3DVisualization
                             continue;
                         u = (face.Points[1].X - face.Points[0].X, face.Points[1].Y - face.Points[0].Y, face.Points[1].Z - face.Points[0].Z);
                         v = (face.Points[2].X - face.Points[0].X, face.Points[2].Y - face.Points[0].Y, face.Points[2].Z - face.Points[0].Z);
+                        uLen = Math.Sqrt(u.Item1 * u.Item1 + u.Item2 * u.Item2 + u.Item3 * u.Item3);
+                        vLen = Math.Sqrt(v.Item1 * v.Item1 + v.Item2 * v.Item2 + v.Item3 * v.Item3);
 
-                        for (int imgX = 0; imgX < len / 2; ++imgX)
-                        {
-                            for (int imgY = 0; imgY <= Math.Sqrt(3) * imgX; ++imgY)
+                        for (int x = 0; x < uLen; ++x)
+                            for (int y = 0; y <= uLen - x; ++y)
                             {
-                                p = new Point(face.Points[0].X + (imgX - imgY / Math.Sqrt(3)) / len * u.Item1 + 2 * imgY / (len * Math.Sqrt(3)) * v.Item1,
-                                              face.Points[0].Y + (imgX - imgY / Math.Sqrt(3)) / len * u.Item2 + 2 * imgY / (len * Math.Sqrt(3)) * v.Item2,
-                                              face.Points[0].Z + (imgX - imgY / Math.Sqrt(3)) / len * u.Item3 + 2 * imgY / (len * Math.Sqrt(3)) * v.Item3);
+                                p = new Point(face.Points[0].X + (x / uLen) * u.Item1 + (y / vLen) * v.Item1,
+                                               face.Points[0].Y + (x / uLen) * u.Item2 + (y / vLen) * v.Item2,
+                                               face.Points[0].Z + (x / uLen) * u.Item3 + (y / vLen) * v.Item3);
                                 pF = p.to2D(c);
-                                fastBitmap[(int)pF.X, pictureBox1.Height - (int)pF.Y] = bTex.GetPixel(imgX, imgY);
+                                if (pictureBox1.Height - (int)pF.Y >= 0 || pictureBox1.Height - (int)pF.Y <= pictureBox1.Height)
+                                    fastBitmap[(int)pF.X, pictureBox1.Height - (int)pF.Y] = bTex.GetPixel((int)(x / uLen * len), (int)(y / vLen * len));
                             }
-
-                        }
-
-                        for (int imgX = (int)(len / 2); imgX < len; ++imgX)
-                        {
-                            for (int imgY = 0; imgY <= Math.Sqrt(3) * (len - imgX); ++imgY)
-                            {
-                                p = new Point(face.Points[0].X + (imgX - imgY / Math.Sqrt(3)) / len * u.Item1 + 2 * imgY / (len * Math.Sqrt(3)) * v.Item1,
-                                              face.Points[0].Y + (imgX - imgY / Math.Sqrt(3)) / len * u.Item2 + 2 * imgY / (len * Math.Sqrt(3)) * v.Item2,
-                                              face.Points[0].Z + (imgX - imgY / Math.Sqrt(3)) / len * u.Item3 + 2 * imgY / (len * Math.Sqrt(3)) * v.Item3);
-                                pF = p.to2D(c);
-                                fastBitmap[(int)pF.X, pictureBox1.Height - (int)pF.Y] = bTex.GetPixel(imgX, imgY);
-                            }
-                        }
                     }
                     pictureBox1.Image = bitmap;
                 }
