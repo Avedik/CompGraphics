@@ -1266,7 +1266,6 @@
             // 
             // buttonFongShading
             // 
-            this.buttonFongShading.Enabled = false;
             this.buttonFongShading.Location = new System.Drawing.Point(1129, 225);
             this.buttonFongShading.Name = "buttonFongShading";
             this.buttonFongShading.Size = new System.Drawing.Size(104, 51);
@@ -1369,6 +1368,7 @@
             this.checkBox2.TabIndex = 152;
             this.checkBox2.Text = "Текстура";
             this.checkBox2.UseVisualStyleBackColor = false;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // buttonTex
             // 
@@ -1390,6 +1390,7 @@
             this.checkBox3.TabIndex = 154;
             this.checkBox3.Text = "Цвет";
             this.checkBox3.UseVisualStyleBackColor = false;
+            this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
             // 
             // Form1
             // 
@@ -1525,6 +1526,7 @@
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "Affine3D";
+            this.Click += new System.EventHandler(this.buttonObjectColor_Click);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

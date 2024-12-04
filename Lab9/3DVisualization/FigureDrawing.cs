@@ -21,6 +21,7 @@ namespace _3DVisualization
         VertexColor vertexColor;
         ShapeType currentShapeType;
         Polyhedron currentShape;
+        Color currentShapeColor;
         Graphics g;
         Camera c;
         Vector3 viewVector;
@@ -262,6 +263,7 @@ namespace _3DVisualization
 
         private Color getDefaultColor(int x, int y, float intensity)
         {
+            currentShapeColor = colorDialog1.Color;
             return colorDialog1.Color;
         }
 
@@ -281,6 +283,134 @@ namespace _3DVisualization
         public float linearInterpolation(float I1, float I2, float t)
         {
             return t * I1 + (1 - t) * I2;
+        }
+
+        public Vector3 linInterpolForFace(Vector3 I1, Vector3 I2, Vector3 I3, Vector3 I4, float xShift, float yShift)
+        {
+            return Vector3.Normalize(new Vector3(
+                yShift * (xShift * I1.X + (1 - xShift) * I2.X) +
+                (1 - yShift) * (xShift * I4.X + (1 - xShift) * I3.X) +
+                xShift * (yShift * I1.X + (1 - xShift) * I4.X) +
+                (1 - xShift) * (yShift * I2.X + (1 - xShift) * I3.X),
+
+                yShift * (xShift * I1.Y + (1 - xShift) * I2.Y) +
+                (1 - yShift) * (xShift * I4.Y + (1 - xShift) * I3.Y) +
+                xShift * (yShift * I1.Y + (1 - xShift) * I4.Y) +
+                (1 - xShift) * (yShift * I2.Y + (1 - xShift) * I3.Y),
+
+                yShift * (xShift * I1.Z + (1 - xShift) * I2.Z) +
+                (1 - yShift) * (xShift * I4.Z + (1 - xShift) * I3.Z) +
+                xShift * (yShift * I1.Z + (1 - xShift) * I4.Z) +
+                (1 - xShift) * (yShift * I2.Z + (1 - xShift) * I3.Z)));
+        }
+
+        List<List<List<Vector3>>> InterpolateNormals(ref Polyhedron shape)
+        {
+            List<Vector3> normalPnts = new List<Vector3> { new Vector3(), new Vector3(), new Vector3(), new Vector3() };
+            (double, double, double) u;
+            (double, double, double) v;
+            double uLen;
+            double vLen;
+            List<List<List<Vector3>>> normalEdges = new List<List<List<Vector3>>>
+            {new List<List<Vector3>>(), new List<List<Vector3>>(), new List<List<Vector3>>(),
+                new List<List<Vector3>>(), new List<List<Vector3>>(), new List<List<Vector3>>()};
+
+
+            if (currentShapeType == ShapeType.HEXAHEDRON)
+            {
+                for (int i = 0; i < shape.Faces.Count(); ++i)
+                {
+                    foreach (Vertex vert in shape.Vertices)
+                    {
+                        if (vert.Position.X == shape.Faces[i].Points[0].X && vert.Position.Y == shape.Faces[i].Points[0].Y && vert.Position.Z == shape.Faces[i].Points[0].Z)
+                            normalPnts[0] = vert.Normal;
+                        if (vert.Position.X == shape.Faces[i].Points[1].X && vert.Position.Y == shape.Faces[i].Points[1].Y && vert.Position.Z == shape.Faces[i].Points[1].Z)
+                            normalPnts[1] = vert.Normal;
+                        if (vert.Position.X == shape.Faces[i].Points[2].X && vert.Position.Y == shape.Faces[i].Points[2].Y && vert.Position.Z == shape.Faces[i].Points[2].Z)
+                            normalPnts[2] = vert.Normal;
+                        if (vert.Position.X == shape.Faces[i].Points[3].X && vert.Position.Y == shape.Faces[i].Points[3].Y && vert.Position.Z == shape.Faces[i].Points[3].Z)
+                            normalPnts[3] = vert.Normal;
+                    }
+                    u = (shape.Faces[i].Points[2].X - shape.Faces[i].Points[3].X, shape.Faces[i].Points[2].Y - shape.Faces[i].Points[3].Y, shape.Faces[i].Points[2].Z - shape.Faces[i].Points[3].Z);
+                    v = (shape.Faces[i].Points[0].X - shape.Faces[i].Points[3].X, shape.Faces[i].Points[0].Y - shape.Faces[i].Points[3].Y, shape.Faces[i].Points[0].Z - shape.Faces[i].Points[3].Z);
+                    uLen = Math.Sqrt(u.Item1 * u.Item1 + u.Item2 * u.Item2 + u.Item3 * u.Item3);
+                    vLen = Math.Sqrt(v.Item1 * v.Item1 + v.Item2 * v.Item2 + v.Item3 * v.Item3);
+
+                    for (int x = 0; x < uLen; ++x)
+                    {
+                        normalEdges[i].Add(new List<Vector3>());
+                        for (int y = 0; y < vLen; ++y)
+                        {
+                            normalEdges[i][x].Add(linInterpolForFace(normalPnts[3], normalPnts[2], normalPnts[1], normalPnts[0], (float)(x / uLen), (float)(y / vLen)));
+                        }  
+                    }   
+                }
+            }
+
+            // для треугольников сделать
+
+            return normalEdges;
+        }
+
+        void drawFong(Polyhedron shape, List<List<List<Vector3>>> normalVect)
+        {
+            Point p;
+            PointF pF;
+            (double, double, double) u;
+            (double, double, double) v;
+            double uLen;
+            double vLen;
+            double diff;
+            Color colorPoint;
+            float intensity;
+
+            bitmap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+
+            if (currentShapeType == ShapeType.HEXAHEDRON)
+            {
+                using (var fastBitmap = new FastBitmap.FastBitmap(bitmap))
+                {
+                    for (int i = 0; i < shape.Faces.Count(); ++i)
+                    {
+                        if (viewVectorSelected && !shape.faceIsVisible(shape.Faces[i], viewVector))
+                            continue;
+
+                        u = (shape.Faces[i].Points[2].X - shape.Faces[i].Points[3].X, shape.Faces[i].Points[2].Y - shape.Faces[i].Points[3].Y, shape.Faces[i].Points[2].Z - shape.Faces[i].Points[3].Z);
+                        v = (shape.Faces[i].Points[0].X - shape.Faces[i].Points[3].X, shape.Faces[i].Points[0].Y - shape.Faces[i].Points[3].Y, shape.Faces[i].Points[0].Z - shape.Faces[i].Points[3].Z);
+                        uLen = Math.Sqrt(u.Item1 * u.Item1 + u.Item2 * u.Item2 + u.Item3 * u.Item3);
+                        vLen = Math.Sqrt(v.Item1 * v.Item1 + v.Item2 * v.Item2 + v.Item3 * v.Item3);
+
+                        for (int x = 0; x < uLen; ++x)
+                            for (int y = 0; y < vLen; ++y)
+                            {
+                                p = new Point(shape.Faces[i].Points[3].X + (x / uLen) * u.Item1 + (y / vLen) * v.Item1,
+                                               shape.Faces[i].Points[3].Y + (x / uLen) * u.Item2 + (y / vLen) * v.Item2,
+                                               shape.Faces[i].Points[3].Z + (x / uLen) * u.Item3 + (y / vLen) * v.Item3);
+                                pF = p.to2D(c);
+                                diff = 0.2 + Math.Max(Vector3.Dot(normalVect[i][x][y], lightDirection), 0.0);
+                                intensity = Math.Max(0, Vector3.Dot(normalVect[i][x][y], lightDirection));
+                                colorPoint = Color.FromArgb((int)(colorDialog1.Color.R * intensity),
+                                             (int)(colorDialog1.Color.G * intensity),
+                                             (int)(colorDialog1.Color.B * intensity));
+                                if (diff > 0.7)
+                                    colorPoint = Color.FromArgb((int)(colorDialog1.Color.R *  0.3), (int)(colorDialog1.Color.G *  0.3), (int)(colorDialog1.Color.B *  0.3));
+                                else if (diff > 0.3)
+                                    colorPoint = currentShapeColor;
+                                else
+                                    colorPoint = Color.FromArgb(colorDialog1.Color.R * 1.3 > 255 ? 255 : (int)(colorDialog1.Color.R *  1.3),
+                                                                colorDialog1.Color.G * 1.3 > 255 ? 255 : (int)(colorDialog1.Color.G *  1.3),
+                                                                colorDialog1.Color.B * 1.3 > 255 ? 255 : (int)(colorDialog1.Color.B *  1.3));
+                                
+
+                                if (pictureBox1.Height - (int)pF.Y >= 0 || pictureBox1.Height - (int)pF.Y <= pictureBox1.Height)
+                                    fastBitmap[(int)pF.X, pictureBox1.Height - (int)pF.Y] = colorPoint;
+                            }
+                    }
+                }
+                pictureBox1.Image = bitmap;
+            }
+
+
         }
 
         void drawTex(Polyhedron shape)

@@ -26,6 +26,7 @@ namespace _3DVisualization
         int Div;
         Bitmap bitmap;
         Bitmap bTex;
+        bool flag = false;
 
         bool isInteractiveMode = false;
         double sphereLength;
@@ -406,6 +407,7 @@ namespace _3DVisualization
 
         private void buttonShadingGuro_Click(object sender, EventArgs e)
         {
+            flag = true;
             currentShape.calculateFaceNormals();
             currentShape.calculateVertexNormals();
 
@@ -421,7 +423,11 @@ namespace _3DVisualization
 
         private void buttonFongShading_Click(object sender, EventArgs e)
         {
-            vertexColor = getDefaultColor;
+            flag = false;
+            currentShape.calculateFaceNormals();
+            currentShape.calculateVertexNormals();
+
+            drawFong(currentShape, InterpolateNormals(ref currentShape));
         }
 
         private void buttonTex_Click(object sender, EventArgs e)
