@@ -89,6 +89,7 @@ namespace _3DVisualization
     {
         PointF position;
         float intensity;
+        Vector3 normal;
 
         public Point2D(PointF position, float intensity)
         {
@@ -96,8 +97,16 @@ namespace _3DVisualization
             this.intensity = intensity;
         }
 
+        public Point2D(PointF position, Vector3 normal)
+        {
+            this.position = position;
+            this.normal = normal;
+        }
+
         public PointF Position { get => position; set => position = value; }
         public float Intensity { get => intensity; set => intensity = value; }
+
+        public Vector3 Normal { get => normal; set => normal = value; }
     }
 
     // Многоугольник (грань фигуры)
