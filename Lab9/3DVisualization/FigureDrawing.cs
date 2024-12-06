@@ -17,11 +17,12 @@ namespace _3DVisualization
     public partial class Form1
     {
         public delegate Color VertexColor(int x, int y, float intensity);
+        public delegate Color FongColor(int x, int y, float intensity, double diff);
 
         VertexColor vertexColor;
+        FongColor fongColor;
         ShapeType currentShapeType;
         Polyhedron currentShape;
-        Color currentShapeColor;
         Graphics g;
         Camera c;
         Vector3 viewVector;
@@ -100,7 +101,13 @@ namespace _3DVisualization
                 drawShape(currentShape);
 
             if (checkBox3.Checked && !checkBox2.Checked)
-                drawColor(currentShape);
+            {
+                if (!flag)
+                    drawGuro(currentShape);
+                else
+                    drawFong(currentShape);
+            }
+                
 
             if (checkBox2.Checked && !checkBox3.Checked)
                 if (bTex != null)
@@ -129,7 +136,7 @@ namespace _3DVisualization
             }
         }
 
-        void drawColor(Polyhedron shape)
+        void drawGuro(Polyhedron shape)
         {
             bitmap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
 
@@ -141,6 +148,23 @@ namespace _3DVisualization
                 using (var fastBitmap = new FastBitmap.FastBitmap(bitmap))
                 {
                     rasterizePolygon(shape, face, fastBitmap);
+                }
+            }
+            pictureBox1.Image = bitmap;
+        }
+
+        void drawFong(Polyhedron shape)
+        {
+            bitmap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+
+            foreach (var face in shape.Faces)
+            {
+                if (viewVectorSelected && !shape.faceIsVisible(face, viewVector))
+                    continue;
+
+                using (var fastBitmap = new FastBitmap.FastBitmap(bitmap))
+                {
+                    rasterizePolygonFong(shape, face, fastBitmap);
                 }
             }
             pictureBox1.Image = bitmap;
@@ -260,10 +284,103 @@ namespace _3DVisualization
             }
         }
 
+        void rasterizePolygonFong(Polyhedron shape, Polygon face, FastBitmap.FastBitmap fastBitmap)
+        {
+            List<Vector3> normalVrtcs = new List<Vector3> { new Vector3(), new Vector3(), new Vector3(), new Vector3(), new Vector3() };
+            List<(Point2D, Point2D)> edges2D = new List<(Point2D, Point2D)>();
+
+            foreach (Vertex vert in shape.Vertices)
+            {
+                for (int i = 0; i < face.Points.Count(); ++i)
+                    if (vert.Position.X == face.Points[i].X && vert.Position.Y == face.Points[i].Y && vert.Position.Z == face.Points[i].Z)
+                        normalVrtcs[i] = vert.Normal;
+            }
+
+            // Получаем рёбра
+            Point prev = face.Points.First();
+            Point current;
+            int pointCount = face.Points.Count();
+
+            for (int i = 1; i < pointCount; i++)
+            {
+                current = face.Points[i];
+                edges2D.Add((new Point2D(prev.to2D(c), normalVrtcs[i-1]),
+                    new Point2D(current.to2D(c), normalVrtcs[i])));
+                prev = current;
+            }
+            edges2D.Add((new Point2D(prev.to2D(c), normalVrtcs[face.Points.Count() - 1]),
+                    new Point2D(face.Points.First().to2D(c), normalVrtcs.First())));
+
+            // Первый шаг алгоритма растеризации (со списком рёберных точек)
+            Dictionary<int, List<(int, Vector3)>> segments = new Dictionary<int, List<(int, Vector3)>>();
+            foreach ((Point2D, Point2D) edge in edges2D)
+            {
+                Point2D start, end;
+
+                if ((int)Math.Ceiling(edge.Item1.Position.Y) == (int)Math.Ceiling(edge.Item2.Position.Y))
+                {
+                    int horizontalLineY = (int)Math.Ceiling(edge.Item1.Position.Y);
+                    if (!segments.ContainsKey(horizontalLineY))
+                        segments.Add(horizontalLineY, new List<(int, Vector3)>());
+
+                    segments[horizontalLineY].Add(((int)edge.Item1.Position.X, edge.Item1.Normal));
+                    segments[horizontalLineY].Add(((int)edge.Item2.Position.X, edge.Item2.Normal));
+                    continue;
+                }
+                else if (edge.Item1.Position.Y > edge.Item2.Position.Y)
+                {
+                    start = edge.Item2;
+                    end = edge.Item1;
+                }
+                else
+                {
+                    start = edge.Item1;
+                    end = edge.Item2;
+                }
+
+                int y = (int)Math.Ceiling(start.Position.Y);
+                float dx = (end.Position.X - start.Position.X) / (end.Position.Y - start.Position.Y);
+                float x = start.Position.X + dx * (y - start.Position.Y);
+
+                while (y <= end.Position.Y)
+                {
+                    if (!segments.ContainsKey(y))
+                        segments.Add(y, new List<(int, Vector3)>());
+                    segments[y].Add(((int)x, linInterpolForNormal(start.Normal, end.Normal, 
+                        (float)(Math.Sqrt(Math.Pow(x-start.Position.X, 2) + Math.Pow(y-start.Position.Y, 2)) /
+                        Math.Sqrt(Math.Pow(end.Position.X-start.Position.X, 2) + Math.Pow(end.Position.Y-start.Position.Y, 2))) )));
+
+                    y++;
+                    x += dx;
+                }
+            }
+
+            // Второй шаг алгоритма растеризации — сортировка по возрастанию X
+           foreach (var pair in segments)
+           {
+                pair.Value.Sort();
+           }
+
+            // Третий шаг алгоритма растеризации
+            foreach (var pair in segments)
+            {
+                for (int i = 0; i < pair.Value.Count() - 1; i += 2)
+                {
+                    int x1 = pair.Value[i].Item1;
+                    int x2 = pair.Value[i+1].Item1;
+
+                    for (int x = x1; x < x2; x++)
+                    {
+                        Vector3 n = Vector3.Normalize(linInterpolForNormal(pair.Value[i].Item2, pair.Value[i+1].Item2, (Math.Abs(x-x1) / Math.Abs(x1-x2))));
+                        fastBitmap[x, bitmap.Height - pair.Key] = 
+                            fongColor(x, pair.Key, calculateVertexIntensity(n), 0.2 + Math.Max(Vector3.Dot(n, lightDirection), 0.0));
+                    }
+                }
+            }
+        }
 
         private Color getDefaultColor(int x, int y, float intensity)
         {
-            currentShapeColor = colorDialog1.Color;
             return colorDialog1.Color;
         }
 
@@ -280,137 +397,30 @@ namespace _3DVisualization
                 (int)(colorDialog1.Color.B * intensity));
         }
 
+        private Color calculateFongColor(int x, int y, float intensity, double diff)
+        {
+            if (diff < 0.4)
+                return Color.FromArgb((int)(colorDialog1.Color.R * intensity * 0.3),
+                        (int)(colorDialog1.Color.G * intensity * 0.3),
+                        (int)(colorDialog1.Color.B * intensity * 0.3));
+            else if (diff < 0.7)
+                return Color.FromArgb((int)(colorDialog1.Color.R * intensity),
+                        (int)(colorDialog1.Color.G * intensity),
+                        (int)(colorDialog1.Color.B * intensity));
+            else
+                return Color.FromArgb((int)(colorDialog1.Color.R * intensity * 1.3) > 255 ? 255 : (int)(colorDialog1.Color.R * intensity * 1.3),
+                    (int)(colorDialog1.Color.G * intensity * 1.3) > 255 ? 255 : (int)(colorDialog1.Color.G * intensity * 1.3),
+                    (int)(colorDialog1.Color.B * intensity * 1.3) > 255 ? 255 : (int)(colorDialog1.Color.B * intensity * 1.3));
+        }
+
         public float linearInterpolation(float I1, float I2, float t)
         {
             return t * I1 + (1 - t) * I2;
         }
 
-        public Vector3 linInterpolForFace(Vector3 I1, Vector3 I2, Vector3 I3, Vector3 I4, float xShift, float yShift)
+        public Vector3 linInterpolForNormal(Vector3 I1, Vector3 I2, float t)
         {
-            return Vector3.Normalize(new Vector3(
-                yShift * (xShift * I1.X + (1 - xShift) * I2.X) +
-                (1 - yShift) * (xShift * I4.X + (1 - xShift) * I3.X) +
-                xShift * (yShift * I1.X + (1 - xShift) * I4.X) +
-                (1 - xShift) * (yShift * I2.X + (1 - xShift) * I3.X),
-
-                yShift * (xShift * I1.Y + (1 - xShift) * I2.Y) +
-                (1 - yShift) * (xShift * I4.Y + (1 - xShift) * I3.Y) +
-                xShift * (yShift * I1.Y + (1 - xShift) * I4.Y) +
-                (1 - xShift) * (yShift * I2.Y + (1 - xShift) * I3.Y),
-
-                yShift * (xShift * I1.Z + (1 - xShift) * I2.Z) +
-                (1 - yShift) * (xShift * I4.Z + (1 - xShift) * I3.Z) +
-                xShift * (yShift * I1.Z + (1 - xShift) * I4.Z) +
-                (1 - xShift) * (yShift * I2.Z + (1 - xShift) * I3.Z)));
-        }
-
-        List<List<List<Vector3>>> InterpolateNormals(ref Polyhedron shape)
-        {
-            List<Vector3> normalPnts = new List<Vector3> { new Vector3(), new Vector3(), new Vector3(), new Vector3() };
-            (double, double, double) u;
-            (double, double, double) v;
-            double uLen;
-            double vLen;
-            List<List<List<Vector3>>> normalEdges = new List<List<List<Vector3>>>
-            {new List<List<Vector3>>(), new List<List<Vector3>>(), new List<List<Vector3>>(),
-                new List<List<Vector3>>(), new List<List<Vector3>>(), new List<List<Vector3>>()};
-
-
-            if (currentShapeType == ShapeType.HEXAHEDRON)
-            {
-                for (int i = 0; i < shape.Faces.Count(); ++i)
-                {
-                    foreach (Vertex vert in shape.Vertices)
-                    {
-                        if (vert.Position.X == shape.Faces[i].Points[0].X && vert.Position.Y == shape.Faces[i].Points[0].Y && vert.Position.Z == shape.Faces[i].Points[0].Z)
-                            normalPnts[0] = vert.Normal;
-                        if (vert.Position.X == shape.Faces[i].Points[1].X && vert.Position.Y == shape.Faces[i].Points[1].Y && vert.Position.Z == shape.Faces[i].Points[1].Z)
-                            normalPnts[1] = vert.Normal;
-                        if (vert.Position.X == shape.Faces[i].Points[2].X && vert.Position.Y == shape.Faces[i].Points[2].Y && vert.Position.Z == shape.Faces[i].Points[2].Z)
-                            normalPnts[2] = vert.Normal;
-                        if (vert.Position.X == shape.Faces[i].Points[3].X && vert.Position.Y == shape.Faces[i].Points[3].Y && vert.Position.Z == shape.Faces[i].Points[3].Z)
-                            normalPnts[3] = vert.Normal;
-                    }
-                    u = (shape.Faces[i].Points[2].X - shape.Faces[i].Points[3].X, shape.Faces[i].Points[2].Y - shape.Faces[i].Points[3].Y, shape.Faces[i].Points[2].Z - shape.Faces[i].Points[3].Z);
-                    v = (shape.Faces[i].Points[0].X - shape.Faces[i].Points[3].X, shape.Faces[i].Points[0].Y - shape.Faces[i].Points[3].Y, shape.Faces[i].Points[0].Z - shape.Faces[i].Points[3].Z);
-                    uLen = Math.Sqrt(u.Item1 * u.Item1 + u.Item2 * u.Item2 + u.Item3 * u.Item3);
-                    vLen = Math.Sqrt(v.Item1 * v.Item1 + v.Item2 * v.Item2 + v.Item3 * v.Item3);
-
-                    for (int x = 0; x < uLen; ++x)
-                    {
-                        normalEdges[i].Add(new List<Vector3>());
-                        for (int y = 0; y < vLen; ++y)
-                        {
-                            normalEdges[i][x].Add(linInterpolForFace(normalPnts[3], normalPnts[2], normalPnts[1], normalPnts[0], (float)(x / uLen), (float)(y / vLen)));
-                        }  
-                    }   
-                }
-            }
-
-            // для треугольников сделать
-
-            return normalEdges;
-        }
-
-        void drawFong(Polyhedron shape, List<List<List<Vector3>>> normalVect)
-        {
-            Point p;
-            PointF pF;
-            (double, double, double) u;
-            (double, double, double) v;
-            double uLen;
-            double vLen;
-            double diff;
-            Color colorPoint;
-            float intensity;
-
-            bitmap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-
-            if (currentShapeType == ShapeType.HEXAHEDRON)
-            {
-                using (var fastBitmap = new FastBitmap.FastBitmap(bitmap))
-                {
-                    for (int i = 0; i < shape.Faces.Count(); ++i)
-                    {
-                        if (viewVectorSelected && !shape.faceIsVisible(shape.Faces[i], viewVector))
-                            continue;
-
-                        u = (shape.Faces[i].Points[2].X - shape.Faces[i].Points[3].X, shape.Faces[i].Points[2].Y - shape.Faces[i].Points[3].Y, shape.Faces[i].Points[2].Z - shape.Faces[i].Points[3].Z);
-                        v = (shape.Faces[i].Points[0].X - shape.Faces[i].Points[3].X, shape.Faces[i].Points[0].Y - shape.Faces[i].Points[3].Y, shape.Faces[i].Points[0].Z - shape.Faces[i].Points[3].Z);
-                        uLen = Math.Sqrt(u.Item1 * u.Item1 + u.Item2 * u.Item2 + u.Item3 * u.Item3);
-                        vLen = Math.Sqrt(v.Item1 * v.Item1 + v.Item2 * v.Item2 + v.Item3 * v.Item3);
-
-                        for (int x = 0; x < uLen; ++x)
-                            for (int y = 0; y < vLen; ++y)
-                            {
-                                p = new Point(shape.Faces[i].Points[3].X + (x / uLen) * u.Item1 + (y / vLen) * v.Item1,
-                                               shape.Faces[i].Points[3].Y + (x / uLen) * u.Item2 + (y / vLen) * v.Item2,
-                                               shape.Faces[i].Points[3].Z + (x / uLen) * u.Item3 + (y / vLen) * v.Item3);
-                                pF = p.to2D(c);
-                                diff = 0.2 + Math.Max(Vector3.Dot(normalVect[i][x][y], lightDirection), 0.0);
-                                intensity = Math.Max(0, Vector3.Dot(normalVect[i][x][y], lightDirection));
-                                colorPoint = Color.FromArgb((int)(colorDialog1.Color.R * intensity),
-                                             (int)(colorDialog1.Color.G * intensity),
-                                             (int)(colorDialog1.Color.B * intensity));
-                                if (diff > 0.7)
-                                    colorPoint = Color.FromArgb((int)(colorDialog1.Color.R *  0.3), (int)(colorDialog1.Color.G *  0.3), (int)(colorDialog1.Color.B *  0.3));
-                                else if (diff > 0.3)
-                                    colorPoint = currentShapeColor;
-                                else
-                                    colorPoint = Color.FromArgb(colorDialog1.Color.R * 1.3 > 255 ? 255 : (int)(colorDialog1.Color.R *  1.3),
-                                                                colorDialog1.Color.G * 1.3 > 255 ? 255 : (int)(colorDialog1.Color.G *  1.3),
-                                                                colorDialog1.Color.B * 1.3 > 255 ? 255 : (int)(colorDialog1.Color.B *  1.3));
-                                
-
-                                if (pictureBox1.Height - (int)pF.Y >= 0 || pictureBox1.Height - (int)pF.Y <= pictureBox1.Height)
-                                    fastBitmap[(int)pF.X, pictureBox1.Height - (int)pF.Y] = colorPoint;
-                            }
-                    }
-                }
-                pictureBox1.Image = bitmap;
-            }
-
-
+            return new Vector3(t * I1.X + (1 - t) * I2.X, t * I1.Y + (1 - t) * I2.Y, t * I1.Z + (1 - t) * I2.Z);
         }
 
         void drawTex(Polyhedron shape)

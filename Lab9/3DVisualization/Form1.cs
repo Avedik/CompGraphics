@@ -407,7 +407,7 @@ namespace _3DVisualization
 
         private void buttonShadingGuro_Click(object sender, EventArgs e)
         {
-            flag = true;
+            flag = false;
             currentShape.calculateFaceNormals();
             currentShape.calculateVertexNormals();
 
@@ -423,11 +423,14 @@ namespace _3DVisualization
 
         private void buttonFongShading_Click(object sender, EventArgs e)
         {
-            flag = false;
+            flag = true;
             currentShape.calculateFaceNormals();
             currentShape.calculateVertexNormals();
 
-            drawFong(currentShape, InterpolateNormals(ref currentShape));
+            fongColor = calculateFongColor;
+
+            redraw();
+            setFlags(true);
         }
 
         private void buttonTex_Click(object sender, EventArgs e)
