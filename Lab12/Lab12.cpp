@@ -8,30 +8,40 @@
 #include <fstream>
 #include <sstream>
 
-const std::vector<GLfloat> tetra {
-      -1.0f, -1.0f, -1.0f,   1.0f, 1.0f, 1.0f,
+const std::vector<GLfloat> tetra{
+       -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 1.0f,
+       -1.0f, 1.0f, 1.0f,   0.0f, 1.0f, 0.0f,
+        1.0f, -1.0f, 1.0f,  1.0f, 0.0f, 0.0f,
+
+      -1.0f, -1.0f, -1.0f,   0.0f, 0.0f, 1.0f,
        -1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f,
-       1.0f, 1.0f, -1.0f,    0.0f, 0.0f, 1.0f,
+       1.0f, 1.0f, -1.0f,    1.0f, 1.0f, 1.0f,
 
-       -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
+       -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 1.0f,
        1.0f, -1.0f, 1.0f,   1.0f, 0.0f, 0.0f,
-       1.0f, 1.0f, -1.0f,   0.0f, 0.0f, 1.0f,
+       1.0f, 1.0f, -1.0f,   1.0f, 1.0f, 1.0f,
 
-       1.0f, -1.0f, 1.0f,   1.0f, 0.0f, 1.0f,
-       1.0f, 1.0f, -1.0f,   0.0f, 0.0f, 1.0f,
+       1.0f, -1.0f, 1.0f,   1.0f, 0.0f, 0.0f,
+       1.0f, 1.0f, -1.0f,   1.0f, 1.0f, 1.0f,
        -1.0f, 1.0f, 1.0f,   0.0f, 1.0f, 0.0f,
-
-       -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
-       -1.0f, 1.0f, 1.0f,   0.0f, 1.0f, 0.0f,
-        1.0f, -1.0f, 1.0f,  1.0f, 0.0f, 1.0f,
 };
 
 
-const std::vector<GLfloat> cube {
-      -1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
+const std::vector<GLfloat> cube{
+       -1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
        1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 0.0f,   0.0f, 0.0f,
        1.0f, -1.0f, 1.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,
        -1.0f, -1.0f, 1.0f,  0.0f, 0.0f, 1.0f,   1.0f, 1.0f,
+
+       -1.0f, 1.0f, -1.0f,  0.5f, 0.5f, 0.5f,   1.0f, 0.0f,
+       -1.0f, 1.0f, 1.0f,   0.0f, 1.0f, 0.0f,   0.0f, 0.0f,
+       -1.0f, -1.0f, 1.0f,  0.0f, 0.0f, 1.0f,   0.0f, 1.0f,
+       -1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,   1.0f, 1.0f,
+
+        1.0f, -1.0f, 1.0f,   1.0f, 1.0f, 0.0f,   1.0f, 0.0f,
+       -1.0f, -1.0f, 1.0f,  0.0f, 0.0f, 1.0f,    0.0f, 0.0f,
+       -1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,    0.0f, 1.0f,
+        1.0f, -1.0f, -1.0f,  0.0f, 1.0f, 1.0f,   1.0f, 1.0f,
 
        1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 0.0f,   1.0f, 0.0f,
        1.0f, 1.0f, -1.0f,   1.0f, 1.0f, 1.0f,   0.0f, 0.0f,
@@ -43,20 +53,11 @@ const std::vector<GLfloat> cube {
        -1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,   0.0f, 1.0f,
        1.0f, -1.0f, -1.0f,  0.0f, 1.0f, 1.0f,   1.0f, 1.0f,
 
-       -1.0f, 1.0f, -1.0f,  0.5f, 0.5f, 0.5f,   1.0f, 0.0f,
-       -1.0f, 1.0f, 1.0f,   0.0f, 1.0f, 0.0f,   0.0f, 0.0f,
-       -1.0f, -1.0f, 1.0f,  0.0f, 0.0f, 1.0f,   0.0f, 1.0f,
-       -1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,   1.0f, 1.0f,
-
        1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 0.0f,   1.0f, 0.0f,
        -1.0f, 1.0f, 1.0f,   0.0f, 1.0f, 0.0f,   0.0f, 0.0f,
        -1.0f, 1.0f, -1.0f,  0.5f, 0.5f, 0.5f,   0.0f, 1.0f,
        1.0f, 1.0f, -1.0f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
 
-       1.0f, -1.0f, 1.0f,   1.0f, 1.0f, 0.0f,   1.0f, 0.0f,
-       -1.0f, -1.0f, 1.0f,  0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
-       -1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,   0.0f, 1.0f,
-       1.0f, -1.0f, -1.0f,  0.0f, 1.0f, 1.0f,   1.0f, 1.0f,
 };
 
 std::string readAllFile(const std::string filename)
@@ -148,15 +149,16 @@ int main() {
     glEnable(GL_DEPTH_TEST);
 
     glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(1.0f, 1.0f, 1.0f));
+    model = glm::translate(model, glm::vec3(0.0f, 0.0f,
+        0.0f));
 
     glm::mat4 view = glm::lookAt(
-        glm::vec3(-5.0f, 5.0f, -5.0f),
+        glm::vec3(5.0f, 5.0f, -5.0f),
         glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(0.0f, 1.0f, 0.0f)
     );
 
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 500.0f / 500.0f, 0.1f, 100.0f);
 
     glm::mat4 mvp = projection * view * model;
 
@@ -201,7 +203,7 @@ int main() {
             //glEnableVertexAttribArray(2);
         }
 
-        glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "matrix"), 1, GL_FALSE, glm::value_ptr(mvp));
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "matr"), 1, GL_FALSE, glm::value_ptr(mvp));
         glBindBuffer(GL_ARRAY_BUFFER, NULL);
 
         if (count == 0)
