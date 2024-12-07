@@ -19,4 +19,10 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="cube_vertex_shader.glsl" />
+    <None Include="tetra_fragment_shader.glsl" />
+    <None Include="tetra_vertex_shader.glsl" />
+    <None Include="tex_fragment_shader.glsl" />
+  </ItemGroup>
 </Project>

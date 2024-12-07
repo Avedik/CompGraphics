@@ -1,25 +1,221 @@
-﻿#include <SFML/Graphics.hpp>
+﻿#include <GL/glew.h>
+#include <SFML/Graphics.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <sstream>
 
-int main()
+const std::vector<GLfloat> tetra {
+      -1.0f, -1.0f, -1.0f,   1.0f, 1.0f, 1.0f,
+       -1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f,
+       1.0f, 1.0f, -1.0f,    0.0f, 0.0f, 1.0f,
+
+       -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
+       1.0f, -1.0f, 1.0f,   1.0f, 0.0f, 0.0f,
+       1.0f, 1.0f, -1.0f,   0.0f, 0.0f, 1.0f,
+
+       1.0f, -1.0f, 1.0f,   1.0f, 0.0f, 1.0f,
+       1.0f, 1.0f, -1.0f,   0.0f, 0.0f, 1.0f,
+       -1.0f, 1.0f, 1.0f,   0.0f, 1.0f, 0.0f,
+
+       -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
+       -1.0f, 1.0f, 1.0f,   0.0f, 1.0f, 0.0f,
+        1.0f, -1.0f, 1.0f,  1.0f, 0.0f, 1.0f,
+};
+
+
+const std::vector<GLfloat> cube {
+      -1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
+       1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 0.0f,   0.0f, 0.0f,
+       1.0f, -1.0f, 1.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,
+       -1.0f, -1.0f, 1.0f,  0.0f, 0.0f, 1.0f,   1.0f, 1.0f,
+
+       1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 0.0f,   1.0f, 0.0f,
+       1.0f, 1.0f, -1.0f,   1.0f, 1.0f, 1.0f,   0.0f, 0.0f,
+       1.0f, -1.0f, -1.0f,  0.0f, 1.0f, 1.0f,   0.0f, 1.0f,
+       1.0f, -1.0f, 1.0f,   0.0f, 1.0f, 1.0f,   1.0f, 1.0f,
+
+       1.0f, 1.0f, -1.0f,   1.0f, 1.0f, 1.0f,   1.0f, 0.0f,
+       -1.0f, 1.0f, -1.0f,  0.5f, 0.5f, 0.5f,   0.0f, 0.0f,
+       -1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,   0.0f, 1.0f,
+       1.0f, -1.0f, -1.0f,  0.0f, 1.0f, 1.0f,   1.0f, 1.0f,
+
+       -1.0f, 1.0f, -1.0f,  0.5f, 0.5f, 0.5f,   1.0f, 0.0f,
+       -1.0f, 1.0f, 1.0f,   0.0f, 1.0f, 0.0f,   0.0f, 0.0f,
+       -1.0f, -1.0f, 1.0f,  0.0f, 0.0f, 1.0f,   0.0f, 1.0f,
+       -1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,   1.0f, 1.0f,
+
+       1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 0.0f,   1.0f, 0.0f,
+       -1.0f, 1.0f, 1.0f,   0.0f, 1.0f, 0.0f,   0.0f, 0.0f,
+       -1.0f, 1.0f, -1.0f,  0.5f, 0.5f, 0.5f,   0.0f, 1.0f,
+       1.0f, 1.0f, -1.0f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
+
+       1.0f, -1.0f, 1.0f,   1.0f, 1.0f, 0.0f,   1.0f, 0.0f,
+       -1.0f, -1.0f, 1.0f,  0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
+       -1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,   0.0f, 1.0f,
+       1.0f, -1.0f, -1.0f,  0.0f, 1.0f, 1.0f,   1.0f, 1.0f,
+};
+
+std::string readAllFile(const std::string filename)
 {
-    // Создаём окно
-    sf::RenderWindow window(sf::VideoMode(200, 200), "Window");
+    std::fstream fs(filename);
+    std::ostringstream sstr;
+    sstr << fs.rdbuf();
+    return sstr.str();
+}
 
-    // Главный цикл
-    while (window.isOpen())
-    {
+GLuint compileShader(const GLchar* source, GLenum type) {
+    GLuint shader = glCreateShader(type);
+    glShaderSource(shader, 1, &source, nullptr);
+    glCompileShader(shader);
+
+    GLint success;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        char infoLog[512];
+        glGetShaderInfoLog(shader, 512, nullptr, infoLog);
+        std::cerr << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
+    return shader;
+}
+
+GLuint createShaderProgram(const std::string vShader, const std::string frShader) {
+    std::string vertexShaderSource = readAllFile(vShader);
+    std::string fragmentShaderSource = readAllFile(frShader);
+
+    GLuint vertexShader = compileShader(vertexShaderSource.c_str(), GL_VERTEX_SHADER);
+    GLuint fragmentShader = compileShader(fragmentShaderSource.c_str(), GL_FRAGMENT_SHADER);
+
+    GLuint shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+
+    GLint link_ok;
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &link_ok);
+    if (!link_ok) {
+        std::cout << "error attach shaders \n";
+    }
+
+    return shaderProgram;
+}
+
+
+GLuint getShaderProgram(GLuint count) {
+    if (count == 0)
+        return createShaderProgram("tetra_vertex_shader.glsl", "tetra_fragment_shader.glsl");
+    else if (count == 1)
+        return createShaderProgram("cube_vertex_shader.glsl", "tex_fragment_shader.glsl");
+    // else if (count == 2)
+       //  return createShaderProgram("cube_vertex_shader.glsl", "two_tex_fragment_shader.glsl");
+    // else
+        // return createShaderProgram("circle_vertex_shader.glsl", "circle_fragment_shader.glsl");
+}
+
+void createShape(GLuint& VBO, const std::vector<GLfloat>& vertices) {
+    glGenBuffers(1, &VBO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, NULL);
+}
+
+void getShape(GLuint& VBO, GLuint count) {
+
+    if (count == 0)
+        createShape(VBO, tetra);
+
+    else if (count == 1 || count == 2)
+        createShape(VBO, cube);
+
+    //else
+         //createShape(VBO, circle);
+}
+
+int main() {
+    sf::RenderWindow window(sf::VideoMode(500, 500), "Window");
+    glewInit();
+
+    GLuint VBO;
+    GLuint count = 0;
+
+    GLuint shaderProgram = getShaderProgram(count);
+    getShape(VBO, count);
+    glEnable(GL_DEPTH_TEST);
+
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(1.0f, 1.0f, 1.0f));
+
+    glm::mat4 view = glm::lookAt(
+        glm::vec3(-5.0f, 5.0f, -5.0f),
+        glm::vec3(0.0f, 0.0f, 0.0f),
+        glm::vec3(0.0f, 1.0f, 0.0f)
+    );
+
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
+
+    glm::mat4 mvp = projection * view * model;
+
+    while (window.isOpen()) {
+
         sf::Event event;
-        // Цикл обработки событий
         while (window.pollEvent(event))
         {
-            // Событие закрытия окна, 
-            if (event.type == sf::Event::Closed)
-                window.close();
+            if (event.type == sf::Event::Closed) { window.close(); }
+            else if (event.type == sf::Event::MouseButtonPressed) {
+                count = (count + 1) % 4;
+                shaderProgram = getShaderProgram(count);
+                getShape(VBO, count);
+            }
         }
 
-        // Перерисовка окна
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glUseProgram(shaderProgram);
+
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+        if (count == 0)
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
+        else if (count == 1 || count == 2)
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
+        // else
+
+        glEnableVertexAttribArray(0);
+
+        if (count == 0)
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+        else if (count == 1 || count == 2)
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+        // else
+
+        glEnableVertexAttribArray(1);
+
+        if (count == 1 || count == 2)
+        {
+            //glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
+            //glEnableVertexAttribArray(2);
+        }
+
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "matrix"), 1, GL_FALSE, glm::value_ptr(mvp));
+        glBindBuffer(GL_ARRAY_BUFFER, NULL);
+
+        if (count == 0)
+            glDrawArrays(GL_TRIANGLES, 0, 12);
+        else if (count == 1 || count == 2)
+            glDrawArrays(GL_QUADS, 0, 24);
+        //else
+
         window.display();
     }
+
+    glDeleteBuffers(1, &VBO);
+    glUseProgram(0);
+    glDeleteProgram(shaderProgram);
 
     return 0;
 }
