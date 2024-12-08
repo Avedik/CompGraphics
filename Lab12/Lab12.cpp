@@ -7,6 +7,7 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <SOIL.h>
 
 const std::vector<GLfloat> tetra{
        -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 1.0f,
@@ -110,8 +111,8 @@ GLuint getShaderProgram(GLuint count) {
         return createShaderProgram("tetra_vertex_shader.glsl", "tetra_fragment_shader.glsl");
     else if (count == 1)
         return createShaderProgram("cube_vertex_shader.glsl", "tex_fragment_shader.glsl");
-    // else if (count == 2)
-       //  return createShaderProgram("cube_vertex_shader.glsl", "two_tex_fragment_shader.glsl");
+    else if (count == 2)
+        return createShaderProgram("cube_vertex_shader.glsl", "two_tex_fragment_shader.glsl");
     // else
         // return createShaderProgram("circle_vertex_shader.glsl", "circle_fragment_shader.glsl");
 }
@@ -142,15 +143,35 @@ int main() {
     glewInit();
 
     GLuint VBO;
+    GLuint tex1;
+    GLuint tex2;
     GLuint count = 0;
+    int w = 512;
+    int h = 512;
+    float coef = 0.5;
 
+    //glEnable(GL_TEXTURE_2D);
+    glEnable(GL_DEPTH_TEST);
     GLuint shaderProgram = getShaderProgram(count);
     getShape(VBO, count);
-    glEnable(GL_DEPTH_TEST);
+
+    unsigned char* image1 = SOIL_load_image("container.jpg", &w, &h, 0, SOIL_LOAD_RGB);
+    unsigned char* image2 = SOIL_load_image("container.jpg", &w, &h, 0, SOIL_LOAD_RGB);
+
+    glGenTextures(1, &tex1);
+    glGenTextures(1, &tex2);
+    glBindTexture(GL_TEXTURE_2D, tex1);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, image1);
+    glBindTexture(GL_TEXTURE_2D, tex2);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, image2);
+
+    SOIL_free_image_data(image1);
+    SOIL_free_image_data(image2);
+    glBindBuffer(GL_TEXTURE_2D, NULL);
+
 
     glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(0.0f, 0.0f,
-        0.0f));
+    model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
 
     glm::mat4 view = glm::lookAt(
         glm::vec3(5.0f, 5.0f, -5.0f),
@@ -173,6 +194,10 @@ int main() {
                 shaderProgram = getShaderProgram(count);
                 getShape(VBO, count);
             }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+                coef = (coef + 0.1f) <= 1.0f ? (coef + 0.1f) : 1.0f;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+                coef = (coef - 0.1f) >= 0.0f ? (coef - 0.1f) : 0.0f;
         }
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -199,8 +224,13 @@ int main() {
 
         if (count == 1 || count == 2)
         {
-            //glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
-            //glEnableVertexAttribArray(2);
+            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
+            glEnableVertexAttribArray(2);
+        }
+
+        if (count == 1 || count == 2)
+        {
+            glUniform1f(glGetUniformLocation(shaderProgram, "coef"), coef);
         }
 
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "matr"), 1, GL_FALSE, glm::value_ptr(mvp));
@@ -208,8 +238,23 @@ int main() {
 
         if (count == 0)
             glDrawArrays(GL_TRIANGLES, 0, 12);
-        else if (count == 1 || count == 2)
+        else if (count == 1)
+        {
+            glBindTexture(GL_TEXTURE_2D, tex1);
             glDrawArrays(GL_QUADS, 0, 24);
+        }
+        else if (count == 2)
+        {
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, tex1);
+            glUniform1i(glGetUniformLocation(shaderProgram, "ourTexture1"), 0);
+            glActiveTexture(GL_TEXTURE1);
+            glBindTexture(GL_TEXTURE_2D, tex2);
+            glUniform1i(glGetUniformLocation(shaderProgram, "ourTexture2"), 1);
+
+            glDrawArrays(GL_QUADS, 0, 24);
+        }
+
         //else
 
         window.display();
