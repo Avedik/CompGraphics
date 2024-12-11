@@ -78,29 +78,41 @@ void changeScales(float scaleXinc, float scaleYinc) {
     scaleY += scaleYinc;
 }
 
-float weigh(float color)
-{
-    return (1 / 100.0) * color;
-}
-
 std::vector<float> hsvToRgb(float hue, float saturation = 100.0, float value = 100.0)
 {
-    int perc = (int)floor(hue / 60) % 6;
-    float div = ((100.0f - saturation) * value) / 100.0;
+    // Определяем, в каком секторе цветового круга находится hue
+    int perc = (int)floor(hue / 60) % 6; // Получаем номер сектора (0-5)
 
+    // Вычисляем промежуточные значения для преобразования
+    float div = (100.0f - saturation) * value / 100.0;
     float prod = (value - div) * (((int)hue % 60) / 60.0);
     float sum = div + prod;
     float dec = value - prod;
 
+    // В зависимости от сектора, возвращаем соответствующий цвет в формате RGBA
     switch (perc)
     {
-        case 0: return { weigh(value), weigh(sum), weigh(div), 1.0 };
-        case 1: return { weigh(dec), weigh(value), weigh(div), 1.0 };
-        case 2: return { weigh(div), weigh(value), weigh(sum), 1.0 };
-        case 3: return { weigh(div), weigh(dec), weigh(value), 1.0 };
-        case 4: return { weigh(sum), weigh(div), weigh(value), 1.0 };
-        case 5: return { weigh(value), weigh(div), weigh(dec), 1.0 };
+    case 0:
+        // Сектор 0: Красный
+        return { value / 100.0f, sum / 100.0f, div / 100.0f, 1.0f };
+    case 1:
+        // Сектор 1: Желтый
+        return { dec / 100.0f, value / 100.0f, div / 100.0f, 1.0f };
+    case 2:
+        // Сектор 2: Зеленый
+        return { div / 100.0f, value / 100.0f, sum / 100.0f, 1.0f };
+    case 3:
+        // Сектор 3: Циановый
+        return { div / 100.0f, dec / 100.0f, value / 100.0f, 1.0f };
+    case 4:
+        // Сектор 4: Синий
+        return { sum / 100.0f, div / 100.0f, value / 100.0f, 1.0f };
+    case 5:
+        // Сектор 5: Магента
+        return { value / 100.0f, div / 100.0f, dec / 100.0f, 1.0f };
     }
+
+    // Если что-то пошло не так, возвращаем черный цвет (0, 0, 0, 0)
     return { 0, 0, 0 , 0 };
 }
 
