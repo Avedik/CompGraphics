@@ -29,6 +29,16 @@ namespace _3DVisualization
         Vector3 lightDirection;
         bool viewVectorSelected = false;
 
+        // Компаратор для кортежей (int, Vector3)
+        public class TupleComparer : IComparer<(int, Vector3)>
+        {
+            public int Compare((int, Vector3) x, (int, Vector3) y)
+            {
+                // Сравнение по первому элементу кортежа (int)
+                return x.Item1.CompareTo(y.Item1);
+            }
+        }
+
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             redraw();
@@ -347,8 +357,7 @@ namespace _3DVisualization
                     if (!segments.ContainsKey(y))
                         segments.Add(y, new List<(int, Vector3)>());
                     segments[y].Add(((int)x, linInterpolForNormal(start.Normal, end.Normal, 
-                        (float)(Math.Sqrt(Math.Pow(x-start.Position.X, 2) + Math.Pow(y-start.Position.Y, 2)) /
-                        Math.Sqrt(Math.Pow(end.Position.X-start.Position.X, 2) + Math.Pow(end.Position.Y-start.Position.Y, 2))) )));
+                        1f * (y - start.Position.Y) / (end.Position.Y - start.Position.Y))));
 
                     y++;
                     x += dx;
@@ -358,7 +367,7 @@ namespace _3DVisualization
             // Второй шаг алгоритма растеризации — сортировка по возрастанию X
            foreach (var pair in segments)
            {
-                pair.Value.Sort();
+                pair.Value.Sort(new TupleComparer());
            }
 
             // Третий шаг алгоритма растеризации
@@ -371,7 +380,7 @@ namespace _3DVisualization
 
                     for (int x = x1; x < x2; x++)
                     {
-                        Vector3 n = Vector3.Normalize(linInterpolForNormal(pair.Value[i].Item2, pair.Value[i+1].Item2, (Math.Abs(x-x1) / Math.Abs(x1-x2))));
+                        Vector3 n = Vector3.Normalize(linInterpolForNormal(pair.Value[i].Item2, pair.Value[i+1].Item2, 1f * (x - x1) / (x2 - x1)));
                         fastBitmap[x, bitmap.Height - pair.Key] = 
                             fongColor(x, pair.Key, calculateVertexIntensity(n), 0.2 + Math.Max(Vector3.Dot(n, lightDirection), 0.0));
                     }
@@ -399,18 +408,27 @@ namespace _3DVisualization
 
         private Color calculateFongColor(int x, int y, float intensity, double diff)
         {
+            // Определяем коэффициент изменения цвета в зависимости от diff
+            float colorFactor;
+
             if (diff < 0.4)
-                return Color.FromArgb((int)(colorDialog1.Color.R * intensity * 0.3),
-                        (int)(colorDialog1.Color.G * intensity * 0.3),
-                        (int)(colorDialog1.Color.B * intensity * 0.3));
+                colorFactor = 0.3f;
             else if (diff < 0.7)
-                return Color.FromArgb((int)(colorDialog1.Color.R * intensity),
-                        (int)(colorDialog1.Color.G * intensity),
-                        (int)(colorDialog1.Color.B * intensity));
+                colorFactor = 1.0f;
             else
-                return Color.FromArgb((int)(colorDialog1.Color.R * intensity * 1.3) > 255 ? 255 : (int)(colorDialog1.Color.R * intensity * 1.3),
-                    (int)(colorDialog1.Color.G * intensity * 1.3) > 255 ? 255 : (int)(colorDialog1.Color.G * intensity * 1.3),
-                    (int)(colorDialog1.Color.B * intensity * 1.3) > 255 ? 255 : (int)(colorDialog1.Color.B * intensity * 1.3));
+                colorFactor = 1.3f;
+
+            // Рассчитываем значения RGB с учетом интенсивности и ограничиваем их до 255
+            int r = (int)(colorDialog1.Color.R * intensity * colorFactor);
+            int g = (int)(colorDialog1.Color.G * intensity * colorFactor);
+            int b = (int)(colorDialog1.Color.B * intensity * colorFactor);
+
+            // Ограничиваем значения до 255
+            r = Math.Max(Math.Min(r, 255), 0);
+            g = Math.Max(Math.Min(g, 255), 0);
+            b = Math.Max(Math.Min(b, 255), 0);
+
+            return Color.FromArgb(r, g, b);
         }
 
         public float linearInterpolation(float I1, float I2, float t)
@@ -418,9 +436,11 @@ namespace _3DVisualization
             return t * I1 + (1 - t) * I2;
         }
 
-        public Vector3 linInterpolForNormal(Vector3 I1, Vector3 I2, float t)
+        public Vector3 linInterpolForNormal(Vector3 N1, Vector3 N2, float t)
         {
-            return new Vector3(t * I1.X + (1 - t) * I2.X, t * I1.Y + (1 - t) * I2.Y, t * I1.Z + (1 - t) * I2.Z);
+            return new Vector3(N1.X + (N2.X - N1.X) * t,
+                N1.Y + (N2.Y - N1.Y) * t,
+                N1.Z + (N2.Z - N1.Z) * t);
         }
 
         void drawTex(Polyhedron shape)
