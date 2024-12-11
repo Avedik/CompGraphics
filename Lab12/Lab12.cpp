@@ -270,8 +270,7 @@ int main() {
 
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), 500.0f / 500.0f, 0.1f, 100.0f);
 
-    glm::mat4 MVP = projection * view * model;
-    glm::mat4 mvp = MVP;
+    glm::mat4 mvp = projection * view * model;
 
     while (window.isOpen()) {
 
@@ -281,7 +280,6 @@ int main() {
             if (event.type == sf::Event::Closed) { window.close(); }
             else if (event.type == sf::Event::MouseButtonPressed) {
                 count = (count + 1) % 4;
-                mvp = count == 3 ? glm::mat4(1.0f) : MVP;
 
                 shaderProgram = getShaderProgram(count);
                 getShape(VBO, count);
@@ -306,13 +304,13 @@ int main() {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
                 coef = (coef - 0.1f) >= 0.0f ? (coef - 0.1f) : 0.0f;
 
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
                 changeScales(0, 0.05);
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::K))
                 changeScales(0, -0.05);
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::J))
                 changeScales(-0.05, 0);
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
                 changeScales(0.05, 0);
         }
 
@@ -320,7 +318,7 @@ int main() {
 
         glUseProgram(shaderProgram);
 
-        glm::mat4 mvp = projection * view * model;
+        mvp = count == 3 ? glm::mat4(1.0f) : projection * view * model;
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "matr"), 1, GL_FALSE, glm::value_ptr(mvp));
 
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
