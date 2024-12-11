@@ -136,6 +136,7 @@
     <None Include="tetra_fragment_shader.glsl" />
     <None Include="tetra_vertex_shader.glsl" />
     <None Include="tex_fragment_shader.glsl" />
+    <None Include="two_tex_fragment_shader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

@@ -10,6 +10,5 @@ uniform float coef;
 
 void main()
 {
-      color = coef* vec4(col,1.0f);
-    //color = texture(ourTexture1,TexCoord) * vec4(col,1.0f) * coef;
+      color = texture(ourTexture1,TexCoord) * vec4(col,1.0f) * coef;
 }

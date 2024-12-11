@@ -26,5 +26,6 @@
     <None Include="tex_fragment_shader.glsl" />
     <None Include="circle_fragment_shader.glsl" />
     <None Include="circle_vertex_shader.glsl" />
+    <None Include="two_tex_fragment_shader.glsl" />
   </ItemGroup>
 </Project>

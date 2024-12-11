@@ -10,6 +10,5 @@ uniform float coef;
 
 void main()
 {
-    color = coef* vec4(col,1.0f);
-    //color = mix(texture(ourTexture1, TexCoord), texture(ourTexture2, TexCoord), coef);
+    color = mix(texture(ourTexture1, TexCoord), texture(ourTexture2, TexCoord), coef);
 }
