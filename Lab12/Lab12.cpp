@@ -230,6 +230,7 @@ void getShape(GLuint& VBO, GLuint count) {
 int main() {
     sf::RenderWindow window(sf::VideoMode(500, 500), "Window");
     glewInit();
+    glEnable(GL_DEPTH_TEST);
 
     GLuint tex1;
     GLuint tex2;
@@ -285,6 +286,20 @@ int main() {
                 shaderProgram = getShaderProgram(count);
                 getShape(VBO, count);
             }
+            // Обработка клавиш для перемещения тетраэдра
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+                model = glm::translate(model, glm::vec3(0.0f, 0.1f, 0.0f)); // Движение вверх
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+                model = glm::translate(model, glm::vec3(0.0f, -0.1f, 0.0f)); // Движение вниз
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+                model = glm::translate(model, glm::vec3(-0.1f, 0.0f, 0.0f)); // Движение влево
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+                model = glm::translate(model, glm::vec3(0.1f, 0.0f, 0.0f)); // Движение вправо
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+                model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.1f)); // Движение вперед
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::F))
+                model = glm::translate(model, glm::vec3(0.0f, 0.0f, -0.1f)); // Движение назад
+
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
                 coef = (coef + 0.1f) <= 1.0f ? (coef + 0.1f) : 1.0f;
@@ -304,6 +319,9 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
+
+        glm::mat4 mvp = projection * view * model;
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "matr"), 1, GL_FALSE, glm::value_ptr(mvp));
 
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
