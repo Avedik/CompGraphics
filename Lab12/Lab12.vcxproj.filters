@@ -24,5 +24,7 @@
     <None Include="tetra_fragment_shader.glsl" />
     <None Include="tetra_vertex_shader.glsl" />
     <None Include="tex_fragment_shader.glsl" />
+    <None Include="circle_fragment_shader.glsl" />
+    <None Include="circle_vertex_shader.glsl" />
   </ItemGroup>
 </Project>
