@@ -9,13 +9,7 @@ namespace SecondTask
 { using FastBitmap;
     class Z_buffer
     {
-        /// <summary>
         /// Интерполяция точек
-        /// </summary>
-        /// <param name="x1">Стартовая точка</param>
-        /// <param name="y1">Стартовая точка</param>
-        /// <param name="x2">Конечная точка</param>
-        /// <param name="y2">Конечная точка</param>
         public static List<int> interpolate(int x1, int y1, int x2, int y2)
         {
             List<int> res = new List<int>();
@@ -33,10 +27,6 @@ namespace SecondTask
             return res;
         }
         //растеризация треугольника
-        /// <summary>
-        /// Растеризация треугольника
-        /// </summary>
-        /// <param name="points">Список вершин треугольника</param>
         public static List<Point> Raster(List<Point> points)
         {
             List<Point> res = new List<Point>();
@@ -88,10 +78,6 @@ namespace SecondTask
             return res;
         }
         //разбиение на треугольники
-        /// <summary>
-        /// Разбиение полигона на треугольники
-        /// </summary>
-        /// <param name="points">Список вершин треугольника</param>
         public static List<List<Point>> Triangulate(List<Point> points)
         {
             //если всего 3 точки, то это уже трекгольник
@@ -102,16 +88,11 @@ namespace SecondTask
             }
             for (int i = 2; i < points.Count(); i++)
             {
-                res.Add(new List<Point> { points[0], points[i - 1], points[i] });//points[0]
+                res.Add(new List<Point> { points[0], points[i - 1], points[i] });
             }
             return res;
         }
         //растеризовать фигуру
-        /// <summary>
-        /// Растеризация фигуры
-        /// </summary>
-        /// <param name="figure">Фигура</param>
-        /// <param name="camera">Камера</param>
         public static List<List<Point>> RasterFigure(Shape figure,Camera camera)
         {
             List<List<Point>> res = new List<List<Point>>();
@@ -128,30 +109,21 @@ namespace SecondTask
                 List<List<Point>> triangles = Triangulate(points);//разбили все грани на треугольники
                 foreach (var triangle in triangles)
                 {
-                    currentface.AddRange(Raster(ProjectionToPlane(triangle,camera)));//projection(triangle)
-                    //currentface.AddRange(Raster(triangle));
+                    currentface.AddRange(Raster(ProjectionToPlane(triangle,camera)));
                 }
                 res.Add(currentface);
             }
             return res;
         }
-        /// <summary>
         /// Проецирование точек на экран с учетом камеры и вида проекции
-        /// </summary>
-        /// <param name="points">Список точек</param>
-        /// <param name="camera">Камера</param>
-        public static List<Point> ProjectionToPlane(List<Point> points,Camera camera)//Camera camera,ProjectionType type 
+        public static List<Point> ProjectionToPlane(List<Point> points,Camera camera)
         {
             List<Point> res = new List<Point>();
-           // float c = 1000;
-            //Matrix matrix = new Matrix(4, 4).fill(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -1 / c, 0, 0, 0, 1);//перспективная чисто для начала
             foreach (var p in points)//потом заменить to2D(camera)
             {
                var current = p.to2D(camera);
                 if (current.Item1 != null)
                 {
-                   // Point newpoint = new Point(current.Item1.Value.X, current.Item1.Value.Y,current.Item2);
-                    //var current = transformPoint(p, matrix);
                     var tocamv = camera.toCameraView(p);
                     Point newpoint = new Point(current.Item1.Value.X, current.Item1.Value.Y, tocamv.Zf);
                     res.Add(newpoint);
@@ -159,11 +131,8 @@ namespace SecondTask
             }
             return res;
 
-        }/// <summary>
+        }
          /// Перевод фигуры в то, как ее видит камера
-         /// </summary>
-         /// <param name="figure">Фигура</param>
-         /// <param name="c">Камера</param>
         public static Shape ToCamera(Shape figure, Camera c)
         {
             Shape res = new Shape();
@@ -173,45 +142,29 @@ namespace SecondTask
             }
             return res;
         }
-        /// <summary>
         /// Перевод координат точки согласно матрице
-        /// </summary>
-        /// <param name="p">Точка</param>
-        /// <param name="matrix">Матрица перевода</param>
         public static Point transformPoint(Point p, Matrix matrix)
 
         {
             var matrfrompoint = new Matrix(4, 1).fill(p.Xf, p.Yf, p.Zf, 1);
 
             var matrPoint = matrix * matrfrompoint;//применение преобразования к точке
-                                                   //Point newPoint = new Point(matrPoint[0, 0] / matrPoint[3, 0], matrPoint[1, 0] / matrPoint[3, 0], matrPoint[2, 0] / matrPoint[3, 0]);
             Point newPoint = new Point(matrPoint[0, 0], matrPoint[1, 0], matrPoint[2, 0]);
             return newPoint;
 
         }
-        /// <summary>
         /// Алгоритм z-буфера
-        /// </summary>
-        /// <param name="width">Ширина канваса</param>
-        /// <param name="height">Высота канваса</param>
-        /// <param name="scene">Множество фигур на сцене</param>
-        /// <param name="camera">Камера</param>
-        /// <param name="colors">Список цветов</param>
         public static Bitmap z_buf(int width, int height, List<Shape> scene,Camera camera, List<Color> colors)
         {
            
-           //Bitmap bitmap = new Bitmap(width, height);
             Bitmap canvas = new Bitmap(width, height);
-            //new FastBitmap(bitmap);
             for (int i = 0; i < width; i++)
                 for (int j = 0; j < height; j++)
-                    canvas.SetPixel(i, j, Color.White);//new System.Drawing.Point(i, j)
-            //z-буфер
+                    canvas.SetPixel(i, j, Color.White);
             double[,] zbuffer = new double[width, height];
             for (int i = 0; i < width; i++)
                 for (int j = 0; j < height; j++)
-                    zbuffer[i, j] = double.MaxValue;//Изначально, буфер
-                                                    // инициализируется значением z = zmax
+                    zbuffer[i, j] = double.MaxValue;//буфер инициализируется значением zmax
             List<List<List<Point>>> rasterscene = new List<List<List<Point>>>();
             for (int i = 0; i < scene.Count(); i++)
             {
@@ -228,16 +181,16 @@ namespace SecondTask
                     List<Point> current = rasterscene[i][j];//это грань растеризованная
                     foreach (Point p in current)
                     {
-                        int x = (int)(p.X); //
+                        int x = (int)(p.X);
                      
-                        int y = (int)(p.Y);// + heightmiddle 
+                        int y = (int)(p.Y);
                        ;
                         if (x < width && y < height && y > 0 && x > 0)
                         {
                             if (p.Zf < zbuffer[x, y])
                             {
                                 zbuffer[x, y] = p.Zf;
-                                canvas.SetPixel(x, y, colors[index % colors.Count()]);//canvas.Height - 
+                                canvas.SetPixel(x, y, colors[index % colors.Count()]); 
                             }
 
                         }

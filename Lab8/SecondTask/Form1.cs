@@ -64,7 +64,7 @@ namespace SecondTask
             textShiftY.Enabled = isOn;
             textShiftZ.Enabled = isOn;
             buttonShift.Enabled = isOn;
-            btnShowAxis.Enabled = isOn;
+            //btnShowAxis.Enabled = isOn;
         }
 
         private void listBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -138,19 +138,8 @@ namespace SecondTask
 
         private void z_buffer_Click(object sender, EventArgs e)
         {
-            // colorrange = GenerateColors();
-            // Shape s = Z_buffer.ToCamera(scene[0], camera);
-            // sceneShapes.RemoveAt(0);
-            //sceneShapes.Add(s);
-            // redrawScene();
-            //
-            //List<Shape> vspom=new List<Shape>{ s};
-            // drawShape(s, highlightPen);
+           
             List<Shape> l = sceneShapes.ToList();
-            //canvas.Image = new Bitmap(canvas.Width, canvas.Height);
-            // sceneShapes.Clear();
-            // sceneShapes.Add(l[0]);
-            // redrawScene();
             Bitmap bmp = Z_buffer.z_buf(canvas.Width, canvas.Height, l, camera, colorrange);
             canvas.Image = bmp;
             canvas.Invalidate();

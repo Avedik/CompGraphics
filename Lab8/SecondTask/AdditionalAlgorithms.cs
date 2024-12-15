@@ -128,12 +128,6 @@ namespace SecondTask
                 case "DODECAHEDRON":
                     newShape = new Dodecahedron();
                     break;
-                case "SURFACESEGMENT":
-                    newShape = new SurfaceSegment();
-                    break;
-                case "ROTATIONSHAPE":
-                    newShape = new RotationShape();
-                    break;
                 case "OBJECT":
                     newShape = new ObjectShape();
                     break;

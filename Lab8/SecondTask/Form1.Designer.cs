@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.listBox = new System.Windows.Forms.ListBox();
-            this.btnShowAxis = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -59,18 +58,6 @@
             this.listBox.TabIndex = 1;
             this.listBox.TabStop = false;
             this.listBox.SelectedIndexChanged += new System.EventHandler(this.listBox_SelectedIndexChanged);
-            // 
-            // btnShowAxis
-            // 
-            this.btnShowAxis.Location = new System.Drawing.Point(9, 380);
-            this.btnShowAxis.Margin = new System.Windows.Forms.Padding(1);
-            this.btnShowAxis.Name = "btnShowAxis";
-            this.btnShowAxis.Size = new System.Drawing.Size(141, 25);
-            this.btnShowAxis.TabIndex = 27;
-            this.btnShowAxis.TabStop = false;
-            this.btnShowAxis.Text = "Показать оси";
-            this.btnShowAxis.UseVisualStyleBackColor = true;
-            this.btnShowAxis.Click += new System.EventHandler(this.btnShowAxis_Click);
             // 
             // label6
             // 
@@ -141,7 +128,7 @@
             // buttonShift
             // 
             this.buttonShift.Enabled = false;
-            this.buttonShift.Location = new System.Drawing.Point(34, 192);
+            this.buttonShift.Location = new System.Drawing.Point(34, 200);
             this.buttonShift.Margin = new System.Windows.Forms.Padding(1);
             this.buttonShift.Name = "buttonShift";
             this.buttonShift.Size = new System.Drawing.Size(121, 23);
@@ -154,15 +141,14 @@
             // canvas
             // 
             this.canvas.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.canvas.Dock = System.Windows.Forms.DockStyle.Right;
-            this.canvas.Location = new System.Drawing.Point(200, 0);
+            this.canvas.Dock = System.Windows.Forms.DockStyle.Left;
+            this.canvas.Location = new System.Drawing.Point(0, 0);
             this.canvas.Margin = new System.Windows.Forms.Padding(1);
             this.canvas.Name = "canvas";
             this.canvas.Size = new System.Drawing.Size(807, 491);
             this.canvas.TabIndex = 19;
             this.canvas.TabStop = false;
             this.canvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.canvas_MouseDown);
-            //this.canvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.canvas_MouseMove);
             this.canvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.canvas_MouseUp);
             // 
             // groupBox1
@@ -177,25 +163,24 @@
             this.groupBox1.Controls.Add(this.textShiftY);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.textShiftZ);
-            this.groupBox1.Location = new System.Drawing.Point(9, 10);
+            this.groupBox1.Location = new System.Drawing.Point(810, 10);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(190, 223);
+            this.groupBox1.Size = new System.Drawing.Size(190, 231);
             this.groupBox1.TabIndex = 28;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Сцена";
             // 
             // btnDelete
             // 
             this.btnDelete.Enabled = false;
-            this.btnDelete.Location = new System.Drawing.Point(69, 151);
+            this.btnDelete.Location = new System.Drawing.Point(30, 151);
             this.btnDelete.Margin = new System.Windows.Forms.Padding(2);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(30, 20);
+            this.btnDelete.Size = new System.Drawing.Size(69, 20);
             this.btnDelete.TabIndex = 28;
             this.btnDelete.TabStop = false;
-            this.btnDelete.Text = "🗑️";
+            this.btnDelete.Text = "Удалить";
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
@@ -207,22 +192,22 @@
             this.btnAdd.Size = new System.Drawing.Size(73, 20);
             this.btnAdd.TabIndex = 27;
             this.btnAdd.TabStop = false;
-            this.btnAdd.Text = "Загрузить...";
+            this.btnAdd.Text = "Загрузить";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.Filter = "Текстовые файлы|*.txt";
+            this.openFileDialog1.Filter = "OBJ Files (*.obj)|*.obj";
             this.openFileDialog1.InitialDirectory = "C:\\Code\\3DFacesProcessing\\shapes";
             // 
             // rbPerspective
             // 
             this.rbPerspective.AutoSize = true;
-            this.rbPerspective.BackColor = System.Drawing.SystemColors.Control;
+            this.rbPerspective.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.rbPerspective.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.rbPerspective.Checked = true;
-            this.rbPerspective.Location = new System.Drawing.Point(26, 235);
+            this.rbPerspective.Location = new System.Drawing.Point(827, 244);
             this.rbPerspective.Margin = new System.Windows.Forms.Padding(1);
             this.rbPerspective.Name = "rbPerspective";
             this.rbPerspective.Size = new System.Drawing.Size(155, 17);
@@ -234,9 +219,9 @@
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.BackColor = System.Drawing.SystemColors.Control;
+            this.radioButton1.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.radioButton1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.radioButton1.Location = new System.Drawing.Point(26, 253);
+            this.radioButton1.Location = new System.Drawing.Point(827, 261);
             this.radioButton1.Margin = new System.Windows.Forms.Padding(1);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(122, 17);
@@ -247,7 +232,7 @@
             // 
             // z_buffer
             // 
-            this.z_buffer.Location = new System.Drawing.Point(9, 408);
+            this.z_buffer.Location = new System.Drawing.Point(823, 296);
             this.z_buffer.Margin = new System.Windows.Forms.Padding(2);
             this.z_buffer.Name = "z_buffer";
             this.z_buffer.Size = new System.Drawing.Size(141, 25);
@@ -260,12 +245,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(1007, 491);
             this.Controls.Add(this.z_buffer);
             this.Controls.Add(this.radioButton1);
             this.Controls.Add(this.rbPerspective);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.btnShowAxis);
             this.Controls.Add(this.canvas);
             this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(2);
@@ -282,7 +267,6 @@
 
         #endregion
         private System.Windows.Forms.ListBox listBox;
-        private System.Windows.Forms.Button btnShowAxis;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
