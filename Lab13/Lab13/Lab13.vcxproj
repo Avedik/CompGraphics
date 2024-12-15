@@ -129,6 +129,12 @@
   <ItemGroup>
     <ClCompile Include="Lab13.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="center_fragment_shader.glsl" />
+    <None Include="center_vertex_shader.glsl" />
+    <None Include="object_fragment_shader.glsl" />
+    <None Include="object_vertex_shader.glsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

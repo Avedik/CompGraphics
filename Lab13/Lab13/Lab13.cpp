@@ -12,6 +12,73 @@
 #define _USE_MATH_DEFINES
 #include "math.h"
 
+struct Camera {
+    glm::vec3 position; // Позиция камеры
+    glm::vec3 front;    // Направление взгляда
+    glm::vec3 up;       // Вектор "вверх"
+    float yaw;          // Угол поворота по горизонтали
+    float pitch;        // Угол поворота по вертикали
+    float movementSpeed; // Скорость движения
+    float mouseSensitivity; // Чувствительность мыши
+
+    Camera(glm::vec3 startPos)
+        : position(startPos), front(glm::vec3(0.0f, 0.0f, -1.0f)), up(glm::vec3(0.0f, 1.0f, 0.0f)),
+        yaw(-90.0f), pitch(0.0f), movementSpeed(2.5f), mouseSensitivity(0.1f) {
+        updateCameraVectors();
+    }
+
+    void updateCameraVectors() {
+        glm::vec3 front;
+        front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+        front.y = sin(glm::radians(pitch));
+        front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+        this->front = glm::normalize(front);
+        glm::vec3 right = glm::normalize(glm::cross(this->front, glm::vec3(0.0f, 1.0f, 0.0f)));
+        this->up = glm::normalize(glm::cross(right, this->front)); // Пересчет вектора "вверх"
+    }
+
+    void processKeyboardInput(sf::Keyboard::Key key, float deltaTime) {
+        float velocity = movementSpeed * deltaTime;
+        if (key == sf::Keyboard::W)
+            position += front * velocity; // Вперёд
+        if (key == sf::Keyboard::S)
+            position -= front * velocity; // Назад
+        if (key == sf::Keyboard::A)
+            position -= glm::normalize(glm::cross(front, up)) * velocity; // Влево
+        if (key == sf::Keyboard::D)
+            position += glm::normalize(glm::cross(front, up)) * velocity; // Вправо
+        if (key == sf::Keyboard::Up)
+            position += up * velocity; // Вверх
+        if (key == sf::Keyboard::Down)
+            position -= up * velocity; // Вниз
+        updateCameraVectors();
+    }
+
+    void rotateCamera(float yawOffset, float pitchOffset) {
+        yaw += yawOffset;
+        pitch += pitchOffset;
+
+        // pitch ограничен только для предотвращения инверсии
+        if (pitch > 89.0f)
+            pitch = 89.0f;
+        if (pitch < -89.0f)
+            pitch = -89.0f;
+
+        // Обеспечение 360-градусного поворота по yaw
+        if (yaw < 0.0f)
+            yaw += 360.0f;
+        if (yaw >= 360.0f)
+            yaw -= 360.0f;
+
+        updateCameraVectors();
+    }
+
+    glm::mat4 getViewMatrix() {
+        return glm::lookAt(position, position + front, up);
+    }
+};
+
+
 std::vector<std::vector<GLfloat>> verts;
 std::vector<std::vector<GLfloat>> texs;
 std::vector<std::vector<GLfloat>> normals;
@@ -236,7 +303,6 @@ int main() {
     createShape(vboCenter, vaoCenter, 0);
     createShape(vboObj, vaoObj, 1);
 
-
     GLuint* tex = &texCenter;
     for (std::string filename : {"container.jpg", "container.jpg"})
     {
@@ -269,27 +335,44 @@ int main() {
 
     glm::mat4 mvp = projection * view * model;
 
+    Camera camera(glm::vec3(-3.0f, 0.0f, 10.0f)); // Начальная позиция камеры
+
     while (window.isOpen()) {
 
         sf::Event event;
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed) { window.close(); }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-                std::cerr << "W" << std::endl; // движение вперёд
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-                std::cerr << "S" << std::endl; // движение назад
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-                std::cerr << "A" << std::endl; // движение влево
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-                std::cerr << "D" << std::endl; // движение вправо
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
-                std::cerr << "R" << std::endl; // поворот вертикально
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::F))
-                std::cerr << "F" << std::endl; // поворот горизонтально
         }
+        // Обработка ввода
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+            camera.processKeyboardInput(sf::Keyboard::W, 0.1f); // движение вперёд
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+            camera.processKeyboardInput(sf::Keyboard::S, 0.1f); // движение назад
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+            camera.processKeyboardInput(sf::Keyboard::A, 0.1f); // движение влево
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+            camera.processKeyboardInput(sf::Keyboard::D, 0.1f); // движение вправо
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+            camera.processKeyboardInput(sf::Keyboard::Up, 0.1f); // движение вверх
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+            camera.processKeyboardInput(sf::Keyboard::Down, 0.1f); // движение вниз
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) // Клавиша для горизонтального поворота
+            camera.rotateCamera(1.0f, 0.0f); // Поворот вправо
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::F)) // Клавиша для вертикального поворота
+            camera.rotateCamera(0.0f, 1.0f); // Поворот вверх
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::G)) // Клавиша для вертикального поворота вниз
+            camera.rotateCamera(0.0f, -1.0f); // Поворот вниз
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // Обновление матрицы вида
+        glm::mat4 view = camera.getViewMatrix();
+        glm::mat4 model = glm::mat4(1.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+        glm::mat4 mvp = projection * view * model;
+
 
         glUseProgram(shaderCenterProgram);
         glUniformMatrix4fv(glGetUniformLocation(shaderCenterProgram, "matr"), 1, GL_FALSE, glm::value_ptr(mvp));
