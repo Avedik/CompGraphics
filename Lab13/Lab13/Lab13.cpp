@@ -7,7 +7,7 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
-#include <SOIL/SOIL.h>
+#include <SOIL.h>
 
 #define _USE_MATH_DEFINES // для использования математических констант
 #include <math.h>
@@ -135,7 +135,7 @@ void loadOBJ(const std::string filename) {
 
     std::string str;
     GLfloat numb;
-    GLint intNumb; 
+    GLint intNumb;
 
     while (sstr >> str) {
         if (str == "v") { // Если строка начинается с 'v' (вершина)
@@ -196,7 +196,7 @@ void loadOBJ(const std::string filename) {
         // Добавление текстурных координат
         if (indTexs[num][i] != -1) {
             figures[num].push_back(texs[num][2 * indTexs[num][i]]);
-            figures[num].push_back(texs[num][2 * indTexs[num][i] + 1]);
+            figures[num].push_back(1.0 - texs[num][2 * indTexs[num][i] + 1]);
         }
         else {
             figures[num].push_back(0); // Если текстурные координаты отсутствуют, добавляем 0
@@ -268,8 +268,8 @@ void createShape(GLuint& VBO, GLuint& VAO, GLuint ind) {
 
 void initPlanets() {
     // Добавление планет с их параметрами (расстояние, размер, скорость орбиты, скорость вращения, углы)
-    planets.push_back({ 2.0f, 0.1f, 0.02f, 0.5f, 0.0f, 0.0f });
-    planets.push_back({ 3.0f, 0.15f, 0.015f, 0.4f, 0.0f, 0.0f });
+    planets.push_back({ 16.0f, 0.6f, 0.02f, 0.5f, 0.0f, 0.0f });
+    planets.push_back({ 25.0f, 0.8f, 0.015f, 0.4f, 0.0f, 0.0f });
 }
 
 int main() {
@@ -290,21 +290,23 @@ int main() {
     int h = 512; // Высота текстуры
 
     glEnable(GL_TEXTURE_2D); // Включение текстурирования
+
+
     // Создание шейдерной программы для Солнца
     GLuint shaderCenterProgram = createShaderProgram("center_vertex_shader.glsl", "center_fragment_shader.glsl");
     // Создание шейдерной программы для планет
     GLuint shaderObjectProgram = createShaderProgram("object_vertex_shader.glsl", "object_fragment_shader.glsl");
 
     // Загрузка моделей для Солнца и планет
-    loadOBJ("sphere.obj"); // Солнце
-    loadOBJ("cube.obj");   // Планеты
+    loadOBJ("dino.obj"); // Солнце
+    loadOBJ("wolf.obj");   // Планеты
 
     // Создание VAO и VBO для Солнца и планет
     createShape(vboCenter, vaoCenter, 0);
     createShape(vboObj, vaoObj, 1);
 
     GLuint* tex = &texCenter;
-    for (std::string filename : {"container.jpg", "container.jpg"})
+    for (std::string filename : {"dino.png", "wolf.png"})
     {
         unsigned char* image = SOIL_load_image(filename.c_str(), &w, &h, 0, SOIL_LOAD_RGB);
         glGenTextures(1, tex);
@@ -348,15 +350,15 @@ int main() {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) // Клавиша для горизонтального поворота
             camera.rotateCamera(1.0f, 0.0f); // Поворот вправо
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::F)) // Клавиша для вертикального поворота
-            camera.rotateCamera(0.0f, 1.0f); // Поворот вверх
+            camera.rotateCamera(0.0f, 0.05f); // Поворот вверх
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::G)) // Клавиша для вертикального поворота вниз
-            camera.rotateCamera(0.0f, -1.0f); // Поворот вниз
+            camera.rotateCamera(0.0f, -0.05f); // Поворот вниз
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Обновление угла вращения центрального объекта ("Солнца")
         sunRotationAngle += 0.1f;
-        if (sunRotationAngle >= 360.0f) 
+        if (sunRotationAngle >= 360.0f)
             sunRotationAngle -= 360.0f; // Сброс угла вращения
 
         // Обновление матрицы вида
@@ -381,7 +383,7 @@ int main() {
                 planet.orbitAngle -= 360.0f;
 
             planet.rotationAngle += planet.rotationSpeed; // Обновление угла вращения
-            if (planet.rotationAngle > 360.0f) 
+            if (planet.rotationAngle > 360.0f)
                 planet.rotationAngle -= 360.0f; // Сброс угла вращения
 
             glm::mat4 planetModel = glm::mat4(1.0f);
