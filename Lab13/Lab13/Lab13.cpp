@@ -9,56 +9,60 @@
 #include <sstream>
 #include <SOIL/SOIL.h>
 
-#define _USE_MATH_DEFINES
-#include "math.h"
+#define _USE_MATH_DEFINES // для использования математических констант
+#include <math.h>
 
+// Структура для представления камеры в 3D пространстве
 struct Camera {
-    glm::vec3 position; // Позиция камеры
-    glm::vec3 front;    // Направление взгляда
-    glm::vec3 up;       // Вектор "вверх"
+    glm::vec3 position; // Позиция камеры в мировых координатах
+    glm::vec3 front;    // Направление взгляда камеры
+    glm::vec3 up;       // Вектор "вверх" для камеры
     float yaw;          // Угол поворота по горизонтали
     float pitch;        // Угол поворота по вертикали
-    float movementSpeed; // Скорость движения
-    float mouseSensitivity; // Чувствительность мыши
+    float movementSpeed; // Скорость движения камеры
 
+    // Конструктор камеры, инициализирует позицию и векторы
     Camera(glm::vec3 startPos)
         : position(startPos), front(glm::vec3(0.0f, 0.0f, -1.0f)), up(glm::vec3(0.0f, 1.0f, 0.0f)),
-        yaw(-90.0f), pitch(0.0f), movementSpeed(2.5f), mouseSensitivity(0.1f) {
-        updateCameraVectors();
+        yaw(-90.0f), pitch(0.0f), movementSpeed(0.5f) {
+        updateCameraVectors(); // Обновление векторов камеры
     }
 
+    // Функция для обновления направления взгляда и вектора "вверх"
     void updateCameraVectors() {
-        glm::vec3 front;
-        front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-        front.y = sin(glm::radians(pitch));
-        front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-        this->front = glm::normalize(front);
-        glm::vec3 right = glm::normalize(glm::cross(this->front, glm::vec3(0.0f, 1.0f, 0.0f)));
+        glm::vec3 front; // Вектор направления взгляда
+        front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch)); // Вычисление направления по оси X
+        front.y = sin(glm::radians(pitch)); // Вычисление направления по оси Y
+        front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch)); // Вычисление направления по оси Z
+        this->front = glm::normalize(front); // Нормализация вектора направления взгляда
+        glm::vec3 right = glm::normalize(glm::cross(this->front, glm::vec3(0.0f, 1.0f, 0.0f))); // Вычисление вектора "право"
         this->up = glm::normalize(glm::cross(right, this->front)); // Пересчет вектора "вверх"
     }
 
+    // Функция для обработки ввода с клавиатуры и перемещения камеры
     void processKeyboardInput(sf::Keyboard::Key key, float deltaTime) {
-        float velocity = movementSpeed * deltaTime;
+        float velocity = movementSpeed * deltaTime; // Вычисление скорости перемещения
         if (key == sf::Keyboard::W)
-            position += front * velocity; // Вперёд
+            position += front * velocity; // Движение вперёд
         if (key == sf::Keyboard::S)
-            position -= front * velocity; // Назад
+            position -= front * velocity; // Движение назад
         if (key == sf::Keyboard::A)
-            position -= glm::normalize(glm::cross(front, up)) * velocity; // Влево
+            position -= glm::normalize(glm::cross(front, up)) * velocity; // Движение влево
         if (key == sf::Keyboard::D)
-            position += glm::normalize(glm::cross(front, up)) * velocity; // Вправо
+            position += glm::normalize(glm::cross(front, up)) * velocity; // Движение вправо
         if (key == sf::Keyboard::Up)
-            position += up * velocity; // Вверх
+            position += up * velocity; // Движение вверх
         if (key == sf::Keyboard::Down)
-            position -= up * velocity; // Вниз
-        updateCameraVectors();
+            position -= up * velocity; // Движение вниз
+        updateCameraVectors(); // Обновление векторов камеры
     }
 
+    // Функция для вращения камеры
     void rotateCamera(float yawOffset, float pitchOffset) {
-        yaw += yawOffset;
-        pitch += pitchOffset;
+        yaw += yawOffset; // Обновление угла поворота по горизонтали
+        pitch += pitchOffset; // Обновление угла поворота по вертикали
 
-        // pitch ограничен только для предотвращения инверсии
+        // Ограничение угла поворота по вертикали для предотвращения инверсии
         if (pitch > 89.0f)
             pitch = 89.0f;
         if (pitch < -89.0f)
@@ -73,43 +77,46 @@ struct Camera {
         updateCameraVectors();
     }
 
+    // Функция для получения матрицы вида
     glm::mat4 getViewMatrix() {
         return glm::lookAt(position, position + front, up);
     }
 };
 
+struct Planet {
+    float distance;      // Расстояние от Солнца
+    float size;          // Размер планеты
+    float orbitSpeed;    // Скорость орбитального вращения
+    float rotationSpeed; // Скорость вращения вокруг своей оси
+    float orbitAngle;    // Текущий угол на орбите
+    float rotationAngle; // Текущий угол вращения вокруг своей оси
+    GLuint texture;      // Текстура планеты
+};
 
-std::vector<std::vector<GLfloat>> verts;
-std::vector<std::vector<GLfloat>> texs;
-std::vector<std::vector<GLfloat>> normals;
-std::vector<std::vector<GLint>> indVerts;
-std::vector<std::vector<GLint>> indTexs;
-std::vector<std::vector<GLint>> indNorms;
+std::vector<Planet> planets;
+
+std::vector<std::vector<GLfloat>> verts; // Вершины
+std::vector<std::vector<GLfloat>> texs; // Текстурные координаты
+std::vector<std::vector<GLfloat>> normals; // Нормали
+std::vector<std::vector<GLint>> indVerts; // Индексы вершин
+std::vector<std::vector<GLint>> indTexs; // Индексы текстур
+std::vector<std::vector<GLint>> indNorms; // Индексы нормалей
 
 std::vector<std::vector<GLfloat>> figures;
 
 GLuint vboInstance;
-glm::vec2 translations[7] = { glm::vec3(0.0, 0.0, 0.0),
-                              glm::vec3(1.0, 0.0, 0.0),
-                              glm::vec3(0.0, 1.0, 0.0),
-                              glm::vec3(0.0, 0.0, 1.0),
-                              glm::vec3(1.0, 1.0, 0.0),
-                              glm::vec3(1.0, 0.0, 1.0),
-                              glm::vec3(0.0, 1.0, 1.0) };
 
-std::string readAllFile(const std::string filename)
-{
+std::string readAllFile(const std::string filename) {
     std::fstream fs(filename);
     std::ostringstream sstr;
     sstr << fs.rdbuf();
     return sstr.str();
 }
 
-// Функция загрузки модели из OBJ файла
-void loadOBJ(const std::string filename)
-{
+void loadOBJ(const std::string filename) {
     GLint num = verts.size();
 
+    // Инициализация векторов для новой модели
     verts.push_back(std::vector<GLfloat>());
     texs.push_back(std::vector<GLfloat>());
     normals.push_back(std::vector<GLfloat>());
@@ -118,8 +125,7 @@ void loadOBJ(const std::string filename)
     indNorms.push_back(std::vector<GLint>());
 
     std::fstream obj(filename);
-    if (!obj.is_open())
-    {
+    if (!obj.is_open()) {
         std::cerr << "Не удалось загрузить obj файл" << std::endl;
         return;
     }
@@ -129,88 +135,80 @@ void loadOBJ(const std::string filename)
 
     std::string str;
     GLfloat numb;
-    GLint intNumb;
+    GLint intNumb; 
 
-    while (sstr >> str)
-    {
-        if (str == "v")
-        {
-            sstr >> numb;
+    while (sstr >> str) {
+        if (str == "v") { // Если строка начинается с 'v' (вершина)
+            sstr >> numb; // Чтение координаты X
             verts[num].push_back(numb);
-            sstr >> numb;
+            sstr >> numb; // Чтение координаты Y
             verts[num].push_back(numb);
-            sstr >> numb;
+            sstr >> numb; // Чтение координаты Z
             verts[num].push_back(numb);
         }
 
-        if (str == "vn")
-        {
-            sstr >> numb;
+        if (str == "vn") { // Если строка начинается с 'vn' (нормаль)
+            sstr >> numb; // Чтение нормали по X
             normals[num].push_back(numb);
-            sstr >> numb;
+            sstr >> numb; // Чтение нормали по Y
             normals[num].push_back(numb);
-            sstr >> numb;
+            sstr >> numb; // Чтение нормали по Z
             normals[num].push_back(numb);
         }
 
-        if (str == "vt")
-        {
-            sstr >> numb;
+        if (str == "vt") { // Если строка начинается с 'vt' (текстурная координата)
+            sstr >> numb; // Чтение текстурной координаты U
             texs[num].push_back(numb);
-            sstr >> numb;
+            sstr >> numb; // Чтение текстурной координаты V
             texs[num].push_back(numb);
         }
 
-        if (str == "f")
-        {
-            for (int i = 0; i < 3; ++i)
-            {
-                sstr >> intNumb;
-                indVerts[num].push_back(intNumb - 1);
-                sstr >> str;
-                if (str[0] == '/' && str[1] == '/')
-                {
-                    indNorms[num].push_back(stoi(str.substr(2)) - 1);
-                    indTexs[num].push_back(-1);
+        if (str == "f") { // Если строка начинается с 'f' (фигура)
+            for (int i = 0; i < 3; ++i) { // Обработка треугольника (3 вершины)
+                sstr >> intNumb; // Чтение индекса вершины
+                indVerts[num].push_back(intNumb - 1); // Сохранение индекса вершины (с учетом смещения)
+                sstr >> str; // Чтение текстурного индекса
+                if (str[0] == '/' && str[1] == '/') { // Если текстурный индекс отсутствует
+                    indNorms[num].push_back(stoi(str.substr(2)) - 1); // Сохранение индекса нормали
+                    indTexs[num].push_back(-1); // Отметка отсутствия текстурного индекса
                 }
-                else
-                {
-                    indTexs[num].push_back(stoi(str.substr(1, str.find('/', 1) - 1)) - 1);
-                    indNorms[num].push_back(stoi(str.substr(str.find('/', str.find('/', 1)) + 1)) - 1);
+                else { // Если текстурный индекс присутствует
+                    indTexs[num].push_back(stoi(str.substr(1, str.find('/', 1) - 1)) - 1); // Сохранение текстурного индекса
+                    indNorms[num].push_back(stoi(str.substr(str.find('/', str.find('/', 1)) + 1)) - 1); // Сохранение индекса нормали
                 }
             }
-            //4
         }
     }
+
+    // Создание фигуры на основе загруженных данных
     figures.push_back(std::vector<GLfloat>());
-    for (int i = 0; i < indVerts[num].size(); ++i)
-    {
+    for (int i = 0; i < indVerts[num].size(); ++i) {
+        // Добавление координат вершин
         figures[num].push_back(verts[num][3 * indVerts[num][i]]);
         figures[num].push_back(verts[num][3 * indVerts[num][i] + 1]);
         figures[num].push_back(verts[num][3 * indVerts[num][i] + 2]);
 
+        // Добавление нормалей
         figures[num].push_back(normals[num][3 * indNorms[num][i]]);
         figures[num].push_back(normals[num][3 * indNorms[num][i] + 1]);
         figures[num].push_back(normals[num][3 * indNorms[num][i] + 2]);
 
-        if (indTexs[num][i] != -1)
-        {
+        // Добавление текстурных координат
+        if (indTexs[num][i] != -1) {
             figures[num].push_back(texs[num][2 * indTexs[num][i]]);
             figures[num].push_back(texs[num][2 * indTexs[num][i] + 1]);
         }
-        else
-        {
-            figures[num].push_back(0);
+        else {
+            figures[num].push_back(0); // Если текстурные координаты отсутствуют, добавляем 0
             figures[num].push_back(0);
         }
-
     }
 }
 
 GLuint compileShader(const GLchar* source, GLenum type) {
-    GLuint shader = glCreateShader(type);
-    glShaderSource(shader, 1, &source, nullptr);
-    glCompileShader(shader);
+    GLuint shader = glCreateShader(type); // Создание шейдера
+    glShaderSource(shader, 1, &source, nullptr); // Привязка исходного кода шейдера
+    glCompileShader(shader); // Компиляция шейдера
 
     GLint success;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
@@ -219,7 +217,7 @@ GLuint compileShader(const GLchar* source, GLenum type) {
         glGetShaderInfoLog(shader, 512, nullptr, infoLog);
         std::cerr << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
-    return shader;
+    return shader; // Возврат ID скомпилированного шейдера
 }
 
 GLuint createShaderProgram(const std::string vShader, const std::string frShader) {
@@ -243,63 +241,65 @@ GLuint createShaderProgram(const std::string vShader, const std::string frShader
     return shaderProgram;
 }
 
+// Функция для создания фигуры (VAO и VBO)
 void createShape(GLuint& VBO, GLuint& VAO, GLuint ind) {
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
     glGenBuffers(1, &VBO);
-
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
+    // Передача данных вершин в VBO
     glBufferData(GL_ARRAY_BUFFER, figures[ind].size() * sizeof(GLfloat), figures[ind].data(), GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
+    // Установка указателей для атрибутов вершин
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0); // Позиции
     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat))); // Нормали
     glEnableVertexAttribArray(1);
 
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat))); // Текстурные координаты
     glEnableVertexAttribArray(2);
-
-    if (ind == 1)
-    {
-        glGenBuffers(1, &vboInstance);
-        glBindBuffer(GL_ARRAY_BUFFER, vboInstance);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * 7, &translations[0], GL_STATIC_DRAW);
-        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
-        glEnableVertexAttribArray(3);
-        glVertexAttribDivisor(3, 1);
-    }
 
     glBindBuffer(GL_ARRAY_BUFFER, NULL);
     glBindVertexArray(0);
 }
 
+void initPlanets() {
+    // Добавление планет с их параметрами (расстояние, размер, скорость орбиты, скорость вращения, углы)
+    planets.push_back({ 2.0f, 0.1f, 0.02f, 0.5f, 0.0f, 0.0f });
+    planets.push_back({ 3.0f, 0.15f, 0.015f, 0.4f, 0.0f, 0.0f });
+}
+
 int main() {
-    sf::RenderWindow window(sf::VideoMode(500, 500), "Window");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Window");
     glewInit();
     glEnable(GL_DEPTH_TEST);
 
-    GLuint vboCenter;
-    GLuint vaoCenter;
+    GLuint vboCenter; // Переменная для хранения VBO центрального объекта ("Солнца")
+    GLuint vaoCenter; // Переменная для хранения VAO центрального объекта ("Солнца")
 
-    GLuint vboObj;
-    GLuint vaoObj;
+    GLuint vboObj; // Переменная для хранения VBO планет
+    GLuint vaoObj; // Переменная для хранения VAO планет
 
-    GLuint texCenter;
-    GLuint texObj;
+    GLuint texCenter; // Переменная для хранения текстуры центрального объекта ("Солнца")
+    GLuint texObj; // Переменная для хранения текстуры планет
 
-    int w = 512;
-    int h = 512;
+    int w = 512; // Ширина текстуры
+    int h = 512; // Высота текстуры
 
-    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_TEXTURE_2D); // Включение текстурирования
+    // Создание шейдерной программы для Солнца
     GLuint shaderCenterProgram = createShaderProgram("center_vertex_shader.glsl", "center_fragment_shader.glsl");
+    // Создание шейдерной программы для планет
     GLuint shaderObjectProgram = createShaderProgram("object_vertex_shader.glsl", "object_fragment_shader.glsl");
 
-    loadOBJ("sphere.obj");
-    loadOBJ("cube.obj");
+    // Загрузка моделей для Солнца и планет
+    loadOBJ("sphere.obj"); // Солнце
+    loadOBJ("cube.obj");   // Планеты
 
+    // Создание VAO и VBO для Солнца и планет
     createShape(vboCenter, vaoCenter, 0);
     createShape(vboObj, vaoObj, 1);
 
@@ -310,41 +310,28 @@ int main() {
         glGenTextures(1, tex);
         glBindTexture(GL_TEXTURE_2D, *tex);
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Установка параметров текстурирования
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, image); // Передача данных текстуры
 
         SOIL_free_image_data(image);
         tex = &texObj;
     }
 
-    glBindBuffer(GL_TEXTURE_2D, NULL);
+    initPlanets();
 
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+    Camera camera(glm::vec3(0.0f, 0.0f, 10.0f)); // Начальная позиция камеры
 
-    glm::mat4 view = glm::lookAt(
-        glm::vec3(5.0f, 5.0f, -5.0f),
-        glm::vec3(0.0f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 1.0f, 0.0f)
-    );
-
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 500.0f / 500.0f, 0.1f, 100.0f);
-
-    glm::mat4 mvp = projection * view * model;
-
-    Camera camera(glm::vec3(-3.0f, 0.0f, 10.0f)); // Начальная позиция камеры
+    float sunRotationAngle = 0.0f; // Угол вращения Солнца
 
     while (window.isOpen()) {
-
         sf::Event event;
-        while (window.pollEvent(event))
-        {
+        while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) { window.close(); }
         }
-        // Обработка ввода
+
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
             camera.processKeyboardInput(sf::Keyboard::W, 0.1f); // движение вперёд
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
@@ -367,40 +354,49 @@ int main() {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // Обновление угла вращения центрального объекта ("Солнца")
+        sunRotationAngle += 0.1f;
+        if (sunRotationAngle >= 360.0f) 
+            sunRotationAngle -= 360.0f; // Сброс угла вращения
+
         // Обновление матрицы вида
         glm::mat4 view = camera.getViewMatrix();
-        glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-        glm::mat4 mvp = projection * view * model;
+        glm::mat4 mvp = projection * view;
 
-
+        // Отрисовка "Солнца"
         glUseProgram(shaderCenterProgram);
-        glUniformMatrix4fv(glGetUniformLocation(shaderCenterProgram, "matr"), 1, GL_FALSE, glm::value_ptr(mvp));
+        glm::mat4 sunModel = glm::mat4(1.0f);
+        sunModel = glm::rotate(sunModel, glm::radians(sunRotationAngle), glm::vec3(0.0f, 1.0f, 0.0f));
+        glUniformMatrix4fv(glGetUniformLocation(shaderCenterProgram, "matr"), 1, GL_FALSE, glm::value_ptr(mvp * sunModel));
 
         glBindVertexArray(vaoCenter);
-        glBindBuffer(GL_ARRAY_BUFFER, vboCenter);
-        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texCenter);
-
         glDrawArrays(GL_TRIANGLES, 0, figures[0].size() / 8);
 
-        glBindVertexArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, NULL);
-        glUseProgram(0);
+        // Обновление и отрисовка планет
+        for (auto& planet : planets) {
+            planet.orbitAngle += planet.orbitSpeed; // Обновление угла орбиты
+            if (planet.orbitAngle > 360.0f)
+                planet.orbitAngle -= 360.0f;
 
-        glUseProgram(shaderObjectProgram);
-        glUniformMatrix4fv(glGetUniformLocation(shaderObjectProgram, "matr"), 1, GL_FALSE, glm::value_ptr(mvp));
+            planet.rotationAngle += planet.rotationSpeed; // Обновление угла вращения
+            if (planet.rotationAngle > 360.0f) 
+                planet.rotationAngle -= 360.0f; // Сброс угла вращения
 
-        glBindVertexArray(vaoObj);
-        glBindBuffer(GL_ARRAY_BUFFER, vboObj);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, texObj);
+            glm::mat4 planetModel = glm::mat4(1.0f);
+            planetModel = glm::translate(planetModel, glm::vec3(cos(glm::radians(planet.orbitAngle)) * planet.distance, 0.0f, sin(glm::radians(planet.orbitAngle)) * planet.distance)); // Положение на орбите
+            planetModel = glm::scale(planetModel, glm::vec3(planet.size)); // Установка размера планеты
 
-        glDrawArraysInstanced(GL_TRIANGLES, 0, figures[1].size() / 8, 7);
+            // Установка вращения планеты вокруг своей оси
+            planetModel = glm::rotate(planetModel, glm::radians(planet.rotationAngle), glm::vec3(0.0f, 1.0f, 0.0f));
 
-        glBindVertexArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, NULL);
-        glUseProgram(0);
+            glUseProgram(shaderObjectProgram);
+            glUniformMatrix4fv(glGetUniformLocation(shaderObjectProgram, "matr"), 1, GL_FALSE, glm::value_ptr(mvp * planetModel)); // Установка MVP матрицы
+            glBindVertexArray(vaoObj);
+            glBindTexture(GL_TEXTURE_2D, texObj); // Установка текстуры планеты
+            glDrawArrays(GL_TRIANGLES, 0, figures[1].size() / 8); // Отрисовка планеты
+        }
 
         window.display();
     }
