@@ -274,6 +274,17 @@ namespace _3DVisualization
             return 0;
         }
 
+        public Vector3 getVertexNormal(Point p)
+        {
+            Vector3 point = p.toVector3();
+
+            foreach (Vertex vertex in vertices)
+                if (vertex.Position.Equals(point))
+                    return vertex.Normal;
+
+            return new Vector3();
+        }
+
         // Получение центра тяжести многогранника
         public Point getCenter()
         {

@@ -282,7 +282,7 @@ namespace _3DVisualization
                     int x1 = pair.Value[i].Item1;
                     int x2 = pair.Value[i + 1].Item1;
 
-                    for (int x = x1; x < x2; x++)
+                    for (int x = x1; x <= x2; x++)
                     {
                         fastBitmap[x, bitmap.Height - pair.Key] = vertexColor(x, pair.Key,
                             x2 == x1 ? pair.Value[i].Item2 :
@@ -296,15 +296,7 @@ namespace _3DVisualization
 
         void rasterizePolygonFong(Polyhedron shape, Polygon face, FastBitmap.FastBitmap fastBitmap)
         {
-            List<Vector3> normalVrtcs = new List<Vector3> { new Vector3(), new Vector3(), new Vector3(), new Vector3(), new Vector3() };
             List<(Point2D, Point2D)> edges2D = new List<(Point2D, Point2D)>();
-
-            foreach (Vertex vert in shape.Vertices)
-            {
-                for (int i = 0; i < face.Points.Count(); ++i)
-                    if (vert.Position.X == face.Points[i].X && vert.Position.Y == face.Points[i].Y && vert.Position.Z == face.Points[i].Z)
-                        normalVrtcs[i] = vert.Normal;
-            }
 
             // Получаем рёбра
             Point prev = face.Points.First();
@@ -314,12 +306,12 @@ namespace _3DVisualization
             for (int i = 1; i < pointCount; i++)
             {
                 current = face.Points[i];
-                edges2D.Add((new Point2D(prev.to2D(c), normalVrtcs[i-1]),
-                    new Point2D(current.to2D(c), normalVrtcs[i])));
+                edges2D.Add((new Point2D(prev.to2D(c), shape.getVertexNormal(prev)),
+                    new Point2D(current.to2D(c), shape.getVertexNormal(current))));
                 prev = current;
             }
-            edges2D.Add((new Point2D(prev.to2D(c), normalVrtcs[face.Points.Count() - 1]),
-                    new Point2D(face.Points.First().to2D(c), normalVrtcs.First())));
+            edges2D.Add((new Point2D(prev.to2D(c), shape.getVertexNormal(prev)),
+                    new Point2D(face.Points.First().to2D(c), shape.getVertexNormal(face.Points.First()))));
 
             // Первый шаг алгоритма растеризации (со списком рёберных точек)
             Dictionary<int, List<(int, Vector3)>> segments = new Dictionary<int, List<(int, Vector3)>>();
@@ -378,9 +370,11 @@ namespace _3DVisualization
                     int x1 = pair.Value[i].Item1;
                     int x2 = pair.Value[i+1].Item1;
 
-                    for (int x = x1; x < x2; x++)
+                    for (int x = x1; x <= x2; x++)
                     {
-                        Vector3 n = Vector3.Normalize(linInterpolForNormal(pair.Value[i].Item2, pair.Value[i+1].Item2, 1f * (x - x1) / (x2 - x1)));
+                        Vector3 n = Vector3.Normalize(linInterpolForNormal(pair.Value[i].Item2, pair.Value[i+1].Item2,
+                            x2 == x1 ? 0 :
+                            1f * (x - x1) / (x2 - x1)));
                         fastBitmap[x, bitmap.Height - pair.Key] = 
                             fongColor(x, pair.Key, calculateVertexIntensity(n), 0.2 + Math.Max(Vector3.Dot(n, lightDirection), 0.0));
                     }
