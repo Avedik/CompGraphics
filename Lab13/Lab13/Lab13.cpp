@@ -7,7 +7,7 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
-#include <SOIL.h>
+#include <SOIL/SOIL.h>
 
 #define _USE_MATH_DEFINES // для использования математических констант
 #include <math.h>
@@ -40,7 +40,7 @@ struct Camera {
     }
 
     // Функция для обработки ввода с клавиатуры и перемещения камеры
-    void processKeyboardInput(sf::Keyboard::Key key, float deltaTime) {
+    void moveCamera(sf::Keyboard::Key key, float deltaTime) {
         float velocity = movementSpeed * deltaTime; // Вычисление скорости перемещения
         if (key == sf::Keyboard::W)
             position += front * velocity; // Движение вперёд
@@ -50,9 +50,9 @@ struct Camera {
             position -= glm::normalize(glm::cross(front, up)) * velocity; // Движение влево
         if (key == sf::Keyboard::D)
             position += glm::normalize(glm::cross(front, up)) * velocity; // Движение вправо
-        if (key == sf::Keyboard::Up)
+        if (key == sf::Keyboard::R)
             position += up * velocity; // Движение вверх
-        if (key == sf::Keyboard::Down)
+        if (key == sf::Keyboard::F)
             position -= up * velocity; // Движение вниз
         updateCameraVectors(); // Обновление векторов камеры
     }
@@ -62,11 +62,10 @@ struct Camera {
         yaw += yawOffset; // Обновление угла поворота по горизонтали
         pitch += pitchOffset; // Обновление угла поворота по вертикали
 
-        // Ограничение угла поворота по вертикали для предотвращения инверсии
-        if (pitch > 89.0f)
-            pitch = 89.0f;
-        if (pitch < -89.0f)
-            pitch = -89.0f;
+        if (pitch < 0.0f)
+            pitch += 360.0f;
+        if (pitch >= 360.0f)
+            pitch -= 360.0f;
 
         // Обеспечение 360-градусного поворота по yaw
         if (yaw < 0.0f)
@@ -335,24 +334,26 @@ int main() {
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-            camera.processKeyboardInput(sf::Keyboard::W, 0.1f); // движение вперёд
+            camera.moveCamera(sf::Keyboard::W, 0.1f); // движение вперёд
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-            camera.processKeyboardInput(sf::Keyboard::S, 0.1f); // движение назад
+            camera.moveCamera(sf::Keyboard::S, 0.1f); // движение назад
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-            camera.processKeyboardInput(sf::Keyboard::A, 0.1f); // движение влево
+            camera.moveCamera(sf::Keyboard::A, 0.1f); // движение влево
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-            camera.processKeyboardInput(sf::Keyboard::D, 0.1f); // движение вправо
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-            camera.processKeyboardInput(sf::Keyboard::Up, 0.1f); // движение вверх
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-            camera.processKeyboardInput(sf::Keyboard::Down, 0.1f); // движение вниз
+            camera.moveCamera(sf::Keyboard::D, 0.1f); // движение вправо
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+            camera.moveCamera(sf::Keyboard::R, 0.1f); // движение вверх
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::F))
+            camera.moveCamera(sf::Keyboard::F, 0.1f); // движение вниз
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) // Клавиша для горизонтального поворота
-            camera.rotateCamera(1.0f, 0.0f); // Поворот вправо
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::F)) // Клавиша для вертикального поворота
-            camera.rotateCamera(0.0f, 0.05f); // Поворот вверх
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::G)) // Клавиша для вертикального поворота вниз
-            camera.rotateCamera(0.0f, -0.05f); // Поворот вниз
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) // для горизонтального поворота
+            camera.rotateCamera(0.1f, 0.0f);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+            camera.rotateCamera(-0.1f, 0.0f);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) // для вертикального поворота
+            camera.rotateCamera(0.0f, 0.1f);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+            camera.rotateCamera(0.0f, -0.1f);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
